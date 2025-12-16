@@ -13,6 +13,9 @@
             
             <converters:PercentageToProgressConverter x:Key="PercentageConverter" />
             <converters:IsGreaterThanZeroConverter x:Key="IsGreaterThanZeroConverter" />
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <converters:EstadoToColorConverter x:Key="EstadoToColorConverter" />
+            <converters:EsPendienteConverter x:Key="EsPendienteConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

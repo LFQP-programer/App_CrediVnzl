@@ -11,6 +11,7 @@ namespace App_CrediVnzl
             // Registrar rutas de navegacion
             Routing.RegisterRoute("clientes", typeof(ClientesPage));
             Routing.RegisterRoute("nuevocliente", typeof(NuevoClientePage));
+            Routing.RegisterRoute("calendario", typeof(CalendarioPagosPage));
         }
     }
 }

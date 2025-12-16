@@ -166,6 +166,9 @@
                        CornerRadius="15"
                        Padding="20"
                        HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCalendarioTapped" />
+                    </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="10">
                         <Frame BackgroundColor="#4CAF50"
                                CornerRadius="12"

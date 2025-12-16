@@ -16,6 +16,7 @@ namespace App_CrediVnzl.Services
             _database = new SQLiteAsyncConnection(dbPath);
             
             await _database.CreateTableAsync<Cliente>();
+            await _database.CreateTableAsync<Pago>();
         }
 
         private async Task<SQLiteAsyncConnection> GetDatabaseAsync()
@@ -86,6 +87,154 @@ namespace App_CrediVnzl.Services
             var db = await GetDatabaseAsync();
             var clientes = await db.Table<Cliente>().ToListAsync();
             return clientes.Sum(c => c.DeudaPendiente);
+        }
+
+        // Metodos para Pagos
+        public async Task<List<Pago>> GetPagosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var pagos = await db.Table<Pago>().OrderBy(p => p.FechaProgramada).ToListAsync();
+            
+            // Cargar informacion del cliente
+            foreach (var pago in pagos)
+            {
+                var cliente = await GetClienteAsync(pago.ClienteId);
+                if (cliente != null)
+                {
+                    pago.ClienteNombre = cliente.NombreCompleto;
+                    pago.ClienteTelefono = cliente.Telefono;
+                }
+            }
+            
+            return pagos;
+        }
+
+        public async Task<List<Pago>> GetPagosByEstadoAsync(string estado)
+        {
+            var db = await GetDatabaseAsync();
+            var pagos = await db.Table<Pago>()
+                .Where(p => p.Estado == estado)
+                .OrderBy(p => p.FechaProgramada)
+                .ToListAsync();
+            
+            foreach (var pago in pagos)
+            {
+                var cliente = await GetClienteAsync(pago.ClienteId);
+                if (cliente != null)
+                {
+                    pago.ClienteNombre = cliente.NombreCompleto;
+                    pago.ClienteTelefono = cliente.Telefono;
+                }
+            }
+            
+            return pagos;
+        }
+
+        public async Task<List<Pago>> GetPagosByFechaAsync(DateTime fecha)
+        {
+            var db = await GetDatabaseAsync();
+            var fechaInicio = fecha.Date;
+            var fechaFin = fecha.Date.AddDays(1);
+            
+            var pagos = await db.Table<Pago>()
+                .Where(p => p.FechaProgramada >= fechaInicio && p.FechaProgramada < fechaFin)
+                .ToListAsync();
+            
+            foreach (var pago in pagos)
+            {
+                var cliente = await GetClienteAsync(pago.ClienteId);
+                if (cliente != null)
+                {
+                    pago.ClienteNombre = cliente.NombreCompleto;
+                    pago.ClienteTelefono = cliente.Telefono;
+                }
+            }
+            
+            return pagos;
+        }
+
+        public async Task<List<Pago>> GetPagosByMesAsync(int year, int month)
+        {
+            var db = await GetDatabaseAsync();
+            var fechaInicio = new DateTime(year, month, 1);
+            var fechaFin = fechaInicio.AddMonths(1);
+            
+            var pagos = await db.Table<Pago>()
+                .Where(p => p.FechaProgramada >= fechaInicio && p.FechaProgramada < fechaFin)
+                .OrderBy(p => p.FechaProgramada)
+                .ToListAsync();
+            
+            foreach (var pago in pagos)
+            {
+                var cliente = await GetClienteAsync(pago.ClienteId);
+                if (cliente != null)
+                {
+                    pago.ClienteNombre = cliente.NombreCompleto;
+                    pago.ClienteTelefono = cliente.Telefono;
+                }
+            }
+            
+            return pagos;
+        }
+
+        public async Task<ResumenPagos> GetResumenPagosMesAsync(int year, int month)
+        {
+            var pagos = await GetPagosByMesAsync(year, month);
+            var hoy = DateTime.Today;
+            
+            return new ResumenPagos
+            {
+                TotalMes = pagos.Count,
+                MontoEsperado = pagos.Sum(p => p.MontoPago),
+                Pendientes = pagos.Count(p => p.Estado == "Pendiente" && p.FechaProgramada >= hoy),
+                Vencidos = pagos.Count(p => p.Estado == "Pendiente" && p.FechaProgramada < hoy),
+                Pagados = pagos.Count(p => p.Estado == "Pagado")
+            };
+        }
+
+        public async Task<int> SavePagoAsync(Pago pago)
+        {
+            var db = await GetDatabaseAsync();
+            
+            if (pago.Id != 0)
+            {
+                return await db.UpdateAsync(pago);
+            }
+            else
+            {
+                return await db.InsertAsync(pago);
+            }
+        }
+
+        public async Task<int> MarcarPagoComoPagadoAsync(int pagoId)
+        {
+            var db = await GetDatabaseAsync();
+            var pago = await db.Table<Pago>().Where(p => p.Id == pagoId).FirstOrDefaultAsync();
+            
+            if (pago != null)
+            {
+                pago.Estado = "Pagado";
+                pago.FechaPagado = DateTime.Now;
+                return await db.UpdateAsync(pago);
+            }
+            
+            return 0;
+        }
+
+        public async Task ActualizarEstadosPagosVencidosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var hoy = DateTime.Today;
+            
+            var pagosVencidos = await db.Table<Pago>()
+                .Where(p => p.Estado == "Pendiente" && p.FechaProgramada < hoy)
+                .ToListAsync();
+            
+            foreach (var pago in pagosVencidos)
+            {
+                pago.Estado = "Vencido";
+                await db.UpdateAsync(pago);
+            }
         }
     }
 }

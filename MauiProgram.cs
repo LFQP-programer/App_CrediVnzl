@@ -28,6 +28,7 @@ namespace App_CrediVnzl
             builder.Services.AddTransient<DashboardPage>();
             builder.Services.AddTransient<ClientesPage>();
             builder.Services.AddTransient<NuevoClientePage>();
+            builder.Services.AddTransient<CalendarioPagosPage>();
 
             return builder.Build();
         }
