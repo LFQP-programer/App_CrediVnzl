@@ -23,12 +23,17 @@ namespace App_CrediVnzl
 
             // Registrar servicios
             builder.Services.AddSingleton<DatabaseService>();
+            builder.Services.AddSingleton<WhatsAppService>();
 
             // Registrar paginas
             builder.Services.AddTransient<DashboardPage>();
             builder.Services.AddTransient<ClientesPage>();
             builder.Services.AddTransient<NuevoClientePage>();
+            builder.Services.AddTransient<DetalleClientePage>();
+            builder.Services.AddTransient<NuevoPrestamoPage>();
+            builder.Services.AddTransient<RegistrarPagoPage>();
             builder.Services.AddTransient<CalendarioPagosPage>();
+            builder.Services.AddTransient<EnviarMensajesPage>();
 
             return builder.Build();
         }

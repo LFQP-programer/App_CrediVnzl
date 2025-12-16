@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.EnviarMensajesPage"
+             Title="Enviar Mensajes WhatsApp"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Título -->
+            <Frame BackgroundColor="#2196F3" 
+                   CornerRadius="10" 
+                   Padding="20"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Enviar Mensajes"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Start"/>
+                    <Label Text="WhatsApp"
+                           FontSize="18"
+                           TextColor="White"
+                           HorizontalOptions="Start"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Tipo de Mensaje -->
+            <Frame BackgroundColor="White" 
+                   CornerRadius="10" 
+                   Padding="15"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Tipo de Mensaje"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Button Text="Recordatorios"
+                                Command="{Binding SeleccionarTipoMensajeCommand}"
+                                CommandParameter="Recordatorios"
+                                BackgroundColor="{Binding TipoMensajeSeleccionado, Converter={StaticResource TipoMensajeToColorConverter}, ConverterParameter='Recordatorios'}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                HeightRequest="45"
+                                HorizontalOptions="FillAndExpand"/>
+
+                        <Button Text="Individual"
+                                Command="{Binding SeleccionarTipoMensajeCommand}"
+                                CommandParameter="Individual"
+                                BackgroundColor="{Binding TipoMensajeSeleccionado, Converter={StaticResource TipoMensajeToColorConverter}, ConverterParameter='Individual'}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                HeightRequest="45"
+                                HorizontalOptions="FillAndExpand"/>
+
+                        <Button Text="Masivo"
+                                Command="{Binding SeleccionarTipoMensajeCommand}"
+                                CommandParameter="Masivo"
+                                BackgroundColor="{Binding TipoMensajeSeleccionado, Converter={StaticResource TipoMensajeToColorConverter}, ConverterParameter='Masivo'}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                HeightRequest="45"
+                                HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Contenido según tipo de mensaje -->
+
+            <!-- RECORDATORIOS -->
+            <Frame BackgroundColor="#FFF9C4"
+                   CornerRadius="10"
+                   Padding="15"
+                   HasShadow="True"
+                   IsVisible="{Binding EsRecordatorios}">
+                <VerticalStackLayout Spacing="10">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="??" FontSize="20"/>
+                        <Label Text="Envío Masivo" 
+                               FontSize="16" 
+                               FontAttributes="Bold"
+                               TextColor="#212121"/>
+                    </HorizontalStackLayout>
+                    <Label Text="Se enviará un recordatorio automático a todos los clientes con pagos próximos."
+                           FontSize="14"
+                           TextColor="#424242"/>
+                    <Label Text="{Binding TotalMensajesRecordatorios, StringFormat='Total de mensajes: {0}'}"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#F57C00"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Vista previa de recordatorios -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="10"
+                   Padding="15"
+                   HasShadow="True"
+                   IsVisible="{Binding EsRecordatorios}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Vista previa del mensaje"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+                    
+                    <Frame BackgroundColor="#E3F2FD"
+                           CornerRadius="8"
+                           Padding="10"
+                           HasShadow="False"
+                           IsVisible="{Binding TienePagosProximos}">
+                        <Label Text="{Binding VistaPrevia}"
+                               FontSize="14"
+                               TextColor="#424242"/>
+                    </Frame>
+
+                    <Label Text="No hay mensajes para enviar"
+                           FontSize="14"
+                           TextColor="#757575"
+                           HorizontalOptions="Center"
+                           IsVisible="{Binding TienePagosProximos, Converter={StaticResource InvertBoolConverter}}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- INDIVIDUAL -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="10"
+                   Padding="15"
+                   HasShadow="True"
+                   IsVisible="{Binding EsIndividual}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Seleccionar Cliente"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+
+                    <Picker Title="Selecciona un cliente"
+                            ItemsSource="{Binding Clientes}"
+                            ItemDisplayBinding="{Binding NombreCompleto}"
+                            SelectedItem="{Binding ClienteSeleccionado}"
+                            BackgroundColor="#F5F5F5"
+                            TextColor="#212121"/>
+
+                    <Label Text="Mensaje"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+
+                    <Editor Text="{Binding MensajePersonalizado}"
+                            Placeholder="Escribe tu mensaje aquí..."
+                            HeightRequest="150"
+                            BackgroundColor="#F5F5F5"
+                            TextColor="#212121"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- MASIVO -->
+            <Frame BackgroundColor="#FFF9C4"
+                   CornerRadius="10"
+                   Padding="15"
+                   HasShadow="True"
+                   IsVisible="{Binding EsMasivo}">
+                <VerticalStackLayout Spacing="10">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="??" FontSize="20"/>
+                        <Label Text="Envío Masivo" 
+                               FontSize="16" 
+                               FontAttributes="Bold"
+                               TextColor="#212121"/>
+                    </HorizontalStackLayout>
+                    <Label Text="Se enviará un recordatorio automático a todos los clientes con pagos próximos."
+                           FontSize="14"
+                           TextColor="#424242"/>
+                    <Label Text="{Binding TotalMensajesMasivos, StringFormat='Total de mensajes: {0}'}"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#F57C00"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Mensaje personalizado masivo -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="10"
+                   Padding="15"
+                   HasShadow="True"
+                   IsVisible="{Binding EsMasivo}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Mensaje"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+
+                    <Editor Text="{Binding MensajeMasivo}"
+                            Placeholder="Escribe tu mensaje aquí..."
+                            HeightRequest="150"
+                            BackgroundColor="#F5F5F5"
+                            TextColor="#212121"/>
+                    
+                    <Label Text="Este mensaje se enviará a todos los clientes con pagos próximos."
+                           FontSize="12"
+                           TextColor="#757575"
+                           FontAttributes="Italic"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botón de envío -->
+            <Button Text="{Binding TextoBotonEnviar}"
+                    Command="{Binding EnviarMensajesCommand}"
+                    BackgroundColor="{Binding ColorBotonEnviar}"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    IsEnabled="{Binding PuedeEnviar}"
+                    Margin="0,10,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

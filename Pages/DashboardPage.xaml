@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
              x:Class="App_CrediVnzl.Pages.DashboardPage"
-             Title="Prestafacil"
+             Title="CrediVnzl"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
@@ -17,8 +17,8 @@
                 </Grid.ColumnDefinitions>
 
                 <VerticalStackLayout Grid.Column="0" Spacing="5">
-                    <Label Text="Prestafacil"
-                           FontSize="24"
+                    <Label Text="CrediVnzl"
+                           FontSize="28"
                            FontAttributes="Bold"
                            TextColor="White" />
                     <Label Text="Panel de Control"
@@ -26,13 +26,21 @@
                            TextColor="#E3F2FD" />
                 </VerticalStackLayout>
 
-                <Button Grid.Column="1"
-                        Text="Menu"
-                        FontSize="18"
-                        BackgroundColor="Transparent"
-                        TextColor="White"
-                        WidthRequest="50"
-                        HeightRequest="50" />
+                <Frame Grid.Column="1"
+                       BackgroundColor="Transparent"
+                       BorderColor="White"
+                       CornerRadius="8"
+                       Padding="8"
+                       HasShadow="False"
+                       WidthRequest="50"
+                       HeightRequest="50"
+                       VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="4" VerticalOptions="Center">
+                        <BoxView Color="White" HeightRequest="3" WidthRequest="30" CornerRadius="1.5" />
+                        <BoxView Color="White" HeightRequest="3" WidthRequest="30" CornerRadius="1.5" />
+                        <BoxView Color="White" HeightRequest="3" WidthRequest="30" CornerRadius="1.5" />
+                    </VerticalStackLayout>
+                </Frame>
             </Grid>
 
             <!-- Dashboard Cards Grid -->
@@ -200,6 +208,9 @@
                        CornerRadius="15"
                        Padding="20"
                        HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMensajesTapped" />
+                    </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="10">
                         <Frame BackgroundColor="#9C27B0"
                                CornerRadius="12"

@@ -38,5 +38,10 @@ namespace App_CrediVnzl.Pages
         {
             await Shell.Current.GoToAsync("calendario");
         }
+
+        private async void OnMensajesTapped(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("mensajes");
+        }
     }
 }

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.RegistrarPagoPage"
+             Title="Registrar Pago"
+             Shell.NavBarIsVisible="True"
+             Shell.BackgroundColor="#2196F3"
+             Shell.ForegroundColor="White"
+             Shell.TitleColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Frame BackgroundColor="#2196F3"
+                   CornerRadius="15"
+                   Padding="20"
+                   HasShadow="False">
+                <Label Text="Sistema de interes sobre saldo"
+                       FontSize="16"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold" />
+            </Frame>
+
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+                   HasShadow="True"
+                   BorderColor="#2196F3">
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="&#x1F4CB;"
+                               FontSize="18"
+                               VerticalOptions="Start" />
+                        <Label Text="Estado Actual del Prestamo"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#2196F3" />
+                    </HorizontalStackLayout>
+
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,5,0,0">
+                        <Label Grid.Column="0"
+                               Text="Prestamo inicial:"
+                               FontSize="14"
+                               TextColor="#757575" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Prestamo.MontoInicial, StringFormat='S/{0:N2}'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#212121" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Capital pendiente:"
+                               FontSize="14"
+                               TextColor="#757575" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Prestamo.CapitalPendiente, StringFormat='S/{0:N2}'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#FF5722" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Semanas transcurridas:"
+                               FontSize="14"
+                               TextColor="#757575" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Prestamo.SemanasTranscurridas, StringFormat='{0} semanas'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#212121" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Interes semanal actual:"
+                               FontSize="14"
+                               TextColor="#757575" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Prestamo.InteresSemanalActual, StringFormat='S/{0:N2} / semana'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#2196F3" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Interes acumulado:"
+                               FontSize="14"
+                               TextColor="#757575" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Prestamo.InteresAcumulado, StringFormat='S/{0:N2}'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#FF9800" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#FFEBEE"
+                   CornerRadius="15"
+                   Padding="20"
+                   HasShadow="True"
+                   BorderColor="#FF5722">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Total adeudado hoy:"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#D32F2F"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding Prestamo.TotalAdeudado, StringFormat='S/{0:N2}'}"
+                           FontSize="32"
+                           FontAttributes="Bold"
+                           TextColor="#D32F2F"
+                           HorizontalOptions="Center" />
+                    <Label Text="Capital + Interes acumulado"
+                           FontSize="12"
+                           TextColor="#757575"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Monto que va a pagar"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="#212121" />
+
+                <Frame BackgroundColor="White"
+                       CornerRadius="10"
+                       Padding="15"
+                       HasShadow="True"
+                       BorderColor="#E0E0E0">
+                    <Entry x:Name="entryMontoPago"
+                           Placeholder="0.00"
+                           Text="{Binding MontoPago}"
+                           Keyboard="Numeric"
+                           FontSize="18"
+                           TextColor="#212121" />
+                </Frame>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,5,0,0">
+                    <Button Grid.Column="0"
+                            Text="Pagar Interes"
+                            BackgroundColor="#FFF3E0"
+                            TextColor="#FF9800"
+                            BorderColor="#FF9800"
+                            BorderWidth="1"
+                            FontSize="12"
+                            CornerRadius="8"
+                            HeightRequest="35"
+                            Command="{Binding PagarInteresCommand}" />
+
+                    <Button Grid.Column="1"
+                            Text="Pagar Total"
+                            BackgroundColor="#FFEBEE"
+                            TextColor="#FF5722"
+                            BorderColor="#FF5722"
+                            BorderWidth="1"
+                            FontSize="12"
+                            CornerRadius="8"
+                            HeightRequest="35"
+                            Command="{Binding PagarTotalCommand}" />
+                </Grid>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Nota (opcional)"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="#212121" />
+
+                <Frame BackgroundColor="White"
+                       CornerRadius="10"
+                       Padding="15"
+                       HasShadow="True"
+                       BorderColor="#E0E0E0">
+                    <Editor x:Name="editorNota"
+                            Placeholder="Ej: Pago de la semana 3"
+                            Text="{Binding NotaPago}"
+                            AutoSize="TextChanges"
+                            FontSize="14"
+                            TextColor="#212121"
+                            HeightRequest="80" />
+                </Frame>
+            </VerticalStackLayout>
+
+            <Frame BackgroundColor="#FFFDE7"
+                   CornerRadius="15"
+                   Padding="20"
+                   HasShadow="True"
+                   BorderColor="#FBC02D">
+                <VerticalStackLayout Spacing="8">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="&#x1F4CC;"
+                               FontSize="18"
+                               VerticalOptions="Start" />
+                        <Label Text="Sistema de Pago:"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#F57F17" />
+                    </HorizontalStackLayout>
+
+                    <Label Text="&#x2022; Primero se aplica al interes acumulado"
+                           FontSize="12"
+                           TextColor="#757575"
+                           Margin="26,0,0,0" />
+
+                    <Label Text="&#x2022; El excedente va al capital"
+                           FontSize="12"
+                           TextColor="#757575"
+                           Margin="26,0,0,0" />
+
+                    <Label Text="&#x2022; El interes semanal se recalcula automaticamente"
+                           FontSize="12"
+                           TextColor="#757575"
+                           Margin="26,0,0,0" />
+
+                    <Label Text="&#x2022; A menor capital, menor interes semanal"
+                           FontSize="12"
+                           TextColor="#757575"
+                           Margin="26,0,0,0" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,0">
+                <Button Grid.Column="0"
+                        Text="Cancelar"
+                        BackgroundColor="White"
+                        TextColor="#757575"
+                        BorderColor="#E0E0E0"
+                        BorderWidth="1"
+                        FontSize="16"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Command="{Binding CancelarCommand}" />
+
+                <Button Grid.Column="1"
+                        Text="Registrar Pago"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Command="{Binding RegistrarPagoCommand}" />
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

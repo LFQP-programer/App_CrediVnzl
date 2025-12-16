@@ -38,12 +38,14 @@ namespace App_CrediVnzl.ViewModels
 
         public ICommand RefreshCommand { get; }
         public ICommand AddClienteCommand { get; }
+        public ICommand EditClienteCommand { get; }
 
         public ClientesViewModel(DatabaseService databaseService)
         {
             _databaseService = databaseService;
             RefreshCommand = new Command(async () => await LoadClientesAsync());
             AddClienteCommand = new Command(async () => await NavigateToNewCliente());
+            EditClienteCommand = new Command<Cliente>(async (cliente) => await NavigateToDetalleCliente(cliente));
             
             _ = LoadClientesAsync();
         }
@@ -99,6 +101,14 @@ namespace App_CrediVnzl.ViewModels
         private async Task NavigateToNewCliente()
         {
             await Shell.Current.GoToAsync("nuevocliente");
+        }
+
+        private async Task NavigateToDetalleCliente(Cliente cliente)
+        {
+            if (cliente != null)
+            {
+                await Shell.Current.GoToAsync($"detallecliente?clienteId={cliente.Id}");
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

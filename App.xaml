@@ -16,6 +16,8 @@
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
             <converters:EstadoToColorConverter x:Key="EstadoToColorConverter" />
             <converters:EsPendienteConverter x:Key="EsPendienteConverter" />
+            <converters:TipoMensajeToColorConverter x:Key="TipoMensajeToColorConverter" />
+            <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

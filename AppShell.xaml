@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:App_CrediVnzl"
     xmlns:pages="clr-namespace:App_CrediVnzl.Pages"
-    Title="App_CrediVnzl">
+    Title="CrediVnzl">
 
     <ShellContent
         Title="Dashboard"

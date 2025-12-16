@@ -16,6 +16,7 @@ namespace App_CrediVnzl.Services
             _database = new SQLiteAsyncConnection(dbPath);
             
             await _database.CreateTableAsync<Cliente>();
+            await _database.CreateTableAsync<Prestamo>();
             await _database.CreateTableAsync<Pago>();
         }
 
@@ -234,6 +235,87 @@ namespace App_CrediVnzl.Services
             {
                 pago.Estado = "Vencido";
                 await db.UpdateAsync(pago);
+            }
+        }
+
+        // Metodos para Prestamos
+        public async Task<List<Prestamo>> GetPrestamosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Prestamo>().OrderByDescending(p => p.FechaInicio).ToListAsync();
+        }
+
+        public async Task<List<Prestamo>> GetPrestamosByClienteAsync(int clienteId)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Prestamo>()
+                .Where(p => p.ClienteId == clienteId)
+                .OrderByDescending(p => p.FechaInicio)
+                .ToListAsync();
+        }
+
+        public async Task<Prestamo?> GetPrestamoAsync(int id)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Prestamo>().Where(p => p.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<int> SavePrestamoAsync(Prestamo prestamo)
+        {
+            var db = await GetDatabaseAsync();
+            
+            if (prestamo.Id != 0)
+            {
+                return await db.UpdateAsync(prestamo);
+            }
+            else
+            {
+                return await db.InsertAsync(prestamo);
+            }
+        }
+
+        public async Task<int> DeletePrestamoAsync(Prestamo prestamo)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.DeleteAsync(prestamo);
+        }
+
+        public async Task<List<Prestamo>> GetPrestamosActivosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Prestamo>()
+                .Where(p => p.Estado == "Activo")
+                .OrderByDescending(p => p.FechaInicio)
+                .ToListAsync();
+        }
+
+        public async Task ActualizarInteresesPrestamosActivosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var prestamosActivos = await GetPrestamosActivosAsync();
+            
+            foreach (var prestamo in prestamosActivos)
+            {
+                // Calcular semanas desde el ultimo pago o desde el inicio
+                var fechaReferencia = prestamo.FechaUltimoPago ?? prestamo.FechaInicio;
+                var dias = (DateTime.Now - fechaReferencia).Days;
+                var semanasTranscurridas = Math.Max(0, dias / 7);
+                
+                if (semanasTranscurridas > 0)
+                {
+                    // Calcular nuevo interes
+                    var interesPorSemana = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100);
+                    var nuevoInteres = interesPorSemana * semanasTranscurridas;
+                    
+                    // Agregar al interes acumulado
+                    prestamo.InteresAcumulado += nuevoInteres;
+                    prestamo.TotalAdeudado = prestamo.CapitalPendiente + prestamo.InteresAcumulado;
+                    
+                    // Actualizar fecha de ultimo calculo
+                    prestamo.FechaUltimoPago = DateTime.Now;
+                    
+                    await db.UpdateAsync(prestamo);
+                }
             }
         }
     }
