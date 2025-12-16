@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
+             x:Class="App_CrediVnzl.Pages.NuevoClientePage"
+             Title="{Binding PageTitle}"
+             Shell.NavBarIsVisible="True"
+             Shell.BackgroundColor="#2196F3"
+             Shell.ForegroundColor="White"
+             Shell.TitleColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="0" Spacing="0">
+            
+            <!-- Header -->
+            <Grid BackgroundColor="#2196F3" Padding="20,10,20,20">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="{Binding PageTitle}"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Registrar informacion del cliente"
+                           FontSize="14"
+                           TextColor="#E3F2FD" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- Informacion del Cliente Card -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+                   Margin="15,20,15,15"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    
+                    <!-- Info Header -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Grid.Column="0"
+                               Text="??"
+                               FontSize="24"
+                               VerticalOptions="Center" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Informacion del Cliente"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#212121" />
+                            <Label Text="Complete todos los datos del cliente. Esta informacion sera utilizada para los prestamos y contacto por WhatsApp."
+                                   FontSize="12"
+                                   TextColor="#757575"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#E0E0E0" />
+
+                    <!-- Nombre Completo -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Nombre Completo"
+                               FontSize="14"
+                               TextColor="#212121" />
+                        <Frame BackgroundColor="#F5F5F5"
+                               CornerRadius="10"
+                               Padding="15,10"
+                               HasShadow="False">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0"
+                                       Text="??"
+                                       FontSize="20"
+                                       VerticalOptions="Center" />
+                                <Entry Grid.Column="1"
+                                       Placeholder="Ej: Maria Gonzalez"
+                                       Text="{Binding Cliente.NombreCompleto}"
+                                       BackgroundColor="Transparent" />
+                            </Grid>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Telefono / WhatsApp -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Telefono / WhatsApp"
+                               FontSize="14"
+                               TextColor="#212121" />
+                        <Frame BackgroundColor="#F5F5F5"
+                               CornerRadius="10"
+                               Padding="15,10"
+                               HasShadow="False">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0"
+                                       Text="??"
+                                       FontSize="20"
+                                       VerticalOptions="Center" />
+                                <Entry Grid.Column="1"
+                                       Placeholder="Ej: +51987654321"
+                                       Text="{Binding Cliente.Telefono}"
+                                       Keyboard="Telephone"
+                                       BackgroundColor="Transparent" />
+                            </Grid>
+                        </Frame>
+                        <Label Text="Incluya el codigo de pais para WhatsApp (Ej: +51 para Peru)"
+                               FontSize="11"
+                               TextColor="#9E9E9E"
+                               Margin="5,0,0,0" />
+                    </VerticalStackLayout>
+
+                    <!-- Cedula / DNI -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Cedula / DNI"
+                               FontSize="14"
+                               TextColor="#212121" />
+                        <Frame BackgroundColor="#F5F5F5"
+                               CornerRadius="10"
+                               Padding="15,10"
+                               HasShadow="False">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0"
+                                       Text="??"
+                                       FontSize="20"
+                                       VerticalOptions="Center" />
+                                <Entry Grid.Column="1"
+                                       Placeholder="Ej: 001-1234567-8"
+                                       Text="{Binding Cliente.Cedula}"
+                                       BackgroundColor="Transparent" />
+                            </Grid>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Direccion -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Direccion"
+                               FontSize="14"
+                               TextColor="#212121" />
+                        <Frame BackgroundColor="#F5F5F5"
+                               CornerRadius="10"
+                               Padding="15,10"
+                               HasShadow="False">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0"
+                                       Text="??"
+                                       FontSize="20"
+                                       VerticalOptions="Start"
+                                       Margin="0,5,0,0" />
+                                <Editor Grid.Column="1"
+                                        Placeholder="Ej: Calle Principal 123, Lima"
+                                        Text="{Binding Cliente.Direccion}"
+                                        AutoSize="TextChanges"
+                                        MinimumHeightRequest="80"
+                                        BackgroundColor="Transparent" />
+                            </Grid>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Alerta de Confidencialidad -->
+            <Frame BackgroundColor="#FFF3E0"
+                   CornerRadius="15"
+                   Padding="15"
+                   Margin="15,0,15,15"
+                   HasShadow="False"
+                   BorderColor="#FFB74D">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Grid.Column="0"
+                           Text="??"
+                           FontSize="24"
+                           VerticalOptions="Start" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                        <Label Text="Confidencialidad:"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#E65100" />
+                        <Label Text="Los datos del cliente son confidenciales. Asegurese de guardarlos de forma segura y no compartirlos con terceros."
+                               FontSize="12"
+                               TextColor="#E65100"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Botones -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Padding="15,0,15,20">
+                <Button Grid.Column="0"
+                        Text="Cancelar"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#424242"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        CornerRadius="15"
+                        HeightRequest="50"
+                        Command="{Binding CancelarCommand}" />
+                
+                <Button Grid.Column="1"
+                        Text="Guardar Cliente"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        CornerRadius="15"
+                        HeightRequest="50"
+                        Command="{Binding GuardarCommand}" />
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
