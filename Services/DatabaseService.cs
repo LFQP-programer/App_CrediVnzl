@@ -18,6 +18,7 @@ namespace App_CrediVnzl.Services
             await _database.CreateTableAsync<Cliente>();
             await _database.CreateTableAsync<Prestamo>();
             await _database.CreateTableAsync<Pago>();
+            await _database.CreateTableAsync<HistorialPago>();
         }
 
         private async Task<SQLiteAsyncConnection> GetDatabaseAsync()
@@ -317,6 +318,118 @@ namespace App_CrediVnzl.Services
                     await db.UpdateAsync(prestamo);
                 }
             }
+            
+            // Actualizar deuda pendiente de todos los clientes afectados
+            var clientesIds = prestamosActivos.Select(p => p.ClienteId).Distinct();
+            foreach (var clienteId in clientesIds)
+            {
+                await ActualizarDeudaClienteAsync(clienteId);
+            }
+        }
+
+        public async Task ActualizarDeudaClienteAsync(int clienteId)
+        {
+            var cliente = await GetClienteAsync(clienteId);
+            if (cliente != null)
+            {
+                var prestamosCliente = await GetPrestamosByClienteAsync(clienteId);
+                cliente.DeudaPendiente = prestamosCliente
+                    .Where(p => p.Estado == "Activo")
+                    .Sum(p => p.TotalAdeudado);
+                cliente.PrestamosActivos = prestamosCliente.Count(p => p.Estado == "Activo");
+                await SaveClienteAsync(cliente);
+            }
+        }
+
+        // Metodos para Historial de Pagos
+        public async Task<int> SaveHistorialPagoAsync(HistorialPago historial)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.InsertAsync(historial);
+        }
+
+        public async Task<List<HistorialPago>> GetHistorialPagosByPrestamoAsync(int prestamoId)
+        {
+            var db = await GetDatabaseAsync();
+            var historial = await db.Table<HistorialPago>()
+                .Where(h => h.PrestamoId == prestamoId)
+                .OrderByDescending(h => h.FechaPago)
+                .ToListAsync();
+            
+            foreach (var item in historial)
+            {
+                var cliente = await GetClienteAsync(item.ClienteId);
+                if (cliente != null)
+                {
+                    item.ClienteNombre = cliente.NombreCompleto;
+                }
+            }
+            
+            return historial;
+        }
+
+        public async Task<List<HistorialPago>> GetHistorialPagosByClienteAsync(int clienteId)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<HistorialPago>()
+                .Where(h => h.ClienteId == clienteId)
+                .OrderByDescending(h => h.FechaPago)
+                .ToListAsync();
+        }
+
+        public async Task<decimal> GetTotalCobradoHoyAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var hoy = DateTime.Today;
+            var historial = await db.Table<HistorialPago>()
+                .Where(h => h.FechaPago >= hoy && h.FechaPago < hoy.AddDays(1))
+                .ToListAsync();
+            return historial.Sum(h => h.MontoTotal);
+        }
+
+        public async Task<decimal> GetTotalCobradoMesAsync(int year, int month)
+        {
+            var db = await GetDatabaseAsync();
+            var fechaInicio = new DateTime(year, month, 1);
+            var fechaFin = fechaInicio.AddMonths(1);
+            var historial = await db.Table<HistorialPago>()
+                .Where(h => h.FechaPago >= fechaInicio && h.FechaPago < fechaFin)
+                .ToListAsync();
+            return historial.Sum(h => h.MontoTotal);
+        }
+
+        // Metodos para estadisticas globales
+        public async Task<decimal> GetTotalCapitalPrestadoAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var prestamos = await db.Table<Prestamo>().ToListAsync();
+            return prestamos.Sum(p => p.MontoInicial);
+        }
+
+        public async Task<decimal> GetTotalCapitalActivoAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var prestamosActivos = await GetPrestamosActivosAsync();
+            return prestamosActivos.Sum(p => p.CapitalPendiente);
+        }
+
+        public async Task<decimal> GetTotalInteresGeneradoAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var historial = await db.Table<HistorialPago>().ToListAsync();
+            return historial.Sum(h => h.MontoInteres);
+        }
+
+        public async Task<int> GetTotalPrestamosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Prestamo>().CountAsync();
+        }
+
+        public async Task<int> GetTotalPrestamosCompletadosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Prestamo>().Where(p => p.Estado == "Completado").CountAsync();
         }
     }
 }

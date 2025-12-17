@@ -78,9 +78,12 @@ namespace App_CrediVnzl.ViewModels
                 var prestamo = await _databaseService.GetPrestamoAsync(PrestamoId);
                 if (prestamo != null)
                 {
-                    // Actualizar interes acumulado antes de mostrar
-                    ActualizarInteresAcumulado(prestamo);
-                    Prestamo = prestamo;
+                    // Calcular y actualizar interes acumulado solo si han pasado semanas
+                    await ActualizarInteresAcumuladoEnBD(prestamo);
+                    
+                    // Recargar prestamo actualizado
+                    prestamo = await _databaseService.GetPrestamoAsync(PrestamoId);
+                    Prestamo = prestamo!;
                 }
             }
             catch (Exception ex)
@@ -89,26 +92,26 @@ namespace App_CrediVnzl.ViewModels
             }
         }
 
-        private void ActualizarInteresAcumulado(Prestamo prestamo)
+        private async Task ActualizarInteresAcumuladoEnBD(Prestamo prestamo)
         {
             // Calcular semanas desde el ultimo pago o desde el inicio
             var fechaReferencia = prestamo.FechaUltimoPago ?? prestamo.FechaInicio;
             var dias = (DateTime.Now - fechaReferencia).Days;
             var semanasTranscurridas = Math.Max(0, dias / 7);
             
-            // Calcular interes acumulado basado en el capital pendiente
-            // El interes se calcula por semana sobre el capital pendiente
-            var interesPorSemana = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100);
-            
-            // Si hay semanas transcurridas desde el ultimo pago, agregar el nuevo interes
+            // Solo actualizar si han pasado al menos una semana completa
             if (semanasTranscurridas > 0)
             {
+                var interesPorSemana = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100);
                 var nuevoInteres = interesPorSemana * semanasTranscurridas;
+                
                 prestamo.InteresAcumulado += nuevoInteres;
+                prestamo.TotalAdeudado = prestamo.CapitalPendiente + prestamo.InteresAcumulado;
+                prestamo.FechaUltimoPago = DateTime.Now;
+                
+                await _databaseService.SavePrestamoAsync(prestamo);
+                await _databaseService.ActualizarDeudaClienteAsync(prestamo.ClienteId);
             }
-            
-            // Actualizar total adeudado
-            prestamo.TotalAdeudado = prestamo.CapitalPendiente + prestamo.InteresAcumulado;
         }
 
         private async Task RegistrarPago()
@@ -123,6 +126,30 @@ namespace App_CrediVnzl.ViewModels
                     await Shell.Current.DisplayAlert("Error", "El monto debe ser un numero valido", "OK");
                     return;
                 }
+
+                // Validar si el monto excede el total adeudado
+                if (monto > Prestamo.TotalAdeudado)
+                {
+                    var excedente = monto - Prestamo.TotalAdeudado;
+                    bool continuar = await Shell.Current.DisplayAlert(
+                        "Monto Excedente",
+                        $"El monto ingresado (S/{monto:N2}) excede el total adeudado (S/{Prestamo.TotalAdeudado:N2}).\n\n" +
+                        $"Excedente: S/{excedente:N2}\n\n" +
+                        $"¿Desea registrar el pago por el total adeudado?",
+                        "Si",
+                        "No");
+                    
+                    if (!continuar)
+                        return;
+                    
+                    // Ajustar al total adeudado
+                    monto = Prestamo.TotalAdeudado;
+                    MontoPago = monto.ToString("F2");
+                }
+
+                // Guardar estado anterior para historial
+                var capitalAntes = Prestamo.CapitalPendiente;
+                var interesAntes = Prestamo.InteresAcumulado;
 
                 // Aplicar el pago segun el sistema: primero interes, luego capital
                 decimal montoRestante = monto;
@@ -174,30 +201,37 @@ namespace App_CrediVnzl.ViewModels
                 // Guardar en base de datos
                 await _databaseService.SavePrestamoAsync(Prestamo);
 
-                // Actualizar cliente
-                var cliente = await _databaseService.GetClienteAsync(Prestamo.ClienteId);
-                if (cliente != null)
+                // Guardar en historial de pagos
+                var historial = new HistorialPago
                 {
-                    // Recalcular deuda pendiente del cliente
-                    var prestamosActivos = await _databaseService.GetPrestamosByClienteAsync(cliente.Id);
-                    cliente.DeudaPendiente = prestamosActivos
-                        .Where(p => p.Estado == "Activo")
-                        .Sum(p => p.TotalAdeudado);
-                    
-                    // Actualizar contador de prestamos activos
-                    cliente.PrestamosActivos = prestamosActivos.Count(p => p.Estado == "Activo");
-                    
-                    await _databaseService.SaveClienteAsync(cliente);
-                }
+                    PrestamoId = Prestamo.Id,
+                    ClienteId = Prestamo.ClienteId,
+                    MontoTotal = monto,
+                    MontoInteres = pagoInteres,
+                    MontoCapital = pagoCapital,
+                    CapitalPendienteAntes = capitalAntes,
+                    CapitalPendienteDespues = Prestamo.CapitalPendiente,
+                    InteresAcumuladoAntes = interesAntes,
+                    InteresAcumuladoDespues = Prestamo.InteresAcumulado,
+                    FechaPago = fechaPago,
+                    Nota = NotaPago
+                };
+                await _databaseService.SaveHistorialPagoAsync(historial);
+
+                // Actualizar cliente
+                await _databaseService.ActualizarDeudaClienteAsync(Prestamo.ClienteId);
 
                 // Mostrar mensaje de exito
                 var mensaje = $"Pago registrado exitosamente\n\n";
+                mensaje += $"Total pagado: S/{monto:N2}\n";
                 if (pagoInteres > 0)
-                    mensaje += $"Interes pagado: S/{pagoInteres:N2}\n";
+                    mensaje += $"  - Interes: S/{pagoInteres:N2}\n";
                 if (pagoCapital > 0)
-                    mensaje += $"Capital pagado: S/{pagoCapital:N2}\n";
-                if (montoRestante > 0)
-                    mensaje += $"\nSobra: S/{montoRestante:N2}";
+                    mensaje += $"  - Capital: S/{pagoCapital:N2}\n";
+                
+                mensaje += $"\nCapital pendiente: S/{Prestamo.CapitalPendiente:N2}";
+                if (Prestamo.InteresAcumulado > 0)
+                    mensaje += $"\nInteres acumulado: S/{Prestamo.InteresAcumulado:N2}";
                 
                 if (Prestamo.Estado == "Completado")
                     mensaje += "\n\n¡Prestamo completado!";

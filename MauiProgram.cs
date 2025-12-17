@@ -20,7 +20,6 @@ namespace App_CrediVnzl
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-
             // Registrar servicios
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<WhatsAppService>();

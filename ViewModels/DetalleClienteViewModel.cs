@@ -85,6 +85,9 @@ namespace App_CrediVnzl.ViewModels
         {
             try
             {
+                // Actualizar intereses de prestamos activos primero
+                await _databaseService.ActualizarInteresesPrestamosActivosAsync();
+                
                 var cliente = await _databaseService.GetClienteAsync(ClienteId);
                 if (cliente != null)
                 {
