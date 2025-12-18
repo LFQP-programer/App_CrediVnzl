@@ -105,12 +105,14 @@ namespace App_CrediVnzl.ViewModels
 
         public ICommand FiltrarCommand { get; }
         public ICommand VerDetallePrestamoCommand { get; }
+        public ICommand ToggleExpandirCommand { get; }
 
         public HistorialPrestamosViewModel(DatabaseService databaseService)
         {
             _databaseService = databaseService;
             FiltrarCommand = new Command<string>(async (filtro) => await FiltrarPrestamos(filtro));
             VerDetallePrestamoCommand = new Command<Prestamo>(async (prestamo) => await VerDetallePrestamo(prestamo));
+            ToggleExpandirCommand = new Command<Prestamo>(ToggleExpandir);
         }
 
         public async Task LoadDataAsync()
@@ -176,6 +178,22 @@ namespace App_CrediVnzl.ViewModels
             if (prestamo != null)
             {
                 await Shell.Current.GoToAsync($"detalleprestamo?prestamoId={prestamo.Id}");
+            }
+        }
+
+        private void ToggleExpandir(Prestamo prestamo)
+        {
+            if (prestamo != null)
+            {
+                prestamo.Expandido = !prestamo.Expandido;
+                
+                // Refrescar la colección para actualizar la UI
+                var index = PrestamosFiltrados.IndexOf(prestamo);
+                if (index >= 0)
+                {
+                    PrestamosFiltrados.RemoveAt(index);
+                    PrestamosFiltrados.Insert(index, prestamo);
+                }
             }
         }
 

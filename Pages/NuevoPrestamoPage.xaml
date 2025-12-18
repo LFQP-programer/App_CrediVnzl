@@ -4,59 +4,78 @@
              x:Class="App_CrediVnzl.Pages.NuevoPrestamoPage"
              Title="Nuevo Prestamo"
              Shell.NavBarIsVisible="True"
-             Shell.BackgroundColor="#2196F3"
-             Shell.ForegroundColor="White"
-             Shell.TitleColor="White">
+             Shell.BackgroundColor="{StaticResource Tertiary}"
+             Shell.ForegroundColor="{StaticResource White}"
+             Shell.TitleColor="{StaticResource White}"
+             BackgroundColor="{StaticResource Background}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Frame BackgroundColor="#2196F3"
+            <Frame BackgroundColor="{StaticResource Primary}"
                    CornerRadius="15"
                    Padding="20"
                    HasShadow="False">
                 <Label Text="Sistema de interes sobre saldo"
                        FontSize="16"
-                       TextColor="White"
+                       TextColor="{StaticResource Tertiary}"
                        HorizontalOptions="Center"
                        FontAttributes="Bold" />
             </Frame>
 
-            <Frame BackgroundColor="White"
+            <Frame BackgroundColor="{StaticResource Surface}"
                    CornerRadius="15"
                    Padding="20"
                    HasShadow="True"
-                   BorderColor="#2196F3">
+                   BorderColor="{StaticResource Tertiary}">
                 <VerticalStackLayout Spacing="10">
                     <HorizontalStackLayout Spacing="8">
-                        <Label Text="&#x2139;&#xFE0F;"
+                        <HorizontalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleCondicionesCommand}" />
+                        </HorizontalStackLayout.GestureRecognizers>
+                        
+                        <Label Text="ℹ️"
                                FontSize="18"
                                VerticalOptions="Start" />
                         <Label Text="Condiciones del Prestamo"
                                FontSize="16"
                                FontAttributes="Bold"
-                               TextColor="#2196F3" />
+                               TextColor="{StaticResource Tertiary}"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding CondicionesExpandidas, Converter={StaticResource BoolToExpandIconConverter}}"
+                               FontSize="16"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalOptions="EndAndExpand"
+                               VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
-                    <Label Text="&#x2022; Interes fijo del 5% semanal sobre el saldo pendiente"
-                           FontSize="14"
-                           TextColor="#424242"
-                           Margin="26,0,0,0" />
+                    <Label Text="👆 Toca para ver las condiciones"
+                           FontSize="11"
+                           TextColor="#9E9E9E"
+                           Margin="26,0,0,0"
+                           IsVisible="{Binding CondicionesExpandidas, Converter={StaticResource InvertBoolConverter}}" />
 
-                    <Label Text="&#x2022; Sin interes sobre interes"
-                           FontSize="14"
-                           TextColor="#424242"
-                           Margin="26,0,0,0" />
+                    <VerticalStackLayout Spacing="10" IsVisible="{Binding CondicionesExpandidas}">
+                        <Label Text="• Interes fijo del 5% semanal sobre el saldo pendiente"
+                               FontSize="14"
+                               TextColor="#424242"
+                               Margin="26,5,0,0" />
 
-                    <Label Text="&#x2022; Pagos flexibles: puede abonar al capital cuando desee"
-                           FontSize="14"
-                           TextColor="#424242"
-                           Margin="26,0,0,0" />
+                        <Label Text="• Sin interes sobre interes"
+                               FontSize="14"
+                               TextColor="#424242"
+                               Margin="26,0,0,0" />
 
-                    <Label Text="&#x2022; El interes se recalcula automaticamente al reducir el capital"
-                           FontSize="14"
-                           TextColor="#424242"
-                           Margin="26,0,0,0" />
+                        <Label Text="• Pagos flexibles: puede abonar al capital cuando desee"
+                               FontSize="14"
+                               TextColor="#424242"
+                               Margin="26,0,0,0" />
+
+                        <Label Text="• El interes se recalcula automaticamente al reducir el capital"
+                               FontSize="14"
+                               TextColor="#424242"
+                               Margin="26,0,0,0" />
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Frame>
 
@@ -151,9 +170,9 @@
             <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,0">
                 <Button Grid.Column="0"
                         Text="Cancelar"
-                        BackgroundColor="White"
-                        TextColor="#757575"
-                        BorderColor="#E0E0E0"
+                        BackgroundColor="{StaticResource Surface}"
+                        TextColor="{StaticResource Gray600}"
+                        BorderColor="{StaticResource Gray300}"
                         BorderWidth="1"
                         FontSize="16"
                         CornerRadius="10"
@@ -162,8 +181,8 @@
 
                 <Button Grid.Column="1"
                         Text="Crear Prestamo"
-                        BackgroundColor="#2196F3"
-                        TextColor="White"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="{StaticResource Tertiary}"
                         FontSize="16"
                         FontAttributes="Bold"
                         CornerRadius="10"

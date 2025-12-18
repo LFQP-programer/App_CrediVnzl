@@ -5,28 +5,29 @@
              x:Class="App_CrediVnzl.Pages.CalendarioPagosPage"
              Title="Calendario de Pagos"
              Shell.NavBarIsVisible="True"
-             Shell.BackgroundColor="#2196F3"
-             Shell.ForegroundColor="White"
-             Shell.TitleColor="White">
+             Shell.BackgroundColor="{StaticResource Tertiary}"
+             Shell.ForegroundColor="{StaticResource White}"
+             Shell.TitleColor="{StaticResource White}">
 
     <ScrollView>
         <VerticalStackLayout Padding="0" Spacing="0">
 
             <!-- Header -->
-            <Grid BackgroundColor="#2196F3" Padding="20,10,20,20">
+            <Grid BackgroundColor="{StaticResource Tertiary}" Padding="20,10,20,20">
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Calendario de Pagos"
                            FontSize="24"
                            FontAttributes="Bold"
-                           TextColor="White" />
+                           TextColor="{StaticResource White}" />
                     <Label x:Name="lblSubtitulo"
                            FontSize="14"
-                           TextColor="#E3F2FD" />
+                           TextColor="{StaticResource White}"
+                           Opacity="0.9" />
                 </VerticalStackLayout>
             </Grid>
 
             <!-- Tarjetas de Resumen -->
-            <Grid Padding="15,20" RowSpacing="15" ColumnSpacing="15">
+            <Grid Padding="15,20" RowSpacing="12" ColumnSpacing="12">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -37,143 +38,118 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Total Mes -->
-                <Border Grid.Row="0" Grid.Column="0"
-                       BackgroundColor="White"
-                       StrokeShape="RoundRectangle 15"
+                <Frame Grid.Row="0" Grid.Column="0"
+                       BackgroundColor="{StaticResource White}"
+                       CornerRadius="20"
                        Padding="15"
-                       StrokeThickness="0">
-                    <Border.Shadow>
-                        <Shadow Brush="Black"
-                                Opacity="0.1"
-                                Radius="8"
-                                Offset="0,2" />
-                    </Border.Shadow>
+                       HasShadow="True">
                     <VerticalStackLayout Spacing="5">
                         <Label Text="📅 Total Mes"
                                FontSize="12"
-                               TextColor="#757575" />
+                               TextColor="{StaticResource Gray600}" />
                         <Label Text="{Binding Resumen.TotalMes}"
                                FontSize="24"
                                FontAttributes="Bold"
-                               TextColor="#212121" />
+                               TextColor="{StaticResource Gray900}" />
                     </VerticalStackLayout>
-                </Border>
+                </Frame>
 
                 <!-- Esperado -->
-                <Border Grid.Row="0" Grid.Column="1"
-                       BackgroundColor="White"
-                       StrokeShape="RoundRectangle 15"
+                <Frame Grid.Row="0" Grid.Column="1"
+                       BackgroundColor="{StaticResource White}"
+                       CornerRadius="20"
                        Padding="15"
-                       StrokeThickness="0">
-                    <Border.Shadow>
-                        <Shadow Brush="Black"
-                                Opacity="0.1"
-                                Radius="8"
-                                Offset="0,2" />
-                    </Border.Shadow>
+                       HasShadow="True">
                     <VerticalStackLayout Spacing="5">
                         <Label Text="💵 Esperado"
                                FontSize="12"
-                               TextColor="#757575" />
-                        <Label Text="{Binding Resumen.MontoEsperado, StringFormat='S/{0:N0}'}"
+                               TextColor="{StaticResource Gray600}" />
+                        <Label Text="{Binding Resumen.MontoEsperado, StringFormat='${0:N0}'}"
                                FontSize="24"
                                FontAttributes="Bold"
-                               TextColor="#212121" />
+                               TextColor="{StaticResource Gray900}" />
                     </VerticalStackLayout>
-                </Border>
+                </Frame>
 
                 <!-- Pendientes -->
-                <Border Grid.Row="1" Grid.Column="0"
-                       BackgroundColor="#FFF9C4"
-                       StrokeShape="RoundRectangle 15"
+                <Frame Grid.Row="1" Grid.Column="0"
+                       BackgroundColor="{StaticResource PrimaryLight}"
+                       CornerRadius="20"
                        Padding="15"
-                       StrokeThickness="0">
-                    <Border.Shadow>
-                        <Shadow Brush="Black"
-                                Opacity="0.1"
-                                Radius="8"
-                                Offset="0,2" />
-                    </Border.Shadow>
+                       HasShadow="True">
                     <VerticalStackLayout Spacing="5">
                         <Label Text="⏰ Pendientes"
                                FontSize="12"
-                               TextColor="#F57C00" />
+                               TextColor="{StaticResource PrimaryDark}" />
                         <Label Text="{Binding Resumen.Pendientes}"
                                FontSize="24"
                                FontAttributes="Bold"
-                               TextColor="#F57C00" />
+                               TextColor="{StaticResource PrimaryDark}" />
                     </VerticalStackLayout>
-                </Border>
+                </Frame>
 
                 <!-- Vencidos -->
-                <Border Grid.Row="1" Grid.Column="1"
-                       BackgroundColor="#FFCDD2"
-                       StrokeShape="RoundRectangle 15"
+                <Frame Grid.Row="1" Grid.Column="1"
+                       BackgroundColor="{StaticResource SecondaryLight}"
+                       CornerRadius="20"
                        Padding="15"
-                       StrokeThickness="0">
-                    <Border.Shadow>
-                        <Shadow Brush="Black"
-                                Opacity="0.1"
-                                Radius="8"
-                                Offset="0,2" />
-                    </Border.Shadow>
+                       HasShadow="True">
                     <VerticalStackLayout Spacing="5">
                         <Label Text="❗ Vencidos"
                                FontSize="12"
-                               TextColor="#D32F2F" />
+                               TextColor="{StaticResource SecondaryDark}" />
                         <Label Text="{Binding Resumen.Vencidos}"
                                FontSize="24"
                                FontAttributes="Bold"
-                               TextColor="#D32F2F" />
+                               TextColor="{StaticResource SecondaryDark}" />
                     </VerticalStackLayout>
-                </Border>
+                </Frame>
             </Grid>
 
             <!-- Vista Calendario -->
-            <Border Margin="15,0,15,15"
-                    BackgroundColor="White"
-                    Padding="20"
-                    IsVisible="{Binding MostrarCalendario}">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="15"/>
-                </Border.StrokeShape>
-                <Border.Shadow>
-                    <Shadow Offset="0,4" Radius="10" Opacity="0.2"/>
-                </Border.Shadow>
+            <Frame Margin="15,0,15,15"
+                   BackgroundColor="{StaticResource White}"
+                   CornerRadius="20"
+                   Padding="20"
+                   HasShadow="True"
+                   IsVisible="{Binding MostrarCalendario}">
 
                 <VerticalStackLayout Spacing="15">
 
                     <!-- Navegacion -->
                     <Grid ColumnDefinitions="Auto,*,Auto">
-                        <Button Text="&lt;" BackgroundColor="Transparent"
-                                TextColor="#2196F3"
+                        <Button Text="&lt;" 
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource Tertiary}"
                                 Command="{Binding MesAnteriorCommand}" />
                         <Label x:Name="lblMesAnio"
                                Grid.Column="1"
                                HorizontalOptions="Center"
-                               FontAttributes="Bold" />
-                        <Button Text="&gt;" Grid.Column="2"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Button Text="&gt;" 
+                                Grid.Column="2"
                                 BackgroundColor="Transparent"
-                                TextColor="#2196F3"
+                                TextColor="{StaticResource Tertiary}"
                                 Command="{Binding MesSiguienteCommand}" />
                     </Grid>
 
                     <!-- Dias -->
                     <Grid ColumnDefinitions="*,*,*,*,*,*,*">
-                        <Label Text="Do" Grid.Column="0" HorizontalOptions="Center"/>
-                        <Label Text="Lu" Grid.Column="1" HorizontalOptions="Center"/>
-                        <Label Text="Ma" Grid.Column="2" HorizontalOptions="Center"/>
-                        <Label Text="Mi" Grid.Column="3" HorizontalOptions="Center"/>
-                        <Label Text="Ju" Grid.Column="4" HorizontalOptions="Center"/>
-                        <Label Text="Vi" Grid.Column="5" HorizontalOptions="Center"/>
-                        <Label Text="Sa" Grid.Column="6" HorizontalOptions="Center"/>
+                        <Label Text="Do" Grid.Column="0" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
+                        <Label Text="Lu" Grid.Column="1" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
+                        <Label Text="Ma" Grid.Column="2" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
+                        <Label Text="Mi" Grid.Column="3" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
+                        <Label Text="Ju" Grid.Column="4" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
+                        <Label Text="Vi" Grid.Column="5" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
+                        <Label Text="Sa" Grid.Column="6" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
                     </Grid>
 
                     <Grid x:Name="gridCalendario"
                           RowSpacing="5"
                           ColumnSpacing="5"/>
                 </VerticalStackLayout>
-            </Border>
+            </Frame>
 
             <!-- Lista de Pagos -->
             <VerticalStackLayout Padding="15,0,15,20" 
@@ -192,7 +168,7 @@
                                 <Label Text="No hay pagos programados"
                                        FontSize="16"
                                        HorizontalOptions="Center"
-                                       TextColor="#757575"
+                                       TextColor="{StaticResource Gray600}"
                                        Margin="0,10,0,0" />
                             </VerticalStackLayout>
                         </ContentView>
@@ -200,17 +176,11 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border BackgroundColor="White"
-                                   StrokeShape="RoundRectangle 15"
+                            <Frame BackgroundColor="{StaticResource White}"
+                                   CornerRadius="20"
                                    Padding="15"
                                    Margin="0,0,0,10"
-                                   StrokeThickness="0">
-                                <Border.Shadow>
-                                    <Shadow Brush="Black"
-                                            Opacity="0.1"
-                                            Radius="8"
-                                            Offset="0,2" />
-                                </Border.Shadow>
+                                   HasShadow="True">
                                 <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="8">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -222,37 +192,37 @@
                                            Text="{Binding ClienteNombre}"
                                            FontSize="16"
                                            FontAttributes="Bold"
-                                           TextColor="#212121" />
+                                           TextColor="{StaticResource Gray900}" />
 
                                     <!-- Estado Badge -->
-                                    <Border Grid.Row="0" Grid.Column="1"
+                                    <Frame Grid.Row="0" Grid.Column="1"
                                            BackgroundColor="{Binding Estado, Converter={StaticResource EstadoToColorConverter}}"
-                                           StrokeShape="RoundRectangle 10"
+                                           CornerRadius="10"
                                            Padding="10,5"
-                                           StrokeThickness="0">
+                                           HasShadow="False">
                                         <Label Text="{Binding Estado}"
-                                               TextColor="White"
+                                               TextColor="{StaticResource White}"
                                                FontSize="12"
                                                FontAttributes="Bold" />
-                                    </Border>
+                                    </Frame>
 
                                     <!-- Monto -->
                                     <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                           Text="{Binding MontoPago, StringFormat='Monto: S/{0:N2}'}"
+                                           Text="{Binding MontoPago, StringFormat='Monto: ${0:N2}'}"
                                            FontSize="14"
-                                           TextColor="#757575" />
+                                           TextColor="{StaticResource Gray600}" />
 
                                     <!-- Fecha -->
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Text="{Binding FechaProgramada, StringFormat='📅 {0:dd/MM/yyyy}'}"
                                            FontSize="12"
-                                           TextColor="#757575" />
+                                           TextColor="{StaticResource Gray600}" />
 
                                     <!-- Boton Marcar Pagado -->
                                     <Button Grid.Row="2" Grid.Column="1"
                                             Text="✓ Pagado"
-                                            BackgroundColor="#4CAF50"
-                                            TextColor="White"
+                                            BackgroundColor="{StaticResource Success}"
+                                            TextColor="{StaticResource White}"
                                             FontSize="12"
                                             CornerRadius="10"
                                             Padding="15,5"
@@ -260,7 +230,7 @@
                                             CommandParameter="{Binding .}"
                                             IsVisible="{Binding Estado, Converter={StaticResource EsPendienteConverter}}" />
                                 </Grid>
-                            </Border>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

@@ -10,9 +10,12 @@ namespace App_CrediVnzl.Converters
             {
                 return estado switch
                 {
-                    "Pagado" => Color.FromArgb("#4CAF50"),
-                    "Pendiente" => Color.FromArgb("#FFC107"),
-                    "Vencido" => Color.FromArgb("#F44336"),
+                    "Activo" => Color.FromArgb("#4CAF50"), // Verde Success
+                    "Completado" => Color.FromArgb("#003B7A"), // Azul Tertiary
+                    "Cancelado" => Color.FromArgb("#E4002B"), // Rojo Secondary
+                    "Pagado" => Color.FromArgb("#4CAF50"), // Verde Success
+                    "Pendiente" => Color.FromArgb("#FDB913"), // Amarillo Primary
+                    "Vencido" => Color.FromArgb("#E4002B"), // Rojo Secondary
                     _ => Color.FromArgb("#9E9E9E")
                 };
             }

@@ -16,10 +16,10 @@ namespace App_CrediVnzl.Converters
             {
                 return filtroBoton switch
                 {
-                    "Todos" => Color.FromArgb("#2196F3"),
-                    "Activo" => Color.FromArgb("#4CAF50"),
-                    "Completado" => Color.FromArgb("#9C27B0"),
-                    _ => Color.FromArgb("#2196F3")
+                    "Todos" => Color.FromArgb("#003B7A"), // Azul Tertiary
+                    "Activo" => Color.FromArgb("#FDB913"), // Amarillo Primary
+                    "Completado" => Color.FromArgb("#E4002B"), // Rojo Secondary
+                    _ => Color.FromArgb("#003B7A")
                 };
             }
 

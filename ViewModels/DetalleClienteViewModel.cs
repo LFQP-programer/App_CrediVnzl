@@ -72,6 +72,7 @@ namespace App_CrediVnzl.ViewModels
         public ICommand NuevoPrestamoCommand { get; }
         public ICommand RegistrarPagoCommand { get; }
         public ICommand VerHistorialCommand { get; }
+        public ICommand ToggleExpandirPrestamoCommand { get; }
 
         public DetalleClienteViewModel(DatabaseService databaseService)
         {
@@ -81,6 +82,7 @@ namespace App_CrediVnzl.ViewModels
             NuevoPrestamoCommand = new Command(async () => await NuevoPrestamo());
             RegistrarPagoCommand = new Command<Prestamo>(async (prestamo) => await RegistrarPago(prestamo));
             VerHistorialCommand = new Command(async () => await VerHistorial());
+            ToggleExpandirPrestamoCommand = new Command<Prestamo>(ToggleExpandirPrestamo);
         }
 
         public async Task LoadDataAsync()
@@ -130,6 +132,22 @@ namespace App_CrediVnzl.ViewModels
         private async Task VerHistorial()
         {
             await Shell.Current.GoToAsync($"historialprestamos?clienteId={ClienteId}");
+        }
+
+        private void ToggleExpandirPrestamo(Prestamo prestamo)
+        {
+            if (prestamo != null)
+            {
+                prestamo.Expandido = !prestamo.Expandido;
+                
+                // Refrescar la colección para actualizar la UI
+                var index = PrestamosActivos.IndexOf(prestamo);
+                if (index >= 0)
+                {
+                    PrestamosActivos.RemoveAt(index);
+                    PrestamosActivos.Insert(index, prestamo);
+                }
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

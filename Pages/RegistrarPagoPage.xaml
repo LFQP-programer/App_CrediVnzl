@@ -4,29 +4,30 @@
              x:Class="App_CrediVnzl.Pages.RegistrarPagoPage"
              Title="Registrar Pago"
              Shell.NavBarIsVisible="True"
-             Shell.BackgroundColor="#2196F3"
-             Shell.ForegroundColor="White"
-             Shell.TitleColor="White">
+             Shell.BackgroundColor="{StaticResource Tertiary}"
+             Shell.ForegroundColor="{StaticResource White}"
+             Shell.TitleColor="{StaticResource White}"
+             BackgroundColor="{StaticResource Background}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Frame BackgroundColor="#2196F3"
+            <Frame BackgroundColor="{StaticResource Primary}"
                    CornerRadius="15"
                    Padding="20"
                    HasShadow="False">
                 <Label Text="Sistema de interes sobre saldo"
                        FontSize="16"
-                       TextColor="White"
+                       TextColor="{StaticResource Tertiary}"
                        HorizontalOptions="Center"
                        FontAttributes="Bold" />
             </Frame>
 
-            <Frame BackgroundColor="White"
+            <Frame BackgroundColor="{StaticResource Surface}"
                    CornerRadius="15"
                    Padding="20"
                    HasShadow="True"
-                   BorderColor="#2196F3">
+                   BorderColor="{StaticResource Tertiary}">
                 <VerticalStackLayout Spacing="12">
                     <HorizontalStackLayout Spacing="8">
                         <Label Text="&#x1F4CB;"
@@ -35,67 +36,67 @@
                         <Label Text="Estado Actual del Prestamo"
                                FontSize="16"
                                FontAttributes="Bold"
-                               TextColor="#2196F3" />
+                               TextColor="{StaticResource Primary}" />
                     </HorizontalStackLayout>
 
                     <Grid ColumnDefinitions="*,Auto" Margin="0,5,0,0">
                         <Label Grid.Column="0"
                                Text="Prestamo inicial:"
                                FontSize="14"
-                               TextColor="#757575" />
+                               TextColor="{StaticResource Gray500}" />
                         <Label Grid.Column="1"
                                Text="{Binding Prestamo.MontoInicial, StringFormat='S/{0:N2}'}"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="#212121" />
+                               TextColor="{StaticResource Black}" />
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0"
                                Text="Capital pendiente:"
                                FontSize="14"
-                               TextColor="#757575" />
+                               TextColor="{StaticResource Gray500}" />
                         <Label Grid.Column="1"
                                Text="{Binding Prestamo.CapitalPendiente, StringFormat='S/{0:N2}'}"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="#FF5722" />
+                               TextColor="{StaticResource Secondary}" />
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0"
                                Text="Semanas transcurridas:"
                                FontSize="14"
-                               TextColor="#757575" />
+                               TextColor="{StaticResource Gray500}" />
                         <Label Grid.Column="1"
                                Text="{Binding Prestamo.SemanasTranscurridas, StringFormat='{0} semanas'}"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="#212121" />
+                               TextColor="{StaticResource Black}" />
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0"
                                Text="Interes semanal actual:"
                                FontSize="14"
-                               TextColor="#757575" />
+                               TextColor="{StaticResource Gray500}" />
                         <Label Grid.Column="1"
                                Text="{Binding Prestamo.InteresSemanalActual, StringFormat='S/{0:N2} / semana'}"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="#2196F3" />
+                               TextColor="{StaticResource Primary}" />
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0"
                                Text="Interes acumulado:"
                                FontSize="14"
-                               TextColor="#757575" />
+                               TextColor="{StaticResource Gray500}" />
                         <Label Grid.Column="1"
                                Text="{Binding Prestamo.InteresAcumulado, StringFormat='S/{0:N2}'}"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="#FF9800" />
+                               TextColor="{StaticResource Secondary}" />
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
@@ -104,21 +105,21 @@
                    CornerRadius="15"
                    Padding="20"
                    HasShadow="True"
-                   BorderColor="#FF5722">
+                   BorderColor="{StaticResource Secondary}">
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Total adeudado hoy:"
                            FontSize="16"
                            FontAttributes="Bold"
-                           TextColor="#D32F2F"
+                           TextColor="{StaticResource Secondary}"
                            HorizontalOptions="Center" />
                     <Label Text="{Binding Prestamo.TotalAdeudado, StringFormat='S/{0:N2}'}"
                            FontSize="32"
                            FontAttributes="Bold"
-                           TextColor="#D32F2F"
+                           TextColor="{StaticResource Secondary}"
                            HorizontalOptions="Center" />
                     <Label Text="Capital + Interes acumulado"
                            FontSize="12"
-                           TextColor="#757575"
+                           TextColor="{StaticResource Gray600}"
                            HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </Frame>
@@ -127,27 +128,27 @@
                 <Label Text="Monto que va a pagar"
                        FontSize="16"
                        FontAttributes="Bold"
-                       TextColor="#212121" />
+                       TextColor="{StaticResource Black}" />
 
-                <Frame BackgroundColor="White"
+                <Frame BackgroundColor="{StaticResource Surface}"
                        CornerRadius="10"
                        Padding="15"
                        HasShadow="True"
-                       BorderColor="#E0E0E0">
+                       BorderColor="{StaticResource Gray300}">
                     <Entry x:Name="entryMontoPago"
                            Placeholder="0.00"
                            Text="{Binding MontoPago}"
                            Keyboard="Numeric"
                            FontSize="18"
-                           TextColor="#212121" />
+                           TextColor="{StaticResource Black}" />
                 </Frame>
 
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,5,0,0">
                     <Button Grid.Column="0"
                             Text="Pagar Interes"
                             BackgroundColor="#FFF3E0"
-                            TextColor="#FF9800"
-                            BorderColor="#FF9800"
+                            TextColor="{StaticResource Secondary}"
+                            BorderColor="{StaticResource Secondary}"
                             BorderWidth="1"
                             FontSize="12"
                             CornerRadius="8"
@@ -157,8 +158,8 @@
                     <Button Grid.Column="1"
                             Text="Pagar Total"
                             BackgroundColor="#FFEBEE"
-                            TextColor="#FF5722"
-                            BorderColor="#FF5722"
+                            TextColor="{StaticResource Secondary}"
+                            BorderColor="{StaticResource Secondary}"
                             BorderWidth="1"
                             FontSize="12"
                             CornerRadius="8"
@@ -171,19 +172,19 @@
                 <Label Text="Nota (opcional)"
                        FontSize="16"
                        FontAttributes="Bold"
-                       TextColor="#212121" />
+                       TextColor="{StaticResource Black}" />
 
-                <Frame BackgroundColor="White"
+                <Frame BackgroundColor="{StaticResource Surface}"
                        CornerRadius="10"
                        Padding="15"
                        HasShadow="True"
-                       BorderColor="#E0E0E0">
+                       BorderColor="{StaticResource Gray300}">
                     <Editor x:Name="editorNota"
                             Placeholder="Ej: Pago de la semana 3"
                             Text="{Binding NotaPago}"
                             AutoSize="TextChanges"
                             FontSize="14"
-                            TextColor="#212121"
+                            TextColor="{StaticResource Black}"
                             HeightRequest="80" />
                 </Frame>
             </VerticalStackLayout>
@@ -195,43 +196,61 @@
                    BorderColor="#FBC02D">
                 <VerticalStackLayout Spacing="8">
                     <HorizontalStackLayout Spacing="8">
-                        <Label Text="&#x1F4CC;"
+                        <HorizontalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleSistemaPagoCommand}" />
+                        </HorizontalStackLayout.GestureRecognizers>
+                        
+                        <Label Text="📌"
                                FontSize="18"
                                VerticalOptions="Start" />
                         <Label Text="Sistema de Pago:"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="#F57F17" />
+                               TextColor="#F57F17"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding SistemaPagoExpandido, Converter={StaticResource BoolToExpandIconConverter}}"
+                               FontSize="16"
+                               TextColor="#F57F17"
+                               HorizontalOptions="EndAndExpand"
+                               VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
-                    <Label Text="&#x2022; Primero se aplica al interes acumulado"
-                           FontSize="12"
-                           TextColor="#757575"
-                           Margin="26,0,0,0" />
+                    <Label Text="👆 Toca para ver cómo funciona el sistema"
+                           FontSize="11"
+                           TextColor="{StaticResource Gray500}"
+                           Margin="26,0,0,0"
+                           IsVisible="{Binding SistemaPagoExpandido, Converter={StaticResource InvertBoolConverter}}" />
 
-                    <Label Text="&#x2022; El excedente va al capital"
-                           FontSize="12"
-                           TextColor="#757575"
-                           Margin="26,0,0,0" />
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding SistemaPagoExpandido}">
+                        <Label Text="• Primero se aplica al interes acumulado"
+                               FontSize="12"
+                               TextColor="{StaticResource Gray700}"
+                               Margin="26,5,0,0" />
 
-                    <Label Text="&#x2022; El interes semanal se recalcula automaticamente"
-                           FontSize="12"
-                           TextColor="#757575"
-                           Margin="26,0,0,0" />
+                        <Label Text="• El excedente va al capital"
+                               FontSize="12"
+                               TextColor="{StaticResource Gray700}"
+                               Margin="26,0,0,0" />
 
-                    <Label Text="&#x2022; A menor capital, menor interes semanal"
-                           FontSize="12"
-                           TextColor="#757575"
-                           Margin="26,0,0,0" />
+                        <Label Text="• El interes semanal se recalcula automaticamente"
+                               FontSize="12"
+                               TextColor="{StaticResource Gray700}"
+                               Margin="26,0,0,0" />
+
+                        <Label Text="• A menor capital, menor interes semanal"
+                               FontSize="12"
+                               TextColor="{StaticResource Gray700}"
+                               Margin="26,0,0,0" />
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Frame>
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,0">
                 <Button Grid.Column="0"
                         Text="Cancelar"
-                        BackgroundColor="White"
-                        TextColor="#757575"
-                        BorderColor="#E0E0E0"
+                        BackgroundColor="{StaticResource Surface}"
+                        TextColor="{StaticResource Gray600}"
+                        BorderColor="{StaticResource Gray300}"
                         BorderWidth="1"
                         FontSize="16"
                         CornerRadius="10"
@@ -240,8 +259,8 @@
 
                 <Button Grid.Column="1"
                         Text="Registrar Pago"
-                        BackgroundColor="#2196F3"
-                        TextColor="White"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="{StaticResource Tertiary}"
                         FontSize="16"
                         FontAttributes="Bold"
                         CornerRadius="10"

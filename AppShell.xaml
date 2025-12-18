@@ -5,7 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:App_CrediVnzl"
     xmlns:pages="clr-namespace:App_CrediVnzl.Pages"
-    Title="CrediVnzl">
+    Title="CrediVnzl"
+    Shell.BackgroundColor="{StaticResource Tertiary}"
+    Shell.ForegroundColor="{StaticResource White}"
+    Shell.TitleColor="{StaticResource Primary}"
+    Shell.TabBarBackgroundColor="{StaticResource Tertiary}"
+    Shell.TabBarForegroundColor="{StaticResource White}">
 
     <ShellContent
         Title="Dashboard"

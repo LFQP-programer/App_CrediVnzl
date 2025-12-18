@@ -15,6 +15,7 @@ namespace App_CrediVnzl.ViewModels
         private string _montoInicial = string.Empty;
         private DateTime _fechaInicio = DateTime.Today;
         private int _clienteId;
+        private bool _condicionesExpandidas = false;
         private const decimal TASA_INTERES_SEMANAL = 5.0m;
 
         public ObservableCollection<Cliente> Clientes { get; set; } = new();
@@ -60,14 +61,26 @@ namespace App_CrediVnzl.ViewModels
             }
         }
 
+        public bool CondicionesExpandidas
+        {
+            get => _condicionesExpandidas;
+            set
+            {
+                _condicionesExpandidas = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand CrearPrestamoCommand { get; }
         public ICommand CancelarCommand { get; }
+        public ICommand ToggleCondicionesCommand { get; }
 
         public NuevoPrestamoViewModel(DatabaseService databaseService)
         {
             _databaseService = databaseService;
             CrearPrestamoCommand = new Command(async () => await CrearPrestamo());
             CancelarCommand = new Command(async () => await Cancelar());
+            ToggleCondicionesCommand = new Command(() => CondicionesExpandidas = !CondicionesExpandidas);
         }
 
         public async Task LoadClientesAsync()

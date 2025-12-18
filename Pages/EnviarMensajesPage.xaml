@@ -8,7 +8,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <!-- Título -->
+            <!-- Tï¿½tulo -->
             <Frame BackgroundColor="#2196F3" 
                    CornerRadius="10" 
                    Padding="20"
@@ -68,7 +68,7 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Contenido según tipo de mensaje -->
+            <!-- Contenido segï¿½n tipo de mensaje -->
 
             <!-- RECORDATORIOS -->
             <Frame BackgroundColor="#FFF9C4"
@@ -79,12 +79,12 @@
                 <VerticalStackLayout Spacing="10">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="??" FontSize="20"/>
-                        <Label Text="Envío Masivo" 
+                        <Label Text="Envï¿½o Masivo" 
                                FontSize="16" 
                                FontAttributes="Bold"
                                TextColor="#212121"/>
                     </HorizontalStackLayout>
-                    <Label Text="Se enviará un recordatorio automático a todos los clientes con pagos próximos."
+                    <Label Text="Se enviarï¿½ un recordatorio automï¿½tico a todos los clientes con pagos prï¿½ximos."
                            FontSize="14"
                            TextColor="#424242"/>
                     <Label Text="{Binding TotalMensajesRecordatorios, StringFormat='Total de mensajes: {0}'}"
@@ -149,7 +149,7 @@
                            TextColor="#212121"/>
 
                     <Editor Text="{Binding MensajePersonalizado}"
-                            Placeholder="Escribe tu mensaje aquí..."
+                            Placeholder="Escribe tu mensaje aquï¿½..."
                             HeightRequest="150"
                             BackgroundColor="#F5F5F5"
                             TextColor="#212121"/>
@@ -165,12 +165,12 @@
                 <VerticalStackLayout Spacing="10">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="??" FontSize="20"/>
-                        <Label Text="Envío Masivo" 
+                        <Label Text="Envï¿½o Masivo" 
                                FontSize="16" 
                                FontAttributes="Bold"
                                TextColor="#212121"/>
                     </HorizontalStackLayout>
-                    <Label Text="Se enviará un recordatorio automático a todos los clientes con pagos próximos."
+                    <Label Text="Se enviarï¿½ un recordatorio automï¿½tico a todos los clientes con pagos prï¿½ximos."
                            FontSize="14"
                            TextColor="#424242"/>
                     <Label Text="{Binding TotalMensajesMasivos, StringFormat='Total de mensajes: {0}'}"
@@ -193,19 +193,19 @@
                            TextColor="#212121"/>
 
                     <Editor Text="{Binding MensajeMasivo}"
-                            Placeholder="Escribe tu mensaje aquí..."
+                            Placeholder="Escribe tu mensaje aquï¿½..."
                             HeightRequest="150"
                             BackgroundColor="#F5F5F5"
                             TextColor="#212121"/>
                     
-                    <Label Text="Este mensaje se enviará a todos los clientes con pagos próximos."
+                    <Label Text="Este mensaje se enviarï¿½ a todos los clientes con pagos prï¿½ximos."
                            FontSize="12"
                            TextColor="#757575"
                            FontAttributes="Italic"/>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Botón de envío -->
+            <!-- Botï¿½n de envï¿½o -->
             <Button Text="{Binding TextoBotonEnviar}"
                     Command="{Binding EnviarMensajesCommand}"
                     BackgroundColor="{Binding ColorBotonEnviar}"

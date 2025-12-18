@@ -17,8 +17,17 @@ namespace App_CrediVnzl.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _viewModel.LoadClientesAsync();
-            UpdateClientesCount();
+            
+            try
+            {
+                await _viewModel.LoadClientesAsync();
+                UpdateClientesCount();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en ClientesPage.OnAppearing: {ex.Message}");
+                await DisplayAlert("Error", $"Error al cargar clientes: {ex.Message}", "OK");
+            }
         }
 
         private void UpdateClientesCount()

@@ -66,5 +66,8 @@ namespace App_CrediVnzl.Models
                 return (int)((MontoPagado / totalOriginal) * 100);
             }
         }
+
+        [Ignore]
+        public bool Expandido { get; set; } = false;
     }
 }

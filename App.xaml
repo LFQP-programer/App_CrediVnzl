@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
+            <!-- Converters -->
             <converters:PercentageToProgressConverter x:Key="PercentageConverter" />
             <converters:IsGreaterThanZeroConverter x:Key="IsGreaterThanZeroConverter" />
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
@@ -19,6 +20,8 @@
             <converters:TipoMensajeToColorConverter x:Key="TipoMensajeToColorConverter" />
             <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
             <converters:FiltroToColorConverter x:Key="FiltroToColorConverter" />
+            <converters:IsNotNullOrEmptyConverter x:Key="IsNotNullOrEmptyConverter" />
+            <converters:BoolToExpandIconConverter x:Key="BoolToExpandIconConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -19,9 +19,18 @@ namespace App_CrediVnzl.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _viewModel.LoadDataAsync();
-            ActualizarUI();
-            GenerarCalendario();
+            
+            try
+            {
+                await _viewModel.LoadDataAsync();
+                ActualizarUI();
+                GenerarCalendario();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en CalendarioPagosPage.OnAppearing: {ex.Message}");
+                await DisplayAlert("Error", $"Error al cargar calendario: {ex.Message}", "OK");
+            }
         }
 
         private void ActualizarUI()

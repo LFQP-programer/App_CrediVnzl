@@ -79,8 +79,6 @@ namespace App_CrediVnzl.ViewModels
             MarcarPagadoCommand = new Command<Pago>(async (pago) => await MarcarPagadoAsync(pago));
             MesAnteriorCommand = new Command(MesAnterior);
             MesSiguienteCommand = new Command(MesSiguiente);
-            
-            _ = LoadDataAsync();
         }
 
         public async Task LoadDataAsync()

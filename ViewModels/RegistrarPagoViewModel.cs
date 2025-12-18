@@ -14,6 +14,7 @@ namespace App_CrediVnzl.ViewModels
         private int _prestamoId;
         private string _montoPago = string.Empty;
         private string _notaPago = string.Empty;
+        private bool _sistemaPagoExpandido = false;
 
         public Prestamo Prestamo
         {
@@ -55,10 +56,21 @@ namespace App_CrediVnzl.ViewModels
             }
         }
 
+        public bool SistemaPagoExpandido
+        {
+            get => _sistemaPagoExpandido;
+            set
+            {
+                _sistemaPagoExpandido = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand RegistrarPagoCommand { get; }
         public ICommand CancelarCommand { get; }
         public ICommand PagarInteresCommand { get; }
         public ICommand PagarTotalCommand { get; }
+        public ICommand ToggleSistemaPagoCommand { get; }
 
         public RegistrarPagoViewModel(DatabaseService databaseService)
         {
@@ -69,6 +81,7 @@ namespace App_CrediVnzl.ViewModels
             CancelarCommand = new Command(async () => await Cancelar());
             PagarInteresCommand = new Command(() => MontoPago = Prestamo.InteresAcumulado.ToString("F2"));
             PagarTotalCommand = new Command(() => MontoPago = Prestamo.TotalAdeudado.ToString("F2"));
+            ToggleSistemaPagoCommand = new Command(() => SistemaPagoExpandido = !SistemaPagoExpandido);
         }
 
         public async Task LoadDataAsync()

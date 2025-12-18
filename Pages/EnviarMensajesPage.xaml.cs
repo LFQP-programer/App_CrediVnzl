@@ -17,7 +17,16 @@ namespace App_CrediVnzl.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _viewModel.LoadDataAsync();
+            
+            try
+            {
+                await _viewModel.LoadDataAsync();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en EnviarMensajesPage.OnAppearing: {ex.Message}");
+                await DisplayAlert("Error", $"Error al cargar datos: {ex.Message}", "OK");
+            }
         }
     }
 }

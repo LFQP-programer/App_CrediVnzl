@@ -50,49 +50,56 @@ namespace App_CrediVnzl.ViewModels
 
         public async Task LoadDashboardDataAsync()
         {
-            // Cargar datos desde la base de datos
-            TotalClientes = await _databaseService.GetTotalClientesAsync();
-            PrestamosActivos = await _databaseService.GetClientesConPrestamosActivosAsync();
-            CapitalEnCalle = 0; // Se calculara cuando se implementen los prestamos
-            InteresesAcumulados = 0; // Se calculara cuando se implementen los prestamos
-
-            DashboardCards = new ObservableCollection<DashboardCard>
+            try
             {
-                new DashboardCard
-                {
-                    Title = "Clientes",
-                    Value = TotalClientes.ToString(),
-                    Icon = "C",
-                    BackgroundColor = "#2196F3",
-                    IconColor = "#FFFFFF"
-                },
-                new DashboardCard
-                {
-                    Title = "Activos",
-                    Value = PrestamosActivos.ToString(),
-                    Icon = "A",
-                    BackgroundColor = "#4CAF50",
-                    IconColor = "#FFFFFF"
-                },
-                new DashboardCard
-                {
-                    Title = "Capital en la Calle",
-                    Value = $"${CapitalEnCalle:N2}",
-                    Icon = "$",
-                    BackgroundColor = "#9C27B0",
-                    IconColor = "#FFFFFF"
-                },
-                new DashboardCard
-                {
-                    Title = "Intereses Acumulados",
-                    Value = $"${InteresesAcumulados:N2}",
-                    Icon = "I",
-                    BackgroundColor = "#FF5722",
-                    IconColor = "#FFFFFF"
-                }
-            };
+                // Cargar datos desde la base de datos
+                TotalClientes = await _databaseService.GetTotalClientesAsync();
+                PrestamosActivos = await _databaseService.GetClientesConPrestamosActivosAsync();
+                CapitalEnCalle = 0; // Se calculara cuando se implementen los prestamos
+                InteresesAcumulados = 0; // Se calculara cuando se implementen los prestamos
 
-            await LoadPrestamosActivos();
+                DashboardCards = new ObservableCollection<DashboardCard>
+                {
+                    new DashboardCard
+                    {
+                        Title = "Clientes",
+                        Value = TotalClientes.ToString(),
+                        Icon = "C",
+                        BackgroundColor = "#2196F3",
+                        IconColor = "#FFFFFF"
+                    },
+                    new DashboardCard
+                    {
+                        Title = "Activos",
+                        Value = PrestamosActivos.ToString(),
+                        Icon = "A",
+                        BackgroundColor = "#4CAF50",
+                        IconColor = "#FFFFFF"
+                    },
+                    new DashboardCard
+                    {
+                        Title = "Capital en la Calle",
+                        Value = $"${CapitalEnCalle:N2}",
+                        Icon = "$",
+                        BackgroundColor = "#9C27B0",
+                        IconColor = "#FFFFFF"
+                    },
+                    new DashboardCard
+                    {
+                        Title = "Intereses Acumulados",
+                        Value = $"${InteresesAcumulados:N2}",
+                        Icon = "I",
+                        BackgroundColor = "#FF5722",
+                        IconColor = "#FFFFFF"
+                    }
+                };
+
+                await LoadPrestamosActivos();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error cargando datos del dashboard: {ex.Message}");
+            }
         }
 
         private void LoadMenuCards()

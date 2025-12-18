@@ -46,8 +46,6 @@ namespace App_CrediVnzl.ViewModels
             RefreshCommand = new Command(async () => await LoadClientesAsync());
             AddClienteCommand = new Command(async () => await NavigateToNewCliente());
             EditClienteCommand = new Command<Cliente>(async (cliente) => await NavigateToDetalleCliente(cliente));
-            
-            _ = LoadClientesAsync();
         }
 
         public async Task LoadClientesAsync()
