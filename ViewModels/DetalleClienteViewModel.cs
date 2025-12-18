@@ -71,6 +71,7 @@ namespace App_CrediVnzl.ViewModels
 
         public ICommand NuevoPrestamoCommand { get; }
         public ICommand RegistrarPagoCommand { get; }
+        public ICommand VerHistorialCommand { get; }
 
         public DetalleClienteViewModel(DatabaseService databaseService)
         {
@@ -79,6 +80,7 @@ namespace App_CrediVnzl.ViewModels
             
             NuevoPrestamoCommand = new Command(async () => await NuevoPrestamo());
             RegistrarPagoCommand = new Command<Prestamo>(async (prestamo) => await RegistrarPago(prestamo));
+            VerHistorialCommand = new Command(async () => await VerHistorial());
         }
 
         public async Task LoadDataAsync()
@@ -123,6 +125,11 @@ namespace App_CrediVnzl.ViewModels
             {
                 await Shell.Current.GoToAsync($"registrarpago?prestamoId={prestamo.Id}");
             }
+        }
+
+        private async Task VerHistorial()
+        {
+            await Shell.Current.GoToAsync($"historialprestamos?clienteId={ClienteId}");
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

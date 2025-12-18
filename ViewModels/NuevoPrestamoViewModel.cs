@@ -114,6 +114,9 @@ namespace App_CrediVnzl.ViewModels
                     return;
                 }
 
+                // Calcular el interes de la primera semana inmediatamente
+                var interesPrimeraSemana = monto * (TASA_INTERES_SEMANAL / 100);
+
                 var prestamo = new Prestamo
                 {
                     ClienteId = ClienteSeleccionado!.Id,
@@ -123,20 +126,30 @@ namespace App_CrediVnzl.ViewModels
                     FechaInicio = FechaInicio,
                     Estado = "Activo",
                     CapitalPendiente = monto,
-                    InteresAcumulado = 0,
-                    TotalAdeudado = monto,
+                    InteresAcumulado = interesPrimeraSemana, // ? Interes inicial
+                    TotalAdeudado = monto + interesPrimeraSemana, // ? Total con interes
                     MontoPagado = 0,
-                    Notas = $"Préstamo creado el {DateTime.Now:dd/MM/yyyy HH:mm}"
+                    Notas = $"Préstamo creado el {DateTime.Now:dd/MM/yyyy HH:mm}\n" +
+                            $"Capital inicial: S/{monto:N2}\n" +
+                            $"Interes primera semana: S/{interesPrimeraSemana:N2}\n" +
+                            $"Total adeudado inicial: S/{(monto + interesPrimeraSemana):N2}"
                 };
 
                 await _databaseService.SavePrestamoAsync(prestamo);
 
                 // Actualizar contador de prestamos activos del cliente
                 ClienteSeleccionado.PrestamosActivos++;
-                ClienteSeleccionado.DeudaPendiente += monto;
+                ClienteSeleccionado.DeudaPendiente += monto + interesPrimeraSemana; // ? Incluir interes
                 await _databaseService.SaveClienteAsync(ClienteSeleccionado);
 
-                await Shell.Current.DisplayAlert("Éxito", "Préstamo creado exitosamente", "OK");
+                // Mostrar mensaje con detalle
+                var mensaje = $"Préstamo creado exitosamente\n\n" +
+                             $"Capital: S/{monto:N2}\n" +
+                             $"Interes semanal: S/{interesPrimeraSemana:N2}\n" +
+                             $"Total a pagar: S/{(monto + interesPrimeraSemana):N2}\n\n" +
+                             $"El cliente ya tiene S/{interesPrimeraSemana:N2} de interes acumulado desde hoy.";
+
+                await Shell.Current.DisplayAlert("Éxito", mensaje, "OK");
                 await Shell.Current.GoToAsync("..");
             }
             catch (Exception ex)

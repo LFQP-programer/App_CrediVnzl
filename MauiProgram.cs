@@ -20,6 +20,7 @@ namespace App_CrediVnzl
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+
             // Registrar servicios
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<WhatsAppService>();
@@ -31,6 +32,7 @@ namespace App_CrediVnzl
             builder.Services.AddTransient<DetalleClientePage>();
             builder.Services.AddTransient<NuevoPrestamoPage>();
             builder.Services.AddTransient<RegistrarPagoPage>();
+            builder.Services.AddTransient<HistorialPrestamosPage>();
             builder.Services.AddTransient<CalendarioPagosPage>();
             builder.Services.AddTransient<EnviarMensajesPage>();
 

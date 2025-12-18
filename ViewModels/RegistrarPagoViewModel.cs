@@ -99,11 +99,20 @@ namespace App_CrediVnzl.ViewModels
             var dias = (DateTime.Now - fechaReferencia).Days;
             var semanasTranscurridas = Math.Max(0, dias / 7);
             
-            // Solo actualizar si han pasado al menos una semana completa
+            // Solo actualizar si han pasado al menos una semana completa DESDE el inicio o ultimo pago
+            // Si FechaUltimoPago es null y han pasado menos de 7 dias desde FechaInicio, no agregar mas interes
             if (semanasTranscurridas > 0)
             {
+                // Si no hay FechaUltimoPago y es la primera semana, restar 1 porque ya tiene el interes inicial
+                var semanasAAgregar = semanasTranscurridas;
+                if (prestamo.FechaUltimoPago == null && semanasTranscurridas == 1)
+                {
+                    // Ya tiene el interes de la primera semana, no agregar nada
+                    return;
+                }
+                
                 var interesPorSemana = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100);
-                var nuevoInteres = interesPorSemana * semanasTranscurridas;
+                var nuevoInteres = interesPorSemana * semanasAAgregar;
                 
                 prestamo.InteresAcumulado += nuevoInteres;
                 prestamo.TotalAdeudado = prestamo.CapitalPendiente + prestamo.InteresAcumulado;

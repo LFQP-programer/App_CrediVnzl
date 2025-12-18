@@ -14,6 +14,7 @@ namespace App_CrediVnzl
             Routing.RegisterRoute("detallecliente", typeof(DetalleClientePage));
             Routing.RegisterRoute("nuevoprestamo", typeof(NuevoPrestamoPage));
             Routing.RegisterRoute("registrarpago", typeof(RegistrarPagoPage));
+            Routing.RegisterRoute("historialprestamos", typeof(HistorialPrestamosPage));
             Routing.RegisterRoute("calendario", typeof(CalendarioPagosPage));
             Routing.RegisterRoute("mensajes", typeof(EnviarMensajesPage));
         }

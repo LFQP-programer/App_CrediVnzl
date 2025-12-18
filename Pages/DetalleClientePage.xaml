@@ -71,7 +71,7 @@
                        Padding="15"
                        HasShadow="True">
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Préstamos"
+                        <Label Text="Prï¿½stamos"
                                FontSize="12"
                                TextColor="#757575"
                                HorizontalOptions="Center" />
@@ -150,7 +150,7 @@
             </Frame>
 
             <!-- Boton Nuevo Prestamo -->
-            <Button Text="+ Nuevo Préstamo"
+            <Button Text="+ Nuevo PrÃ©stamo"
                     BackgroundColor="#2196F3"
                     TextColor="White"
                     FontSize="16"
@@ -159,8 +159,18 @@
                     HeightRequest="50"
                     Command="{Binding NuevoPrestamoCommand}" />
 
+            <!-- Boton Ver Historial -->
+            <Button Text="ðŸ“‹ Ver Historial de PrÃ©stamos"
+                    BackgroundColor="#9C27B0"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="15"
+                    HeightRequest="50"
+                    Command="{Binding VerHistorialCommand}" />
+
             <!-- Prestamos Activos -->
-            <Label Text="Préstamos Activos"
+            <Label Text="PrÃ©stamos Activos"
                    FontSize="18"
                    FontAttributes="Bold"
                    TextColor="#212121"
@@ -175,7 +185,7 @@
                             <Label Text="??"
                                    FontSize="60"
                                    HorizontalOptions="Center" />
-                            <Label Text="No hay préstamos activos"
+                            <Label Text="No hay prï¿½stamos activos"
                                    FontSize="16"
                                    HorizontalOptions="Center"
                                    TextColor="#757575"
@@ -196,7 +206,7 @@
                                 <!-- Header del Prestamo -->
                                 <Grid ColumnDefinitions="*,Auto">
                                     <Label Grid.Column="0"
-                                           Text="{Binding MontoInicial, StringFormat='Préstamo inicial: S/{0:N2}'}"
+                                           Text="{Binding MontoInicial, StringFormat='Prï¿½stamo inicial: S/{0:N2}'}"
                                            FontSize="16"
                                            FontAttributes="Bold"
                                            TextColor="#212121" />
@@ -254,7 +264,7 @@
 
                                 <Grid ColumnDefinitions="*,Auto">
                                     <Label Grid.Column="0"
-                                           Text="Interés semanal actual:"
+                                           Text="Interï¿½s semanal actual:"
                                            FontSize="14"
                                            TextColor="#757575" />
                                     <Label Grid.Column="1"
@@ -266,7 +276,7 @@
 
                                 <Grid ColumnDefinitions="*,Auto">
                                     <Label Grid.Column="0"
-                                           Text="Interés acumulado:"
+                                           Text="Interï¿½s acumulado:"
                                            FontSize="14"
                                            TextColor="#757575" />
                                     <Label Grid.Column="1"
