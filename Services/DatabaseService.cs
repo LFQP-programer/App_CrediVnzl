@@ -19,6 +19,7 @@ namespace App_CrediVnzl.Services
             await _database.CreateTableAsync<Prestamo>();
             await _database.CreateTableAsync<Pago>();
             await _database.CreateTableAsync<HistorialPago>();
+            await _database.CreateTableAsync<CapitalConfig>();
         }
 
         private async Task<SQLiteAsyncConnection> GetDatabaseAsync()
@@ -406,6 +407,66 @@ namespace App_CrediVnzl.Services
                 .Where(h => h.FechaPago >= fechaInicio && h.FechaPago < fechaFin)
                 .ToListAsync();
             return historial.Sum(h => h.MontoTotal);
+        }
+
+        // Metodos para CapitalConfig
+        public async Task<CapitalConfig?> GetCapitalConfigAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var config = await db.Table<CapitalConfig>().FirstOrDefaultAsync();
+            
+            // Si no existe, crear una configuracion por defecto
+            if (config == null)
+            {
+                config = new CapitalConfig
+                {
+                    CapitalInicial = 0,
+                    CapitalDisponible = 0,
+                    GananciaTotal = 0,
+                    FechaActualizacion = DateTime.Now
+                };
+                await db.InsertAsync(config);
+            }
+            
+            return config;
+        }
+
+        public async Task<int> SaveCapitalConfigAsync(CapitalConfig config)
+        {
+            var db = await GetDatabaseAsync();
+            config.FechaActualizacion = DateTime.Now;
+            
+            var existente = await db.Table<CapitalConfig>().FirstOrDefaultAsync();
+            if (existente != null)
+            {
+                config.Id = existente.Id;
+                return await db.UpdateAsync(config);
+            }
+            else
+            {
+                return await db.InsertAsync(config);
+            }
+        }
+
+        public async Task ActualizarCapitalDisponibleAsync()
+        {
+            var config = await GetCapitalConfigAsync();
+            if (config != null)
+            {
+                var capitalEnPrestamos = await GetTotalCapitalActivoAsync();
+                config.CapitalDisponible = config.CapitalInicial - capitalEnPrestamos;
+                await SaveCapitalConfigAsync(config);
+            }
+        }
+
+        public async Task AgregarGananciaAsync(decimal ganancia)
+        {
+            var config = await GetCapitalConfigAsync();
+            if (config != null)
+            {
+                config.GananciaTotal += ganancia;
+                await SaveCapitalConfigAsync(config);
+            }
         }
 
         // Metodos para estadisticas globales

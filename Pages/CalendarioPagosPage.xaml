@@ -12,20 +12,6 @@
     <ScrollView>
         <VerticalStackLayout Padding="0" Spacing="0">
 
-            <!-- Header -->
-            <Grid BackgroundColor="{StaticResource Tertiary}" Padding="20,10,20,20">
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="Calendario de Pagos"
-                           FontSize="24"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource White}" />
-                    <Label x:Name="lblSubtitulo"
-                           FontSize="14"
-                           TextColor="{StaticResource White}"
-                           Opacity="0.9" />
-                </VerticalStackLayout>
-            </Grid>
-
             <!-- Tarjetas de Resumen -->
             <Grid Padding="15,20" RowSpacing="12" ColumnSpacing="12">
                 <Grid.RowDefinitions>

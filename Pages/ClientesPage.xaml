@@ -13,24 +13,10 @@
         <ToolbarItem Text="Agregar" Command="{Binding AddClienteCommand}" />
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto,Auto,*" Padding="0" RowSpacing="0">
+    <Grid RowDefinitions="Auto,*" Padding="0" RowSpacing="0">
         
-        <!-- Header -->
-        <Grid Grid.Row="0" BackgroundColor="{StaticResource Tertiary}" Padding="20,10,20,20">
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Clientes"
-                       FontSize="24"
-                       FontAttributes="Bold"
-                       TextColor="{StaticResource White}" />
-                <Label x:Name="lblClientesCount"
-                       FontSize="14"
-                       TextColor="{StaticResource White}"
-                       Opacity="0.9" />
-            </VerticalStackLayout>
-        </Grid>
-
         <!-- Buscador -->
-        <Frame Grid.Row="1" 
+        <Frame Grid.Row="0" 
                BackgroundColor="{StaticResource White}"
                CornerRadius="25"
                Padding="15,10"
@@ -48,129 +34,132 @@
             </Grid>
         </Frame>
 
-        <!-- Boton Agregar -->
-        <Button Grid.Row="2"
-                Text="+ Agregar Nuevo Cliente"
-                BackgroundColor="{StaticResource Secondary}"
-                TextColor="{StaticResource White}"
-                FontSize="16"
-                FontAttributes="Bold"
-                CornerRadius="15"
-                Margin="15,0,15,10"
-                HeightRequest="50"
-                VerticalOptions="Start"
-                Command="{Binding AddClienteCommand}" />
+        <!-- Contenedor principal con boton y lista -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*" Padding="0" RowSpacing="0">
+            
+            <!-- Boton Agregar -->
+            <Button Grid.Row="0"
+                    Text="+ Agregar Nuevo Cliente"
+                    BackgroundColor="{StaticResource Secondary}"
+                    TextColor="{StaticResource White}"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="15"
+                    Margin="15,0,15,10"
+                    HeightRequest="50"
+                    VerticalOptions="Start"
+                    Command="{Binding AddClienteCommand}" />
 
-        <!-- Lista de Clientes -->
-        <RefreshView Grid.Row="2"
-                     IsRefreshing="{Binding IsRefreshing}"
-                     Command="{Binding RefreshCommand}"
-                     Margin="0,60,0,0">
-            <CollectionView ItemsSource="{Binding Clientes}"
-                           Margin="15,0">
-                <CollectionView.EmptyView>
-                    <ContentView>
-                        <VerticalStackLayout Padding="20"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center">
-                            <Label Text="👥"
-                                   FontSize="60"
-                                   HorizontalOptions="Center" />
-                            <Label Text="No hay clientes registrados"
-                                   FontSize="18"
-                                   HorizontalOptions="Center"
-                                   TextColor="{StaticResource Gray600}"
-                                   Margin="0,10,0,0" />
-                            <Label Text="Toca el boton + para agregar un cliente"
-                                   FontSize="14"
-                                   HorizontalOptions="Center"
-                                   TextColor="{StaticResource Gray500}" />
-                        </VerticalStackLayout>
-                    </ContentView>
-                </CollectionView.EmptyView>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="{StaticResource White}"
-                               CornerRadius="15"
-                               Padding="20"
-                               Margin="0,0,0,15"
-                               HasShadow="True">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ClientesViewModel}}, Path=EditClienteCommand}"
-                                                     CommandParameter="{Binding .}" />
-                            </Frame.GestureRecognizers>
-                            
-                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Nombre -->
-                                <Label Grid.Row="0" Grid.Column="0"
-                                       Text="{Binding NombreCompleto}"
+            <!-- Lista de Clientes -->
+            <RefreshView Grid.Row="1"
+                         IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding Clientes}"
+                               Margin="15,0">
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <VerticalStackLayout Padding="20"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center">
+                                <Label Text="👥"
+                                       FontSize="60"
+                                       HorizontalOptions="Center" />
+                                <Label Text="No hay clientes registrados"
                                        FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray900}" />
+                                       HorizontalOptions="Center"
+                                       TextColor="{StaticResource Gray600}"
+                                       Margin="0,10,0,0" />
+                                <Label Text="Toca el boton + para agregar un cliente"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"
+                                       TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+                        </ContentView>
+                    </CollectionView.EmptyView>
 
-                                <!-- Badge Prestamos Activos -->
-                                <Frame Grid.Row="0" Grid.Column="1"
-                                       BackgroundColor="{StaticResource Success}"
-                                       CornerRadius="12"
-                                       Padding="10,5"
-                                       HasShadow="False"
-                                       IsVisible="{Binding PrestamosActivos, Converter={StaticResource IsGreaterThanZeroConverter}}">
-                                    <Label Text="{Binding PrestamosActivos, StringFormat='{0} activos'}"
-                                           TextColor="{StaticResource White}"
-                                           FontSize="12"
-                                           FontAttributes="Bold" />
-                                </Frame>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="{StaticResource White}"
+                                   CornerRadius="15"
+                                   Padding="20"
+                                   Margin="0,0,0,15"
+                                   HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ClientesViewModel}}, Path=EditClienteCommand}"
+                                                         CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+                                
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
 
-                                <!-- Telefono -->
-                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                                      Spacing="5">
-                                    <Label Text="📱"
-                                           FontSize="14" />
-                                    <Label Text="{Binding Telefono}"
-                                           FontSize="14"
-                                           TextColor="{StaticResource Gray600}" />
-                                </HorizontalStackLayout>
-
-                                <!-- Cedula -->
-                                <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                                      Spacing="5">
-                                    <Label Text="🆔"
-                                           FontSize="14" />
-                                    <Label Text="{Binding Cedula, StringFormat='Cedula: {0}'}"
-                                           FontSize="14"
-                                           TextColor="{StaticResource Gray600}" />
-                                </HorizontalStackLayout>
-
-                                <!-- Separador -->
-                                <BoxView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-                                        HeightRequest="1"
-                                        Color="{StaticResource Gray300}"
-                                        Margin="0,5,0,5"
-                                        IsVisible="{Binding DeudaPendiente, Converter={StaticResource IsGreaterThanZeroConverter}}" />
-
-                                <!-- Deuda Pendiente -->
-                                <HorizontalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
-                                                      Spacing="5"
-                                                      IsVisible="{Binding DeudaPendiente, Converter={StaticResource IsGreaterThanZeroConverter}}">
-                                    <Label Text="Deuda pendiente:"
-                                           FontSize="14"
-                                           TextColor="{StaticResource Gray600}" />
-                                    <Label Text="{Binding DeudaPendiente, StringFormat='${0:N2}'}"
-                                           FontSize="16"
+                                    <!-- Nombre -->
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding NombreCompleto}"
+                                           FontSize="18"
                                            FontAttributes="Bold"
-                                           TextColor="{StaticResource Secondary}" />
-                                </HorizontalStackLayout>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
+                                           TextColor="{StaticResource Gray900}" />
+
+                                    <!-- Badge Prestamos Activos -->
+                                    <Frame Grid.Row="0" Grid.Column="1"
+                                           BackgroundColor="{StaticResource Success}"
+                                           CornerRadius="12"
+                                           Padding="10,5"
+                                           HasShadow="False"
+                                           IsVisible="{Binding PrestamosActivos, Converter={StaticResource IsGreaterThanZeroConverter}}">
+                                        <Label Text="{Binding PrestamosActivos, StringFormat='{0} activos'}"
+                                               TextColor="{StaticResource White}"
+                                               FontSize="12"
+                                               FontAttributes="Bold" />
+                                    </Frame>
+
+                                    <!-- Telefono -->
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                          Spacing="5">
+                                        <Label Text="📱"
+                                               FontSize="14" />
+                                        <Label Text="{Binding Telefono}"
+                                               FontSize="14"
+                                               TextColor="{StaticResource Gray600}" />
+                                    </HorizontalStackLayout>
+
+                                    <!-- Cedula -->
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                          Spacing="5">
+                                        <Label Text="🆔"
+                                               FontSize="14" />
+                                        <Label Text="{Binding Cedula, StringFormat='Cedula: {0}'}"
+                                               FontSize="14"
+                                               TextColor="{StaticResource Gray600}" />
+                                    </HorizontalStackLayout>
+
+                                    <!-- Separador -->
+                                    <BoxView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                            HeightRequest="1"
+                                            Color="{StaticResource Gray300}"
+                                            Margin="0,5,0,5"
+                                            IsVisible="{Binding DeudaPendiente, Converter={StaticResource IsGreaterThanZeroConverter}}" />
+
+                                    <!-- Deuda Pendiente -->
+                                    <HorizontalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                                                          Spacing="5"
+                                                          IsVisible="{Binding DeudaPendiente, Converter={StaticResource IsGreaterThanZeroConverter}}">
+                                        <Label Text="Deuda pendiente:"
+                                               FontSize="14"
+                                               TextColor="{StaticResource Gray600}" />
+                                        <Label Text="{Binding DeudaPendiente, StringFormat='${0:N2}'}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource Secondary}" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
     </Grid>
 </ContentPage>

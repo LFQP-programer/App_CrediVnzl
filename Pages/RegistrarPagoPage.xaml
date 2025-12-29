@@ -30,7 +30,7 @@
                    BorderColor="{StaticResource Tertiary}">
                 <VerticalStackLayout Spacing="12">
                     <HorizontalStackLayout Spacing="8">
-                        <Label Text="&#x1F4CB;"
+                        <Label Text="📋"
                                FontSize="18"
                                VerticalOptions="Start" />
                         <Label Text="Estado Actual del Prestamo"

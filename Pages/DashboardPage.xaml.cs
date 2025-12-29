@@ -41,7 +41,7 @@ namespace App_CrediVnzl.Pages
                 if (_viewModel == null)
                 {
                     System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - Creando ViewModel ***");
-                    _viewModel = new DashboardViewModel(_databaseService);
+                    _viewModel = new DashboardViewModel(_databaseService, this);
                     BindingContext = _viewModel;
                     System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - ViewModel creado OK ***");
                 }
@@ -65,6 +65,72 @@ namespace App_CrediVnzl.Pages
                     // Si falla el DisplayAlert, al menos tenemos los logs
                 }
             }
+        }
+
+        public async Task AnimarAperturaPopup()
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                var modal = this.FindByName<Frame>("ModalCapital");
+                if (modal != null)
+                {
+                    modal.Scale = 0.8;
+                    modal.Opacity = 0;
+                    
+                    var scaleTask = modal.ScaleTo(1, 300, Easing.CubicOut);
+                    var fadeTask = modal.FadeTo(1, 250);
+                    
+                    await Task.WhenAll(scaleTask, fadeTask);
+                }
+            });
+        }
+
+        public async Task AnimarCierrePopup()
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                var modal = this.FindByName<Frame>("ModalCapital");
+                if (modal != null)
+                {
+                    var scaleTask = modal.ScaleTo(0.8, 200, Easing.CubicIn);
+                    var fadeTask = modal.FadeTo(0, 200);
+                    
+                    await Task.WhenAll(scaleTask, fadeTask);
+                }
+            });
+        }
+
+        public async Task AnimarAperturaPopupGanancias()
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                var modal = this.FindByName<Frame>("ModalGanancias");
+                if (modal != null)
+                {
+                    modal.Scale = 0.8;
+                    modal.Opacity = 0;
+                    
+                    var scaleTask = modal.ScaleTo(1, 300, Easing.CubicOut);
+                    var fadeTask = modal.FadeTo(1, 250);
+                    
+                    await Task.WhenAll(scaleTask, fadeTask);
+                }
+            });
+        }
+
+        public async Task AnimarCierrePopupGanancias()
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                var modal = this.FindByName<Frame>("ModalGanancias");
+                if (modal != null)
+                {
+                    var scaleTask = modal.ScaleTo(0.8, 200, Easing.CubicIn);
+                    var fadeTask = modal.FadeTo(0, 200);
+                    
+                    await Task.WhenAll(scaleTask, fadeTask);
+                }
+            });
         }
 
         private async void OnClientesTapped(object sender, EventArgs e)

@@ -26,7 +26,7 @@
                            TextColor="{StaticResource Tertiary}" />
                     
                     <HorizontalStackLayout Spacing="5">
-                        <Label Text="??"
+                        <Label Text="📱"
                                FontSize="16" />
                         <Label Text="{Binding Cliente.Telefono}"
                                FontSize="16"
@@ -34,7 +34,7 @@
                     </HorizontalStackLayout>
                     
                     <HorizontalStackLayout Spacing="5">
-                        <Label Text="??"
+                        <Label Text="🆔"
                                FontSize="16" />
                         <Label Text="{Binding Cliente.Cedula}"
                                FontSize="16"
@@ -42,7 +42,7 @@
                     </HorizontalStackLayout>
                     
                     <HorizontalStackLayout Spacing="5">
-                        <Label Text="??"
+                        <Label Text="📍"
                                FontSize="16" />
                         <Label Text="{Binding Cliente.Direccion}"
                                FontSize="16"
@@ -73,7 +73,7 @@
                        Padding="15"
                        HasShadow="True">
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Pr�stamos"
+                        <Label Text="Prestamos"
                                FontSize="12"
                                TextColor="#757575"
                                HorizontalOptions="Center" />
@@ -184,10 +184,10 @@
                         <VerticalStackLayout Padding="20"
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center">
-                            <Label Text="??"
+                            <Label Text="📝"
                                    FontSize="60"
                                    HorizontalOptions="Center" />
-                            <Label Text="No hay pr�stamos activos"
+                            <Label Text="No hay prestamos activos"
                                    FontSize="16"
                                    HorizontalOptions="Center"
                                    TextColor="#757575"

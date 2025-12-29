@@ -35,7 +35,7 @@ namespace App_CrediVnzl.Pages
 
         private void ActualizarUI()
         {
-            lblSubtitulo.Text = $"{_viewModel.Resumen.TotalMes} pagos programados";
+            Title = $"Calendario ({_viewModel.Resumen.TotalMes} pagos)";
             lblMesAnio.Text = _viewModel.GetMesAnio();
         }
 
@@ -45,7 +45,7 @@ namespace App_CrediVnzl.Pages
             gridCalendario.RowDefinitions.Clear();
             gridCalendario.ColumnDefinitions.Clear();
 
-            // 7 columnas (días)
+            // 7 columnas (dias)
             for (int i = 0; i < 7; i++)
             {
                 gridCalendario.ColumnDefinitions.Add(

@@ -151,7 +151,7 @@
                    BorderColor="#FF9800">
                 <VerticalStackLayout Spacing="5">
                     <HorizontalStackLayout Spacing="8">
-                        <Label Text="&#x26A0;&#xFE0F;"
+                        <Label Text="⚠️"
                                FontSize="18"
                                VerticalOptions="Start" />
                         <Label Text="Importante:"

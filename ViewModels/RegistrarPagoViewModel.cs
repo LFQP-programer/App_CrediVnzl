@@ -240,6 +240,12 @@ namespace App_CrediVnzl.ViewModels
                 };
                 await _databaseService.SaveHistorialPagoAsync(historial);
 
+                // Actualizar ganancia total si se pago interes
+                if (pagoInteres > 0)
+                {
+                    await _databaseService.AgregarGananciaAsync(pagoInteres);
+                }
+
                 // Actualizar cliente
                 await _databaseService.ActualizarDeudaClienteAsync(Prestamo.ClienteId);
 

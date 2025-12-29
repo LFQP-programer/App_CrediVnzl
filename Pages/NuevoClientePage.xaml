@@ -11,20 +11,6 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="0" Spacing="0">
-            
-            <!-- Header -->
-            <Grid BackgroundColor="{StaticResource Tertiary}" Padding="20,10,20,20">
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="{Binding PageTitle}"
-                           FontSize="24"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource White}" />
-                    <Label Text="Registrar informacion del cliente"
-                           FontSize="14"
-                           TextColor="{StaticResource White}"
-                           Opacity="0.9" />
-                </VerticalStackLayout>
-            </Grid>
 
             <!-- Informacion del Cliente Card -->
             <Frame BackgroundColor="{StaticResource White}"

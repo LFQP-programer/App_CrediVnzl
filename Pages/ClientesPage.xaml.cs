@@ -32,7 +32,7 @@ namespace App_CrediVnzl.Pages
 
         private void UpdateClientesCount()
         {
-            lblClientesCount.Text = $"{_viewModel.Clientes.Count} registrados";
+            Title = $"Clientes ({_viewModel.Clientes.Count})";
         }
     }
 }
