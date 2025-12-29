@@ -73,6 +73,8 @@ namespace App_CrediVnzl.ViewModels
         public ICommand RegistrarPagoCommand { get; }
         public ICommand VerHistorialCommand { get; }
         public ICommand ToggleExpandirPrestamoCommand { get; }
+        public ICommand ModificarClienteCommand { get; }
+        public ICommand EliminarClienteCommand { get; }
 
         public DetalleClienteViewModel(DatabaseService databaseService)
         {
@@ -83,6 +85,8 @@ namespace App_CrediVnzl.ViewModels
             RegistrarPagoCommand = new Command<Prestamo>(async (prestamo) => await RegistrarPago(prestamo));
             VerHistorialCommand = new Command(async () => await VerHistorial());
             ToggleExpandirPrestamoCommand = new Command<Prestamo>(ToggleExpandirPrestamo);
+            ModificarClienteCommand = new Command(async () => await ModificarCliente());
+            EliminarClienteCommand = new Command(async () => await EliminarCliente());
         }
 
         public async Task LoadDataAsync()
@@ -132,6 +136,56 @@ namespace App_CrediVnzl.ViewModels
         private async Task VerHistorial()
         {
             await Shell.Current.GoToAsync($"historialprestamos?clienteId={ClienteId}");
+        }
+
+        private async Task ModificarCliente()
+        {
+            await Shell.Current.GoToAsync($"editarcliente?clienteId={ClienteId}");
+        }
+
+        private async Task EliminarCliente()
+        {
+            try
+            {
+                // Verificar si tiene préstamos activos
+                var prestamos = await _databaseService.GetPrestamosByClienteAsync(ClienteId);
+                var prestamosActivos = prestamos.Where(p => p.Estado == "Activo").ToList();
+
+                if (prestamosActivos.Any())
+                {
+                    var confirmar = await Shell.Current.DisplayAlert(
+                        "Advertencia", 
+                        $"Este cliente tiene {prestamosActivos.Count} préstamo(s) activo(s) con una deuda total de S/{prestamosActivos.Sum(p => p.TotalAdeudado):N2}.\n\n¿Está seguro de eliminar al cliente y todos sus préstamos, pagos e historial?", 
+                        "Sí, eliminar", 
+                        "Cancelar");
+
+                    if (!confirmar)
+                        return;
+                }
+                else
+                {
+                    var confirmar = await Shell.Current.DisplayAlert(
+                        "Confirmar eliminación", 
+                        "¿Está seguro de eliminar este cliente? Esta acción no se puede deshacer.", 
+                        "Sí, eliminar", 
+                        "Cancelar");
+
+                    if (!confirmar)
+                        return;
+                }
+
+                // Eliminar todos los datos relacionados en cascada
+                await _databaseService.EliminarClienteConDatosRelacionadosAsync(ClienteId);
+
+                await Shell.Current.DisplayAlert("Éxito", "Cliente eliminado correctamente", "OK");
+                
+                // Regresar a la página de clientes
+                await Shell.Current.GoToAsync("..");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"No se pudo eliminar el cliente: {ex.Message}", "OK");
+            }
         }
 
         private void ToggleExpandirPrestamo(Prestamo prestamo)

@@ -105,5 +105,18 @@ namespace App_CrediVnzl.Pages
                 await DisplayAlert("Error", ex.Message, "OK");
             }
         }
+
+        private async void OnConfiguracionTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                await Shell.Current.GoToAsync("configuracion");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnConfiguracionTapped ***: {ex.Message}");
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
+        }
     }
 }

@@ -441,5 +441,124 @@ namespace App_CrediVnzl.Services
             var db = await GetDatabaseAsync();
             return await db.Table<Prestamo>().Where(p => p.Estado == "Completado").CountAsync();
         }
+
+        // Método para eliminar cliente y todos sus datos relacionados
+        public async Task EliminarClienteConDatosRelacionadosAsync(int clienteId)
+        {
+            var db = await GetDatabaseAsync();
+            
+            // Obtener todos los préstamos del cliente
+            var prestamos = await GetPrestamosByClienteAsync(clienteId);
+            
+            foreach (var prestamo in prestamos)
+            {
+                // Eliminar historial de pagos del préstamo
+                await db.ExecuteAsync("DELETE FROM HistorialPago WHERE PrestamoId = ?", prestamo.Id);
+                
+                // Eliminar pagos programados del préstamo
+                await db.ExecuteAsync("DELETE FROM Pago WHERE PrestamoId = ?", prestamo.Id);
+                
+                // Eliminar el préstamo
+                await db.DeleteAsync(prestamo);
+            }
+            
+            // Finalmente, eliminar el cliente
+            var cliente = await GetClienteAsync(clienteId);
+            if (cliente != null)
+            {
+                await db.DeleteAsync(cliente);
+            }
+        }
+
+        // Método para reiniciar la base de datos (eliminar todos los datos)
+        public async Task ReiniciarBaseDeDatosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            
+            // Eliminar todos los registros en el orden correcto para mantener integridad
+            await db.DeleteAllAsync<HistorialPago>();
+            await db.DeleteAllAsync<Pago>();
+            await db.DeleteAllAsync<Prestamo>();
+            await db.DeleteAllAsync<Cliente>();
+        }
+
+        // Método para eliminar completamente el archivo de base de datos
+        public async Task EliminarBaseDeDatosCompletaAsync()
+        {
+            try
+            {
+                // Cerrar la conexión actual
+                if (_database != null)
+                {
+                    await _database.CloseAsync();
+                    _database = null;
+                }
+
+                // Obtener la ruta del archivo
+                var dbPath = Path.Combine(FileSystem.AppDataDirectory, "prestafacil.db3");
+
+                // Eliminar el archivo si existe
+                if (File.Exists(dbPath))
+                {
+                    File.Delete(dbPath);
+                }
+
+                // Reinicializar la base de datos
+                await InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al eliminar base de datos: {ex.Message}");
+                throw;
+            }
+        }
+
+        // Método para obtener información de la base de datos
+        public async Task<DatabaseInfo> ObtenerInformacionBaseDeDatosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            
+            var info = new DatabaseInfo
+            {
+                RutaArchivo = Path.Combine(FileSystem.AppDataDirectory, "prestafacil.db3"),
+                TotalClientes = await db.Table<Cliente>().CountAsync(),
+                TotalPrestamos = await db.Table<Prestamo>().CountAsync(),
+                TotalPagos = await db.Table<Pago>().CountAsync(),
+                TotalHistorialPagos = await db.Table<HistorialPago>().CountAsync()
+            };
+
+            // Obtener tamaño del archivo
+            if (File.Exists(info.RutaArchivo))
+            {
+                var fileInfo = new FileInfo(info.RutaArchivo);
+                info.TamañoArchivo = fileInfo.Length;
+            }
+
+            return info;
+        }
+    }
+
+    // Clase para información de la base de datos
+    public class DatabaseInfo
+    {
+        public string RutaArchivo { get; set; } = string.Empty;
+        public int TotalClientes { get; set; }
+        public int TotalPrestamos { get; set; }
+        public int TotalPagos { get; set; }
+        public int TotalHistorialPagos { get; set; }
+        public long TamañoArchivo { get; set; }
+        
+        public string TamañoArchivoFormateado
+        {
+            get
+            {
+                if (TamañoArchivo < 1024)
+                    return $"{TamañoArchivo} bytes";
+                else if (TamañoArchivo < 1024 * 1024)
+                    return $"{TamañoArchivo / 1024.0:F2} KB";
+                else
+                    return $"{TamañoArchivo / (1024.0 * 1024.0):F2} MB";
+            }
+        }
     }
 }

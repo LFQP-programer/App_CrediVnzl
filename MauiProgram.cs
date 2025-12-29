@@ -32,11 +32,13 @@ namespace App_CrediVnzl
                 builder.Services.AddTransient<ClientesPage>();
                 builder.Services.AddTransient<NuevoClientePage>();
                 builder.Services.AddTransient<DetalleClientePage>();
+                builder.Services.AddTransient<EditarClientePage>();
                 builder.Services.AddTransient<NuevoPrestamoPage>();
                 builder.Services.AddTransient<RegistrarPagoPage>();
                 builder.Services.AddTransient<HistorialPrestamosPage>();
                 builder.Services.AddTransient<CalendarioPagosPage>();
                 builder.Services.AddTransient<EnviarMensajesPage>();
+                builder.Services.AddTransient<ConfiguracionPage>();
 
                 var app = builder.Build();
                 

@@ -152,7 +152,7 @@
             </Frame>
 
             <!-- Boton Nuevo Prestamo -->
-            <Button Text="+ Nuevo Préstamo"
+            <Button Text="+ Nuevo Prestamo"
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="{StaticResource Tertiary}"
                     FontSize="16"
@@ -162,7 +162,7 @@
                     Command="{Binding NuevoPrestamoCommand}" />
 
             <!-- Boton Ver Historial -->
-            <Button Text="📋 Ver Historial de Préstamos"
+            <Button Text="📋 Ver Historial de Prestamos"
                     BackgroundColor="{StaticResource Secondary}"
                     TextColor="{StaticResource White}"
                     FontSize="16"
@@ -172,7 +172,7 @@
                     Command="{Binding VerHistorialCommand}" />
 
             <!-- Prestamos Activos -->
-            <Label Text="Préstamos Activos"
+            <Label Text="Prestamos Activos"
                    FontSize="18"
                    FontAttributes="Bold"
                    TextColor="#212121"
@@ -213,11 +213,11 @@
                                     </Grid.GestureRecognizers>
                                     
                                     <VerticalStackLayout Grid.Column="0" Spacing="3">
-                                        <Label Text="{Binding MontoInicial, StringFormat='Préstamo inicial: S/{0:N2}'}"
+                                        <Label Text="{Binding MontoInicial, StringFormat='Prestamo inicial: S/{0:N2}'}"
                                                FontSize="16"
                                                FontAttributes="Bold"
                                                TextColor="#212121" />
-                                        <Label Text="👆 Toca para ver más detalles"
+                                        <Label Text="👆 Toca para ver mas detalles"
                                                FontSize="11"
                                                TextColor="#9E9E9E"
                                                IsVisible="{Binding Expandido, Converter={StaticResource InvertBoolConverter}}" />
@@ -235,7 +235,7 @@
                                     </Frame>
                                 </Grid>
 
-                                <!-- Información básica - Siempre visible -->
+                                <!-- Informacion basica - Siempre visible -->
                                 <HorizontalStackLayout Spacing="5">
                                     <Label Text="Inicio:"
                                            FontSize="14"
@@ -279,7 +279,7 @@
 
                                     <Grid ColumnDefinitions="*,Auto">
                                         <Label Grid.Column="0"
-                                               Text="Interés semanal actual:"
+                                               Text="Interes semanal actual:"
                                                FontSize="14"
                                                TextColor="#757575" />
                                         <Label Grid.Column="1"
@@ -291,7 +291,7 @@
 
                                     <Grid ColumnDefinitions="*,Auto">
                                         <Label Grid.Column="0"
-                                               Text="Interés acumulado:"
+                                               Text="Interes acumulado:"
                                                FontSize="14"
                                                TextColor="#757575" />
                                         <Label Grid.Column="1"
@@ -362,7 +362,7 @@
                                            BorderColor="#2196F3"
                                            IsVisible="{Binding Notas, Converter={StaticResource IsNotNullOrEmptyConverter}}">
                                         <VerticalStackLayout Spacing="8">
-                                            <Label Text="📝 Notas del préstamo:"
+                                            <Label Text="📝 Notas del prestamo:"
                                                    FontSize="13"
                                                    FontAttributes="Bold"
                                                    TextColor="#1976D2" />

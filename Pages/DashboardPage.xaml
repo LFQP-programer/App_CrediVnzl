@@ -224,7 +224,7 @@
                                FontSize="15"
                                FontAttributes="Bold"
                                TextColor="{StaticResource Gray900}" />
-                        <Label Text="Estadísticas"
+                        <Label Text="Estadisticas"
                                FontSize="11"
                                TextColor="{StaticResource Gray600}" />
                     </VerticalStackLayout>
@@ -233,7 +233,7 @@
 
             <!-- Prestamos Activos Section -->
             <VerticalStackLayout Padding="15,20" Spacing="15">
-                <Label Text="Préstamos Activos"
+                <Label Text="Prestamos Activos"
                        FontSize="20"
                        FontAttributes="Bold"
                        TextColor="{StaticResource Gray900}" />
@@ -244,7 +244,7 @@
                             <Label Text="📝"
                                    FontSize="48"
                                    HorizontalOptions="Center" />
-                            <Label Text="No hay préstamos activos"
+                            <Label Text="No hay prestamos activos"
                                    FontSize="16"
                                    TextColor="{StaticResource Gray600}"
                                    HorizontalOptions="Center" />
@@ -299,7 +299,7 @@
 
                                     <!-- Interes Semanal -->
                                     <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                           Text="{Binding InteresSemanal, StringFormat='Interés semanal: ${0:N2}'}"
+                                           Text="{Binding InteresSemanal, StringFormat='Interes semanal: ${0:N2}'}"
                                            FontSize="14"
                                            TextColor="{StaticResource Success}" />
 

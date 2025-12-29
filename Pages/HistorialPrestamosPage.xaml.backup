@@ -179,7 +179,7 @@
                                         <Label Text="{Binding FechaInicio, StringFormat='Inicio: {0:dd/MM/yyyy}'}"
                                                FontSize="13"
                                                TextColor="#757575" />
-                                        <Label Text="👆 Toca para mas detalles"
+                                        <Label Text="👆 Toca para más detalles"
                                                FontSize="11"
                                                TextColor="#9E9E9E"
                                                IsVisible="{Binding Expandido, Converter={StaticResource InvertBoolConverter}}" />
@@ -215,7 +215,7 @@
                                                TextColor="#FF5722" />
 
                                         <Label Grid.Row="1" Grid.Column="0"
-                                               Text="Interes acumulado:"
+                                               Text="Interés acumulado:"
                                                FontSize="13"
                                                TextColor="#757575" />
                                         <Label Grid.Row="1" Grid.Column="1"
@@ -235,7 +235,7 @@
                                                TextColor="#4CAF50" />
 
                                         <Label Grid.Row="3" Grid.Column="0"
-                                               Text="Duracion:"
+                                               Text="Duración:"
                                                FontSize="13"
                                                TextColor="#757575" />
                                         <Label Grid.Row="3" Grid.Column="1"

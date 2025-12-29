@@ -16,11 +16,13 @@ namespace App_CrediVnzl
                 Routing.RegisterRoute("clientes", typeof(ClientesPage));
                 Routing.RegisterRoute("nuevocliente", typeof(NuevoClientePage));
                 Routing.RegisterRoute("detallecliente", typeof(DetalleClientePage));
+                Routing.RegisterRoute("editarcliente", typeof(EditarClientePage));
                 Routing.RegisterRoute("nuevoprestamo", typeof(NuevoPrestamoPage));
                 Routing.RegisterRoute("registrarpago", typeof(RegistrarPagoPage));
                 Routing.RegisterRoute("historialprestamos", typeof(HistorialPrestamosPage));
                 Routing.RegisterRoute("calendario", typeof(CalendarioPagosPage));
                 Routing.RegisterRoute("mensajes", typeof(EnviarMensajesPage));
+                Routing.RegisterRoute("configuracion", typeof(ConfiguracionPage));
                 
                 System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - Rutas registradas OK ***");
             }

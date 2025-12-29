@@ -215,7 +215,7 @@
                                VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
-                    <Label Text="👆 Toca para ver cómo funciona el sistema"
+                    <Label Text="👆 Toca para ver como funciona el sistema"
                            FontSize="11"
                            TextColor="{StaticResource Gray500}"
                            Margin="26,0,0,0"

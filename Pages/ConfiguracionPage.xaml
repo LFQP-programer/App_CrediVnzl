@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.ConfiguracionPage"
+             Title="Configuracion"
+             Shell.NavBarIsVisible="True"
+             Shell.BackgroundColor="{StaticResource Tertiary}"
+             Shell.ForegroundColor="{StaticResource White}"
+             Shell.TitleColor="{StaticResource White}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Header -->
+            <Frame BackgroundColor="{StaticResource Tertiary}"
+                   CornerRadius="15"
+                   Padding="20"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Configuracion"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Gestion de Base de Datos"
+                           FontSize="16"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           Opacity="0.9"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Informacion de la Base de Datos -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Informacion de la Base de Datos"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Gray900}"/>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource Gray300}"/>
+
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="12">
+                        <!-- Total Clientes -->
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="Total Clientes:"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="{Binding DatabaseInfo.TotalClientes}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Tertiary}"/>
+
+                        <!-- Total Prestamos -->
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="Total Prestamos:"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding DatabaseInfo.TotalPrestamos}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Tertiary}"/>
+
+                        <!-- Total Pagos -->
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Text="Pagos Programados:"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Grid.Row="2" Grid.Column="1"
+                               Text="{Binding DatabaseInfo.TotalPagos}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Tertiary}"/>
+
+                        <!-- Total Historial -->
+                        <Label Grid.Row="3" Grid.Column="0"
+                               Text="Historial de Pagos:"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Grid.Row="3" Grid.Column="1"
+                               Text="{Binding DatabaseInfo.TotalHistorialPagos}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Tertiary}"/>
+
+                        <!-- Separador -->
+                        <BoxView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                                HeightRequest="1" Color="{StaticResource Gray300}"
+                                Margin="0,5,0,5"/>
+
+                        <!-- Tamano Archivo -->
+                        <Label Grid.Row="5" Grid.Column="0"
+                               Text="Tamano del Archivo:"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Grid.Row="5" Grid.Column="1"
+                               Text="{Binding DatabaseInfo.TamanoArchivoFormateado}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}"/>
+                    </Grid>
+
+                    <!-- Boton Actualizar Info -->
+                    <Button Text="Actualizar Informacion"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            FontSize="14"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Command="{Binding ActualizarInformacionCommand}"
+                            Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Ruta de la Base de Datos -->
+            <Frame BackgroundColor="#E3F2FD"
+                   CornerRadius="15"
+                   Padding="15"
+                   HasShadow="True"
+                   BorderColor="#2196F3">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Ubicacion del Archivo"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#1976D2"/>
+                    <Label Text="{Binding DatabaseInfo.RutaArchivo}"
+                           FontSize="11"
+                           TextColor="#424242"
+                           LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Acciones de Base de Datos -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Acciones de Base de Datos"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Gray900}"/>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource Gray300}"/>
+
+                    <!-- Limpiar Datos -->
+                    <Frame BackgroundColor="#FFF9C4"
+                           CornerRadius="12"
+                           Padding="15"
+                           HasShadow="False"
+                           BorderColor="#FBC02D">
+                        <VerticalStackLayout Spacing="10">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="Limpiar Todos los Datos"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#F57F17"/>
+                                <Label Text="Elimina todos los registros pero mantiene la estructura de la base de datos"
+                                       FontSize="12"
+                                       TextColor="#424242"
+                                       LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                            
+                            <Button Text="Limpiar Datos"
+                                    BackgroundColor="#FFA726"
+                                    TextColor="White"
+                                    FontSize="14"
+                                    FontAttributes="Bold"
+                                    CornerRadius="10"
+                                    HeightRequest="45"
+                                    Command="{Binding LimpiarDatosCommand}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Reiniciar Base de Datos -->
+                    <Frame BackgroundColor="#FFEBEE"
+                           CornerRadius="12"
+                           Padding="15"
+                           HasShadow="False"
+                           BorderColor="#F44336">
+                        <VerticalStackLayout Spacing="10">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="Reiniciar Base de Datos"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#D32F2F"/>
+                                <Label Text="Elimina el archivo completo y crea una base de datos nueva y vacia"
+                                       FontSize="12"
+                                       TextColor="#424242"
+                                       LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                            
+                            <Button Text="Reiniciar Base de Datos"
+                                    BackgroundColor="#F44336"
+                                    TextColor="White"
+                                    FontSize="14"
+                                    FontAttributes="Bold"
+                                    CornerRadius="10"
+                                    HeightRequest="45"
+                                    Command="{Binding ReiniciarBaseDeDatosCommand}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Advertencia Final -->
+            <Frame BackgroundColor="#FFEBEE"
+                   CornerRadius="15"
+                   Padding="15"
+                   HasShadow="True"
+                   BorderColor="#F44336">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Grid.Column="0"
+                           Text="!"
+                           FontSize="32"
+                           FontAttributes="Bold"
+                           TextColor="#D32F2F"
+                           VerticalOptions="Start"/>
+                    <VerticalStackLayout Grid.Column="1" Spacing="8">
+                        <Label Text="IMPORTANTE: Acciones Irreversibles"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#D32F2F"/>
+                        <Label Text="Estas acciones eliminaran permanentemente todos los datos de la aplicacion. No es posible recuperar la informacion una vez eliminada. Use estas funciones solo si esta completamente seguro."
+                               FontSize="12"
+                               TextColor="#424242"
+                               LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
