@@ -20,6 +20,7 @@ namespace App_CrediVnzl.Services
             await _database.CreateTableAsync<Pago>();
             await _database.CreateTableAsync<HistorialPago>();
             await _database.CreateTableAsync<CapitalConfig>();
+            await _database.CreateTableAsync<PagoCalendario>();
         }
 
         private async Task<SQLiteAsyncConnection> GetDatabaseAsync()
@@ -596,6 +597,75 @@ namespace App_CrediVnzl.Services
             }
 
             return info;
+        }
+
+        // Métodos para PagoCalendario
+        public async Task<List<PagoCalendario>> GetPagosCalendarioDelMesAsync(int year, int month)
+        {
+            var pagos = await GetPagosByMesAsync(year, month);
+            var pagosCalendario = new List<PagoCalendario>();
+
+            foreach (var pago in pagos)
+            {
+                pagosCalendario.Add(new PagoCalendario
+                {
+                    Id = pago.Id,
+                    PrestamoId = pago.PrestamoId,
+                    ClienteId = pago.ClienteId,
+                    ClienteNombre = pago.ClienteNombre,
+                    FechaPago = pago.FechaProgramada,
+                    MontoPago = pago.MontoPago,
+                    EsPagado = pago.Estado == "Pagado",
+                    TipoPago = pago.TipoPago,
+                    NumeroCuota = pago.NumeroCuota,
+                    FechaPagoReal = pago.FechaPagado
+                });
+            }
+
+            return pagosCalendario;
+        }
+
+        public async Task<List<PagoCalendario>> GetPagosCalendarioPorFechaAsync(DateTime fecha)
+        {
+            var pagos = await GetPagosByFechaAsync(fecha);
+            var pagosCalendario = new List<PagoCalendario>();
+
+            foreach (var pago in pagos)
+            {
+                pagosCalendario.Add(new PagoCalendario
+                {
+                    Id = pago.Id,
+                    PrestamoId = pago.PrestamoId,
+                    ClienteId = pago.ClienteId,
+                    ClienteNombre = pago.ClienteNombre,
+                    FechaPago = pago.FechaProgramada,
+                    MontoPago = pago.MontoPago,
+                    EsPagado = pago.Estado == "Pagado",
+                    TipoPago = pago.TipoPago,
+                    NumeroCuota = pago.NumeroCuota,
+                    FechaPagoReal = pago.FechaPagado
+                });
+            }
+
+            return pagosCalendario;
+        }
+
+        public async Task<List<DateTime>> GetDiasConPagosDelMesAsync(int year, int month)
+        {
+            var pagos = await GetPagosByMesAsync(year, month);
+            return pagos.Select(p => p.FechaProgramada.Date).Distinct().OrderBy(d => d).ToList();
+        }
+
+        public async Task<ResumenPagos> GetResumenCalendarioMesAsync(int year, int month)
+        {
+            return await GetResumenPagosMesAsync(year, month);
+        }
+
+        // Método para marcar pago del calendario como pagado
+        public async Task<bool> MarcarPagoCalendarioComoPagadoAsync(int pagoId, DateTime fechaPago)
+        {
+            var result = await MarcarPagoComoPagadoAsync(pagoId);
+            return result > 0;
         }
     }
 

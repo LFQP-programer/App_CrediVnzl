@@ -22,6 +22,8 @@
             <converters:FiltroToColorConverter x:Key="FiltroToColorConverter" />
             <converters:IsNotNullOrEmptyConverter x:Key="IsNotNullOrEmptyConverter" />
             <converters:BoolToExpandIconConverter x:Key="BoolToExpandIconConverter" />
+            <converters:BoolToFontAttributesConverter x:Key="BoolToFontAttributesConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

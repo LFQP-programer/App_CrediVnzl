@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
+             xmlns:models="clr-namespace:App_CrediVnzl.Models"
              x:Class="App_CrediVnzl.Pages.CalendarioPagosPage"
              Title="Calendario de Pagos"
              Shell.NavBarIsVisible="True"
@@ -12,215 +13,347 @@
     <ScrollView>
         <VerticalStackLayout Padding="0" Spacing="0">
 
-            <!-- Tarjetas de Resumen -->
-            <Grid Padding="15,20" RowSpacing="12" ColumnSpacing="12">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <!-- Header con navegación de mes -->
+            <Grid BackgroundColor="{StaticResource Primary}" Padding="20">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Total Mes -->
-                <Frame Grid.Row="0" Grid.Column="0"
-                       BackgroundColor="{StaticResource White}"
-                       CornerRadius="20"
-                       Padding="15"
-                       HasShadow="True">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="ðŸ“… Total Mes"
-                               FontSize="12"
-                               TextColor="{StaticResource Gray600}" />
-                        <Label Text="{Binding Resumen.TotalMes}"
-                               FontSize="24"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource Gray900}" />
-                    </VerticalStackLayout>
-                </Frame>
+                <Button Grid.Column="0"
+                        Text="&#x2190;"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontSize="24"
+                        Command="{Binding MesAnteriorCommand}"
+                        WidthRequest="50" />
 
-                <!-- Esperado -->
-                <Frame Grid.Row="0" Grid.Column="1"
-                       BackgroundColor="{StaticResource White}"
-                       CornerRadius="20"
-                       Padding="15"
-                       HasShadow="True">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="ðŸ’µ Esperado"
+                <VerticalStackLayout Grid.Column="1" 
+                                   Spacing="2"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center">
+                    <Label Text="{Binding MesYearTexto}"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                    <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                        <Label Text="{Binding TotalPagosMes, StringFormat='Pagos: {0}'}"
                                FontSize="12"
-                               TextColor="{StaticResource Gray600}" />
-                        <Label Text="{Binding Resumen.MontoEsperado, StringFormat='${0:N0}'}"
-                               FontSize="24"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource Gray900}" />
-                    </VerticalStackLayout>
-                </Frame>
+                               TextColor="White"
+                               Opacity="0.9" />
+                        <Label Text="{Binding TotalEsperadoMes, StringFormat='${0:N0}'}"
+                               FontSize="12"
+                               TextColor="White"
+                               Opacity="0.9" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
 
-                <!-- Pendientes -->
-                <Frame Grid.Row="1" Grid.Column="0"
-                       BackgroundColor="{StaticResource PrimaryLight}"
-                       CornerRadius="20"
-                       Padding="15"
-                       HasShadow="True">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="â° Pendientes"
-                               FontSize="12"
-                               TextColor="{StaticResource PrimaryDark}" />
-                        <Label Text="{Binding Resumen.Pendientes}"
-                               FontSize="24"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource PrimaryDark}" />
-                    </VerticalStackLayout>
-                </Frame>
+                <Button Grid.Column="2"
+                        Text="&#x2192;"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontSize="24"
+                        Command="{Binding MesSiguienteCommand}"
+                        WidthRequest="50" />
 
-                <!-- Vencidos -->
-                <Frame Grid.Row="1" Grid.Column="1"
-                       BackgroundColor="{StaticResource SecondaryLight}"
-                       CornerRadius="20"
-                       Padding="15"
-                       HasShadow="True">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="â— Vencidos"
-                               FontSize="12"
-                               TextColor="{StaticResource SecondaryDark}" />
-                        <Label Text="{Binding Resumen.Vencidos}"
-                               FontSize="24"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource SecondaryDark}" />
-                    </VerticalStackLayout>
-                </Frame>
+                <Button Grid.Column="3"
+                        Text="Hoy"
+                        BackgroundColor="White"
+                        TextColor="{StaticResource Primary}"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        CornerRadius="15"
+                        Padding="15,8"
+                        Command="{Binding IrHoyCommand}" />
             </Grid>
 
-            <!-- Vista Calendario -->
-            <Frame Margin="15,0,15,15"
-                   BackgroundColor="{StaticResource White}"
+            <!-- Grid del Calendario -->
+            <Frame Margin="15,20,15,0"
+                   BackgroundColor="White"
                    CornerRadius="20"
-                   Padding="20"
-                   HasShadow="True"
-                   IsVisible="{Binding MostrarCalendario}">
-
-                <VerticalStackLayout Spacing="15">
-
-                    <!-- Navegacion -->
-                    <Grid ColumnDefinitions="Auto,*,Auto">
-                        <Button Text="&lt;" 
-                                BackgroundColor="Transparent"
-                                TextColor="{StaticResource Tertiary}"
-                                Command="{Binding MesAnteriorCommand}" />
-                        <Label x:Name="lblMesAnio"
-                               Grid.Column="1"
-                               HorizontalOptions="Center"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource Gray900}" />
-                        <Button Text="&gt;" 
-                                Grid.Column="2"
-                                BackgroundColor="Transparent"
-                                TextColor="{StaticResource Tertiary}"
-                                Command="{Binding MesSiguienteCommand}" />
+                   Padding="15"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    
+                    <!-- Encabezados de días de la semana -->
+                    <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="5">
+                        <Label Grid.Column="0" Text="DOM" FontSize="12" FontAttributes="Bold" 
+                               TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
+                        <Label Grid.Column="1" Text="LUN" FontSize="12" FontAttributes="Bold" 
+                               TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
+                        <Label Grid.Column="2" Text="MAR" FontSize="12" FontAttributes="Bold" 
+                               TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
+                        <Label Grid.Column="3" Text="MIÉ" FontSize="12" FontAttributes="Bold" 
+                               TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
+                        <Label Grid.Column="4" Text="JUE" FontSize="12" FontAttributes="Bold" 
+                               TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
+                        <Label Grid.Column="5" Text="VIE" FontSize="12" FontAttributes="Bold" 
+                               TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
+                        <Label Grid.Column="6" Text="SÁB" FontSize="12" FontAttributes="Bold" 
+                               TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
                     </Grid>
 
-                    <!-- Dias -->
-                    <Grid ColumnDefinitions="*,*,*,*,*,*,*">
-                        <Label Text="Do" Grid.Column="0" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
-                        <Label Text="Lu" Grid.Column="1" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
-                        <Label Text="Ma" Grid.Column="2" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
-                        <Label Text="Mi" Grid.Column="3" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
-                        <Label Text="Ju" Grid.Column="4" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
-                        <Label Text="Vi" Grid.Column="5" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
-                        <Label Text="Sa" Grid.Column="6" HorizontalOptions="Center" TextColor="{StaticResource Gray600}" FontAttributes="Bold"/>
-                    </Grid>
+                    <!-- Grid de días (6 filas x 7 columnas = 42 días) -->
+                    <CollectionView ItemsSource="{Binding DiasCalendario}"
+                                   SelectionMode="None">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
+                                           Span="7"
+                                           VerticalItemSpacing="5"
+                                           HorizontalItemSpacing="5" />
+                        </CollectionView.ItemsLayout>
+                        
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:DiaCalendario">
+                                <Frame BackgroundColor="{Binding ColorFondo}"
+                                       CornerRadius="10"
+                                       Padding="5"
+                                       HasShadow="False"
+                                       HeightRequest="55"
+                                       BorderColor="{Binding ColorBadge}"
+                                       WidthRequest="45">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarioPagosViewModel}}, Path=SeleccionarDiaCommand}"
+                                                            CommandParameter="{Binding .}" />
+                                    </Frame.GestureRecognizers>
+                                    
+                                    <Grid RowDefinitions="Auto,*,Auto">
+                                        <!-- Número del día -->
+                                        <Label Grid.Row="0"
+                                               Text="{Binding Dia}"
+                                               FontSize="14"
+                                               FontAttributes="{Binding EsHoy, Converter={StaticResource BoolToFontAttributesConverter}}"
+                                               TextColor="{Binding ColorTexto}"
+                                               HorizontalOptions="Center" />
+                                        
+                                        <!-- Badge indicador -->
+                                        <Frame Grid.Row="2"
+                                               BackgroundColor="{Binding ColorBadge}"
+                                               CornerRadius="8"
+                                               Padding="3"
+                                               HasShadow="False"
+                                               IsVisible="{Binding TienePagos}"
+                                               HeightRequest="16"
+                                               WidthRequest="16"
+                                               HorizontalOptions="Center">
+                                            <Label Text="{Binding TextoBadge}"
+                                                   FontSize="9"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Frame>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                    <Grid x:Name="gridCalendario"
-                          RowSpacing="5"
-                          ColumnSpacing="5"/>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Lista de Pagos -->
-            <VerticalStackLayout Padding="15,0,15,20" 
-                                Spacing="15"
-                                IsVisible="{Binding MostrarLista}">
+            <!-- Resumen del día seleccionado -->
+            <Frame Margin="15,15,15,0"
+                   BackgroundColor="#F5F5F5"
+                   CornerRadius="15"
+                   Padding="15"
+                   HasShadow="False">
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="{Binding CantidadPagosPendientes}"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#FF9800"
+                               HorizontalOptions="Center" />
+                        <Label Text="Pendientes"
+                               FontSize="10"
+                               TextColor="#FF9800"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="3">
+                        <Label Text="{Binding CantidadPagosVencidos}"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#F44336"
+                               HorizontalOptions="Center" />
+                        <Label Text="Vencidos"
+                               FontSize="10"
+                               TextColor="#F44336"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="2" Spacing="3">
+                        <Label Text="{Binding CantidadPagosPagados}"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#4CAF50"
+                               HorizontalOptions="Center" />
+                        <Label Text="Pagados"
+                               FontSize="10"
+                               TextColor="#4CAF50"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="3" Spacing="3">
+                        <Label Text="{Binding TotalPagosDelDia, StringFormat='${0:N0}'}"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalOptions="Center" />
+                        <Label Text="Total"
+                               FontSize="10"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Filtros -->
+            <HorizontalStackLayout Padding="15,15,15,10" Spacing="10">
+                <Button Text="Todos"
+                        BackgroundColor="{Binding FiltroSeleccionado, Converter={StaticResource FiltroToColorConverter}, ConverterParameter='Todos'}"
+                        TextColor="White"
+                        FontSize="12"
+                        CornerRadius="15"
+                        Padding="15,8"
+                        Command="{Binding CambiarFiltroCommand}"
+                        CommandParameter="Todos" />
                 
-                <CollectionView ItemsSource="{Binding PagosFiltrados}">
+                <Button Text="Pendientes"
+                        BackgroundColor="{Binding FiltroSeleccionado, Converter={StaticResource FiltroToColorConverter}, ConverterParameter='Pendientes'}"
+                        TextColor="White"
+                        FontSize="12"
+                        CornerRadius="15"
+                        Padding="15,8"
+                        Command="{Binding CambiarFiltroCommand}"
+                        CommandParameter="Pendientes" />
+                
+                <Button Text="Vencidos"
+                        BackgroundColor="{Binding FiltroSeleccionado, Converter={StaticResource FiltroToColorConverter}, ConverterParameter='Vencidos'}"
+                        TextColor="White"
+                        FontSize="12"
+                        CornerRadius="15"
+                        Padding="15,8"
+                        Command="{Binding CambiarFiltroCommand}"
+                        CommandParameter="Vencidos" />
+                
+                <Button Text="Pagados"
+                        BackgroundColor="{Binding FiltroSeleccionado, Converter={StaticResource FiltroToColorConverter}, ConverterParameter='Pagados'}"
+                        TextColor="White"
+                        FontSize="12"
+                        CornerRadius="15"
+                        Padding="15,8"
+                        Command="{Binding CambiarFiltroCommand}"
+                        CommandParameter="Pagados" />
+            </HorizontalStackLayout>
+
+            <!-- Lista de pagos del día -->
+            <VerticalStackLayout Padding="15,0,15,20" Spacing="10">
+                <Label Text="{Binding FechaSeleccionada, StringFormat='Pagos del {0:dd/MM/yyyy}'}"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray900}" />
+
+                <CollectionView ItemsSource="{Binding PagosDelDia}">
                     <CollectionView.EmptyView>
-                        <ContentView>
-                            <VerticalStackLayout Padding="20"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center">
-                                <Label Text="ðŸ“…"
-                                       FontSize="60"
-                                       HorizontalOptions="Center" />
-                                <Label Text="No hay pagos programados"
-                                       FontSize="16"
-                                       HorizontalOptions="Center"
-                                       TextColor="{StaticResource Gray600}"
-                                       Margin="0,10,0,0" />
-                            </VerticalStackLayout>
-                        </ContentView>
+                        <VerticalStackLayout Padding="40" Spacing="10">
+                            <Label Text="&#x1F4CB;"
+                                   FontSize="48"
+                                   HorizontalOptions="Center" />
+                            <Label Text="No hay pagos para esta fecha"
+                                   FontSize="14"
+                                   TextColor="{StaticResource Gray600}"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
                     </CollectionView.EmptyView>
 
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame BackgroundColor="{StaticResource White}"
-                                   CornerRadius="20"
+                        <DataTemplate x:DataType="models:PagoCalendario">
+                            <Frame BackgroundColor="White"
+                                   CornerRadius="15"
                                    Padding="15"
                                    Margin="0,0,0,10"
                                    HasShadow="True">
-                                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Cliente -->
+                                <Grid RowDefinitions="Auto,Auto,Auto" 
+                                      ColumnDefinitions="*,Auto"
+                                      RowSpacing="8">
+                                    
+                                    <!-- Nombre del cliente -->
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Text="{Binding ClienteNombre}"
                                            FontSize="16"
                                            FontAttributes="Bold"
                                            TextColor="{StaticResource Gray900}" />
 
-                                    <!-- Estado Badge -->
+                                    <!-- Badge de estado -->
                                     <Frame Grid.Row="0" Grid.Column="1"
-                                           BackgroundColor="{Binding Estado, Converter={StaticResource EstadoToColorConverter}}"
-                                           CornerRadius="10"
+                                           BackgroundColor="{Binding ColorEstado}"
+                                           CornerRadius="12"
                                            Padding="10,5"
                                            HasShadow="False">
-                                        <Label Text="{Binding Estado}"
-                                               TextColor="{StaticResource White}"
+                                        <Label Text="{Binding EstadoPago}"
                                                FontSize="12"
-                                               FontAttributes="Bold" />
+                                               FontAttributes="Bold"
+                                               TextColor="White" />
                                     </Frame>
 
-                                    <!-- Monto -->
-                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                           Text="{Binding MontoPago, StringFormat='Monto: ${0:N2}'}"
-                                           FontSize="14"
-                                           TextColor="{StaticResource Gray600}" />
+                                    <!-- Información del pago -->
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Spacing="15">
+                                        <Label Text="{Binding MontoPago, StringFormat='${0:N2}'}"
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource Primary}" />
+                                        <Label Text="{Binding TipoPago}"
+                                               FontSize="14"
+                                               TextColor="{StaticResource Gray600}"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding NumeroCuota, StringFormat='Cuota #{0}'}"
+                                               FontSize="14"
+                                               TextColor="{StaticResource Gray600}"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
 
-                                    <!-- Fecha -->
-                                    <Label Grid.Row="2" Grid.Column="0"
-                                           Text="{Binding FechaProgramada, StringFormat='ðŸ“… {0:dd/MM/yyyy}'}"
-                                           FontSize="12"
-                                           TextColor="{StaticResource Gray600}" />
+                                    <!-- Botones de acción -->
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Spacing="10">
+                                        <Button Text="&#x2713; Marcar Pagado"
+                                                BackgroundColor="#4CAF50"
+                                                TextColor="White"
+                                                FontSize="14"
+                                                CornerRadius="10"
+                                                Padding="15,8"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarioPagosViewModel}}, Path=MarcarComoPagadoCommand}"
+                                                CommandParameter="{Binding .}"
+                                                IsVisible="{Binding EsPagado, Converter={StaticResource InverseBoolConverter}}"
+                                                HorizontalOptions="Start" />
 
-                                    <!-- Boton Marcar Pagado -->
-                                    <Button Grid.Row="2" Grid.Column="1"
-                                            Text="âœ“ Pagado"
-                                            BackgroundColor="{StaticResource Success}"
-                                            TextColor="{StaticResource White}"
-                                            FontSize="12"
-                                            CornerRadius="10"
-                                            Padding="15,5"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarioPagosViewModel}}, Path=MarcarPagadoCommand}"
-                                            CommandParameter="{Binding .}"
-                                            IsVisible="{Binding Estado, Converter={StaticResource EsPendienteConverter}}" />
+                                        <Button Text="Ver Detalle"
+                                                BackgroundColor="{StaticResource Primary}"
+                                                TextColor="White"
+                                                FontSize="14"
+                                                CornerRadius="10"
+                                                Padding="15,8"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarioPagosViewModel}}, Path=VerDetallePagoCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HorizontalOptions="Start" />
+                                    </HorizontalStackLayout>
+
                                 </Grid>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
+
+            <!-- Indicador de carga -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                             IsVisible="{Binding IsLoading}"
+                             Color="{StaticResource Primary}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>

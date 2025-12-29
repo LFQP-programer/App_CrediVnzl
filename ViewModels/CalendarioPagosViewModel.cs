@@ -10,192 +10,339 @@ namespace App_CrediVnzl.ViewModels
     public class CalendarioPagosViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseService _databaseService;
-        private DateTime _selectedDate;
-        private bool _mostrarCalendario = true;
-        private EstadoPago _filtroEstado = EstadoPago.Todos;
-        private ResumenPagos _resumen = new();
+        
+        private DateTime _fechaSeleccionada;
+        private string _mesYearTexto = string.Empty;
+        private decimal _totalPagosDelDia;
+        private int _cantidadPagosPendientes;
+        private int _cantidadPagosVencidos;
+        private int _cantidadPagosPagados;
+        private decimal _totalEsperadoMes;
+        private int _totalPagosMes;
+        private string _filtroSeleccionado = "Todos";
+        private bool _isLoading;
 
-        public DateTime SelectedDate
+        public DateTime FechaSeleccionada
         {
-            get => _selectedDate;
+            get => _fechaSeleccionada;
             set
             {
-                _selectedDate = value;
-                OnPropertyChanged();
-                _ = LoadPagosAsync();
-            }
-        }
-
-        public bool MostrarCalendario
-        {
-            get => _mostrarCalendario;
-            set
-            {
-                _mostrarCalendario = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(MostrarLista));
-            }
-        }
-
-        public bool MostrarLista => !_mostrarCalendario;
-
-        public EstadoPago FiltroEstado
-        {
-            get => _filtroEstado;
-            set
-            {
-                _filtroEstado = value;
-                OnPropertyChanged();
-                _ = LoadPagosAsync();
-            }
-        }
-
-        public ResumenPagos Resumen
-        {
-            get => _resumen;
-            set
-            {
-                _resumen = value;
+                _fechaSeleccionada = value;
                 OnPropertyChanged();
             }
         }
 
-        public ObservableCollection<Pago> Pagos { get; set; } = new();
-        public ObservableCollection<Pago> PagosFiltrados { get; set; } = new();
+        public string MesYearTexto
+        {
+            get => _mesYearTexto;
+            set
+            {
+                _mesYearTexto = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public ICommand CambiarVistaCommand { get; }
-        public ICommand CambiarFiltroCommand { get; }
-        public ICommand MarcarPagadoCommand { get; }
+        public ObservableCollection<DiaCalendario> DiasCalendario { get; set; } = new();
+        public ObservableCollection<PagoCalendario> PagosDelDia { get; set; } = new();
+
+        public decimal TotalPagosDelDia
+        {
+            get => _totalPagosDelDia;
+            set
+            {
+                _totalPagosDelDia = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int CantidadPagosPendientes
+        {
+            get => _cantidadPagosPendientes;
+            set
+            {
+                _cantidadPagosPendientes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int CantidadPagosVencidos
+        {
+            get => _cantidadPagosVencidos;
+            set
+            {
+                _cantidadPagosVencidos = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int CantidadPagosPagados
+        {
+            get => _cantidadPagosPagados;
+            set
+            {
+                _cantidadPagosPagados = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public decimal TotalEsperadoMes
+        {
+            get => _totalEsperadoMes;
+            set
+            {
+                _totalEsperadoMes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int TotalPagosMes
+        {
+            get => _totalPagosMes;
+            set
+            {
+                _totalPagosMes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string FiltroSeleccionado
+        {
+            get => _filtroSeleccionado;
+            set
+            {
+                _filtroSeleccionado = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand MesAnteriorCommand { get; }
         public ICommand MesSiguienteCommand { get; }
+        public ICommand IrHoyCommand { get; }
+        public ICommand SeleccionarDiaCommand { get; }
+        public ICommand MarcarComoPagadoCommand { get; }
+        public ICommand VerDetallePagoCommand { get; }
+        public ICommand CambiarFiltroCommand { get; }
 
         public CalendarioPagosViewModel(DatabaseService databaseService)
         {
             _databaseService = databaseService;
-            _selectedDate = DateTime.Today;
-            
-            CambiarVistaCommand = new Command<string>(CambiarVista);
-            CambiarFiltroCommand = new Command<string>(CambiarFiltro);
-            MarcarPagadoCommand = new Command<Pago>(async (pago) => await MarcarPagadoAsync(pago));
-            MesAnteriorCommand = new Command(MesAnterior);
-            MesSiguienteCommand = new Command(MesSiguiente);
+            FechaSeleccionada = DateTime.Today;
+
+            MesAnteriorCommand = new Command(async () => await MesAnteriorAsync());
+            MesSiguienteCommand = new Command(async () => await MesSiguienteAsync());
+            IrHoyCommand = new Command(async () => await IrHoyAsync());
+            SeleccionarDiaCommand = new Command<DiaCalendario>(async (dia) => await SeleccionarDiaAsync(dia));
+            MarcarComoPagadoCommand = new Command<PagoCalendario>(async (pago) => await MarcarComoPagadoAsync(pago));
+            VerDetallePagoCommand = new Command<PagoCalendario>(async (pago) => await VerDetallePagoAsync(pago));
+            CambiarFiltroCommand = new Command<string>(async (filtro) => await CambiarFiltroAsync(filtro));
+
+            _ = InitializeAsync();
         }
 
-        public async Task LoadDataAsync()
+        private async Task InitializeAsync()
         {
-            await _databaseService.ActualizarEstadosPagosVencidosAsync();
-            await LoadResumenAsync();
-            await LoadPagosAsync();
+            await CargarCalendarioAsync();
+            await CargarPagosDelDiaAsync(FechaSeleccionada);
         }
 
-        private async Task LoadResumenAsync()
+        private async Task MesAnteriorAsync()
         {
-            Resumen = await _databaseService.GetResumenPagosMesAsync(SelectedDate.Year, SelectedDate.Month);
+            FechaSeleccionada = FechaSeleccionada.AddMonths(-1);
+            await CargarCalendarioAsync();
         }
 
-        private async Task LoadPagosAsync()
+        private async Task MesSiguienteAsync()
         {
-            List<Pago> pagos;
-            
-            if (MostrarCalendario)
-            {
-                // Cargar pagos del mes
-                pagos = await _databaseService.GetPagosByMesAsync(SelectedDate.Year, SelectedDate.Month);
-            }
-            else
-            {
-                // Cargar pagos del dia seleccionado
-                pagos = await _databaseService.GetPagosByFechaAsync(SelectedDate);
-            }
-
-            Pagos.Clear();
-            foreach (var pago in pagos)
-            {
-                Pagos.Add(pago);
-            }
-
-            AplicarFiltro();
+            FechaSeleccionada = FechaSeleccionada.AddMonths(1);
+            await CargarCalendarioAsync();
         }
 
-        private void AplicarFiltro()
+        private async Task IrHoyAsync()
         {
-            PagosFiltrados.Clear();
-            
-            IEnumerable<Pago> pagosFiltrados = Pagos;
-
-            if (FiltroEstado != EstadoPago.Todos)
-            {
-                pagosFiltrados = pagosFiltrados.Where(p => p.Estado == FiltroEstado.ToString());
-            }
-
-            foreach (var pago in pagosFiltrados)
-            {
-                PagosFiltrados.Add(pago);
-            }
+            FechaSeleccionada = DateTime.Today;
+            await CargarCalendarioAsync();
+            await CargarPagosDelDiaAsync(FechaSeleccionada);
         }
 
-        private void CambiarVista(string vista)
+        private async Task SeleccionarDiaAsync(DiaCalendario dia)
         {
-            if (vista == "Calendario")
+            if (!dia.EsMesActual) return;
+
+            foreach (var d in DiasCalendario)
             {
-                MostrarCalendario = true;
+                d.EstaSeleccionado = false;
             }
-            else if (vista == "Lista")
-            {
-                MostrarCalendario = false;
-            }
-            
-            _ = LoadPagosAsync();
+
+            dia.EstaSeleccionado = true;
+            FechaSeleccionada = dia.Fecha;
+
+            await CargarPagosDelDiaAsync(dia.Fecha);
         }
 
-        private void CambiarFiltro(string filtro)
+        private async Task MarcarComoPagadoAsync(PagoCalendario pago)
         {
-            FiltroEstado = filtro switch
+            try
             {
-                "Todos" => EstadoPago.Todos,
-                "Pendientes" => EstadoPago.Pendiente,
-                "Pagados" => EstadoPago.Pagado,
-                "Vencidos" => EstadoPago.Vencido,
-                _ => EstadoPago.Todos
-            };
-        }
+                IsLoading = true;
 
-        private async Task MarcarPagadoAsync(Pago pago)
-        {
-            if (pago == null) return;
+                var success = await _databaseService.MarcarPagoCalendarioComoPagadoAsync(pago.Id, DateTime.Now);
 
-            var confirmacion = await Shell.Current.DisplayAlertAsync(
-                "Confirmar Pago",
-                $"Marcar pago de {pago.ClienteNombre} como pagado?",
-                "Si",
-                "No");
+                if (success)
+                {
+                    await CargarCalendarioAsync();
+                    await CargarPagosDelDiaAsync(FechaSeleccionada);
 
-            if (confirmacion)
+                    await Application.Current!.MainPage!.DisplayAlert(
+                        "Éxito",
+                        "Pago marcado como realizado",
+                        "OK");
+                }
+            }
+            catch (Exception ex)
             {
-                await _databaseService.MarcarPagoComoPagadoAsync(pago.Id);
-                await LoadDataAsync();
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error",
+                    $"Error al marcar pago: {ex.Message}",
+                    "OK");
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
-        private void MesAnterior()
+        private async Task VerDetallePagoAsync(PagoCalendario pago)
         {
-            SelectedDate = SelectedDate.AddMonths(-1);
-            _ = LoadResumenAsync();
-            _ = LoadPagosAsync();
+            await Shell.Current.GoToAsync($"detallecliente?clienteId={pago.ClienteId}");
         }
 
-        private void MesSiguiente()
+        private async Task CambiarFiltroAsync(string filtro)
         {
-            SelectedDate = SelectedDate.AddMonths(1);
-            _ = LoadResumenAsync();
-            _ = LoadPagosAsync();
+            FiltroSeleccionado = filtro;
+            await CargarPagosDelDiaAsync(FechaSeleccionada);
         }
 
-        public string GetMesAnio()
+        private async Task CargarCalendarioAsync()
         {
-            var meses = new[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                               "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
-            return $"{meses[SelectedDate.Month - 1]} {SelectedDate.Year}";
+            try
+            {
+                IsLoading = true;
+
+                var year = FechaSeleccionada.Year;
+                var month = FechaSeleccionada.Month;
+
+                var meses = new[] { "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+                                   "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE" };
+                MesYearTexto = $"{meses[month - 1]} {year}";
+
+                var pagosDelMes = await _databaseService.GetPagosCalendarioDelMesAsync(year, month);
+                
+                var resumen = await _databaseService.GetResumenCalendarioMesAsync(year, month);
+                TotalEsperadoMes = resumen.MontoEsperado;
+                TotalPagosMes = resumen.TotalMes;
+
+                var primerDiaDelMes = new DateTime(year, month, 1);
+                
+                var primerDiaMostrar = primerDiaDelMes;
+                while (primerDiaMostrar.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    primerDiaMostrar = primerDiaMostrar.AddDays(-1);
+                }
+
+                DiasCalendario.Clear();
+                var fechaActual = primerDiaMostrar;
+                var hoy = DateTime.Today;
+
+                for (int i = 0; i < 42; i++)
+                {
+                    var esMesActual = fechaActual.Month == month;
+                    var pagosDelDia = pagosDelMes.Where(p => p.FechaPago.Date == fechaActual.Date).ToList();
+                    
+                    var dia = new DiaCalendario
+                    {
+                        Dia = fechaActual.Day,
+                        Fecha = fechaActual,
+                        EsMesActual = esMesActual,
+                        TienePagos = pagosDelDia.Any(),
+                        CantidadPagos = pagosDelDia.Count,
+                        PagosPendientes = pagosDelDia.Count(p => !p.EsPagado && p.FechaPago.Date >= hoy),
+                        PagosVencidos = pagosDelDia.Count(p => !p.EsPagado && p.FechaPago.Date < hoy),
+                        PagosPagados = pagosDelDia.Count(p => p.EsPagado),
+                        EsHoy = fechaActual.Date == hoy,
+                        EstaSeleccionado = fechaActual.Date == FechaSeleccionada.Date
+                    };
+
+                    DiasCalendario.Add(dia);
+                    fechaActual = fechaActual.AddDays(1);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error",
+                    $"Error al cargar calendario: {ex.Message}",
+                    "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task CargarPagosDelDiaAsync(DateTime fecha)
+        {
+            try
+            {
+                IsLoading = true;
+
+                var todosPagos = await _databaseService.GetPagosCalendarioPorFechaAsync(fecha);
+                
+                var pagosFiltrados = FiltroSeleccionado switch
+                {
+                    "Pendientes" => todosPagos.Where(p => !p.EsPagado && p.FechaPago.Date >= DateTime.Today).ToList(),
+                    "Vencidos" => todosPagos.Where(p => !p.EsPagado && p.FechaPago.Date < DateTime.Today).ToList(),
+                    "Pagados" => todosPagos.Where(p => p.EsPagado).ToList(),
+                    _ => todosPagos
+                };
+
+                PagosDelDia.Clear();
+                foreach (var pago in pagosFiltrados.OrderBy(p => p.ClienteNombre))
+                {
+                    PagosDelDia.Add(pago);
+                }
+
+                TotalPagosDelDia = PagosDelDia.Sum(p => p.MontoPago);
+                CantidadPagosPendientes = todosPagos.Count(p => !p.EsPagado && p.FechaPago.Date >= DateTime.Today);
+                CantidadPagosVencidos = todosPagos.Count(p => !p.EsPagado && p.FechaPago.Date < DateTime.Today);
+                CantidadPagosPagados = todosPagos.Count(p => p.EsPagado);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error",
+                    $"Error al cargar pagos: {ex.Message}",
+                    "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        public async Task RefrescarDatosAsync()
+        {
+            await CargarCalendarioAsync();
+            await CargarPagosDelDiaAsync(FechaSeleccionada);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

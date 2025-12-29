@@ -23,6 +23,11 @@ namespace App_CrediVnzl.Models
         [MaxLength(20)]
         public string Estado { get; set; } = "Pendiente"; // Pendiente, Pagado, Vencido
 
+        [MaxLength(20)]
+        public string TipoPago { get; set; } = "Interes"; // Interes o Capital
+
+        public int NumeroCuota { get; set; } = 1;
+
         [MaxLength(500)]
         public string? Notas { get; set; }
 
