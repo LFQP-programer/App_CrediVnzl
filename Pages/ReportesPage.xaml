@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.ReportesPage"
+             Title="Reportes y Estadísticas"
+             Shell.NavBarIsVisible="True"
+             Shell.BackgroundColor="{StaticResource Tertiary}"
+             Shell.ForegroundColor="{StaticResource White}"
+             Shell.TitleColor="{StaticResource White}"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="0" Spacing="0">
+            
+            <!-- Filtros de período en el header -->
+            <Frame BackgroundColor="{StaticResource Tertiary}" 
+                   Padding="15,10,15,15"
+                   CornerRadius="0"
+                   HasShadow="False">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{Binding FechaRango}"
+                           FontSize="13"
+                           TextColor="White"
+                           Opacity="0.9"
+                           HorizontalOptions="Center"/>
+                    
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                        <HorizontalStackLayout Spacing="10">
+                            <Button Text="Hoy"
+                                    Command="{Binding CambiarPeriodoCommand}"
+                                    CommandParameter="Hoy"
+                                    BackgroundColor="White"
+                                    TextColor="{StaticResource Tertiary}"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    CornerRadius="15"
+                                    Padding="18,8"
+                                    HeightRequest="36"/>
+
+                            <Button Text="Semana"
+                                    Command="{Binding CambiarPeriodoCommand}"
+                                    CommandParameter="Semana"
+                                    BackgroundColor="White"
+                                    TextColor="{StaticResource Tertiary}"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    CornerRadius="15"
+                                    Padding="18,8"
+                                    HeightRequest="36"/>
+
+                            <Button Text="Mes"
+                                    Command="{Binding CambiarPeriodoCommand}"
+                                    CommandParameter="Mes"
+                                    BackgroundColor="{StaticResource Primary}"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    CornerRadius="15"
+                                    Padding="18,8"
+                                    HeightRequest="36"/>
+                            
+                            <Button Text="Trimestre"
+                                    Command="{Binding CambiarPeriodoCommand}"
+                                    CommandParameter="Trimestre"
+                                    BackgroundColor="White"
+                                    TextColor="{StaticResource Tertiary}"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    CornerRadius="15"
+                                    Padding="18,8"
+                                    HeightRequest="36"/>
+                            
+                            <Button Text="Año"
+                                    Command="{Binding CambiarPeriodoCommand}"
+                                    CommandParameter="Año"
+                                    BackgroundColor="White"
+                                    TextColor="{StaticResource Tertiary}"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    CornerRadius="15"
+                                    Padding="18,8"
+                                    HeightRequest="36"/>
+                        </HorizontalStackLayout>
+                    </ScrollView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Cards de métricas principales -->
+            <Grid Padding="15,20,15,10" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+                
+                <!-- Capital Total -->
+                <Frame Grid.Row="0" Grid.Column="0"
+                       BackgroundColor="White"
+                       Padding="18"
+                       CornerRadius="16"
+                       HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding VerDetalleFinancieroCommand}" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="💰"
+                               FontSize="28"
+                               HorizontalOptions="Start"/>
+                        <Label Text="Capital Total"
+                               FontSize="12"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Text="{Binding CapitalTotal, StringFormat='${0:N0}'}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Tertiary}"/>
+                        <Label Text="{Binding CapitalEnCalle, StringFormat='En calle: ${0:N0}'}"
+                               FontSize="11"
+                               TextColor="{StaticResource Gray500}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Ganancias -->
+                <Frame Grid.Row="0" Grid.Column="1"
+                       BackgroundColor="White"
+                       Padding="18"
+                       CornerRadius="16"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="📈"
+                               FontSize="28"
+                               HorizontalOptions="Start"/>
+                        <Label Text="Ganancias"
+                               FontSize="12"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Text="{Binding GananciaTotal, StringFormat='${0:N0}'}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#4CAF50"/>
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="{Binding TendenciaGanancias}"
+                                   FontSize="14"
+                                   TextColor="#4CAF50"/>
+                            <Label Text="{Binding PorcentajeCambio, StringFormat='{0:F1}%'}"
+                                   FontSize="11"
+                                   TextColor="{StaticResource Gray500}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Préstamos Activos -->
+                <Frame Grid.Row="1" Grid.Column="0"
+                       BackgroundColor="White"
+                       Padding="18"
+                       CornerRadius="16"
+                       HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding VerDetallePrestamosCommand}" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="📋"
+                               FontSize="28"
+                               HorizontalOptions="Start"/>
+                        <Label Text="Préstamos Activos"
+                               FontSize="12"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Text="{Binding PrestamosActivos}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#FF9800"/>
+                        <Label Text="{Binding TotalPrestamos, StringFormat='Total: {0}'}"
+                               FontSize="11"
+                               TextColor="{StaticResource Gray500}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Clientes -->
+                <Frame Grid.Row="1" Grid.Column="1"
+                       BackgroundColor="White"
+                       Padding="18"
+                       CornerRadius="16"
+                       HasShadow="True">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding VerDetalleClientesCommand}" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="👥"
+                               FontSize="28"
+                               HorizontalOptions="Start"/>
+                        <Label Text="Clientes Activos"
+                               FontSize="12"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Label Text="{Binding ClientesActivos}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#9C27B0"/>
+                        <Label Text="{Binding ClientesNuevos, StringFormat='Nuevos: {0}'}"
+                               FontSize="11"
+                               TextColor="{StaticResource Gray500}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Resumen financiero -->
+            <Frame Margin="15,10"
+                   BackgroundColor="White"
+                   CornerRadius="16"
+                   Padding="20"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="💼"
+                               FontSize="22"
+                               VerticalOptions="Center"/>
+                        <Label Text="Resumen Financiero"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}"/>
+                    </HorizontalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource Gray300}"/>
+
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="14">
+                        
+                        <!-- Capital Disponible -->
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="Capital Disponible"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray700}"/>
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="{Binding CapitalDisponible, StringFormat='${0:N2}'}"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Tertiary}"/>
+
+                        <!-- Intereses Pendientes -->
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="Intereses Pendientes"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray700}"/>
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding InteresesPendientes, StringFormat='${0:N2}'}"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="#FF9800"/>
+
+                        <!-- ROI -->
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Text="ROI (Retorno de Inversión)"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray700}"/>
+                        <Label Grid.Row="2" Grid.Column="1"
+                               Text="{Binding ROI, StringFormat='{0:F2}%'}"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="#4CAF50"/>
+
+                        <!-- Flujo Neto -->
+                        <Label Grid.Row="3" Grid.Column="0"
+                               Text="Flujo Neto del Período"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray700}"/>
+                        <Label Grid.Row="3" Grid.Column="1"
+                               Text="{Binding FlujoNeto, StringFormat='${0:N2}'}"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="{Binding ColorFlujoNeto}"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Top Clientes -->
+            <Frame Margin="15,0,15,10"
+                   BackgroundColor="White"
+                   CornerRadius="16"
+                   Padding="20"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="🏆"
+                               FontSize="22"
+                               VerticalOptions="Center"/>
+                        <Label Text="Top 5 Mejores Clientes"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}"/>
+                    </HorizontalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource Gray300}"/>
+
+                    <CollectionView ItemsSource="{Binding TopClientes}">
+                        <CollectionView.EmptyView>
+                            <Label Text="No hay datos disponibles"
+                                   FontSize="14"
+                                   TextColor="{StaticResource Gray600}"
+                                   HorizontalOptions="Center"
+                                   Margin="0,20"/>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,10" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                    
+                                    <!-- Badge de clasificación -->
+                                    <Frame Grid.Column="0"
+                                           BackgroundColor="{Binding ColorBadge}"
+                                           CornerRadius="10"
+                                           Padding="10,6"
+                                           HasShadow="False"
+                                           WidthRequest="65">
+                                        <Label Text="{Binding Clasificacion}"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"/>
+                                    </Frame>
+
+                                    <!-- Información del cliente -->
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                        <Label Text="{Binding NombreCompleto}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource Gray900}"/>
+                                        <Label Text="{Binding CantidadPrestamos, StringFormat='{0} préstamos'}"
+                                               FontSize="13"
+                                               TextColor="{StaticResource Gray600}"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Monto total -->
+                                    <Label Grid.Column="2"
+                                           Text="{Binding MontoTotalPrestado, StringFormat='${0:N0}'}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Tertiary}"
+                                           VerticalOptions="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botón refrescar -->
+            <Button Text="🔄 Actualizar Datos"
+                    Command="{Binding RefrescarCommand}"
+                    BackgroundColor="{StaticResource Tertiary}"
+                    TextColor="White"
+                    CornerRadius="12"
+                    HeightRequest="52"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    Margin="15,10,15,30"/>
+
+            <!-- Loading indicator -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                             IsVisible="{Binding IsLoading}"
+                             Color="{StaticResource Primary}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Margin="0,20"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -13,7 +13,7 @@
         <VerticalStackLayout Padding="0" Spacing="0">
 
             <!-- Informacion del Cliente Card -->
-            <Frame BackgroundColor="{StaticResource White}"
+            <Frame BackgroundColor="{StaticResource Beige}"
                    CornerRadius="20"
                    Padding="20"
                    Margin="15,20,15,15"

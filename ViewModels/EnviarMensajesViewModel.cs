@@ -92,6 +92,7 @@ namespace App_CrediVnzl.ViewModels
             {
                 _totalMensajesRecordatorios = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(TextoBotonEnviar));
             }
         }
 
@@ -102,6 +103,7 @@ namespace App_CrediVnzl.ViewModels
             {
                 _totalMensajesMasivos = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(TextoBotonEnviar));
             }
         }
 
@@ -150,6 +152,8 @@ namespace App_CrediVnzl.ViewModels
                 return TipoMensajeSeleccionado switch
                 {
                     "Individual" => "#25D366",
+                    "Recordatorios" => "#2196F3",
+                    "Masivo" => "#FF9800",
                     _ => "#757575"
                 };
             }
@@ -177,6 +181,8 @@ namespace App_CrediVnzl.ViewModels
             {
                 ActualizarVistaPrevia();
             }
+            
+            ((Command)EnviarMensajesCommand).ChangeCanExecute();
         }
 
         public async Task LoadDataAsync()
@@ -201,7 +207,7 @@ namespace App_CrediVnzl.ViewModels
                 PagosProximos.Clear();
                 foreach (var pago in pagosHoy.Concat(pagosManana))
                 {
-                    if (pago.Estado == "Pendiente")
+                    if (pago.Estado == "Pendiente" || pago.Estado == "Vencido")
                     {
                         PagosProximos.Add(pago);
                     }
@@ -215,9 +221,11 @@ namespace App_CrediVnzl.ViewModels
 
                 OnPropertyChanged(nameof(PuedeEnviar));
                 OnPropertyChanged(nameof(TextoBotonEnviar));
+                ((Command)EnviarMensajesCommand).ChangeCanExecute();
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Error al cargar datos en EnviarMensajesViewModel: {ex.Message}");
                 await Application.Current!.MainPage!.DisplayAlert("Error", $"Error al cargar datos: {ex.Message}", "OK");
             }
         }
@@ -245,7 +253,8 @@ namespace App_CrediVnzl.ViewModels
                    $"Te recordamos que tienes un pago programado para {fecha}.\n\n" +
                    $"?? Monto: ${pago.MontoPago:N2}\n" +
                    $"?? Fecha: {pago.FechaProgramada:dd/MM/yyyy}\n\n" +
-                   $"Gracias por tu puntualidad.";
+                   $"Gracias por tu puntualidad.\n\n" +
+                   $"CrediVnzl";
         }
 
         private async Task EnviarMensajes()
@@ -267,6 +276,7 @@ namespace App_CrediVnzl.ViewModels
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Error al enviar mensajes: {ex.Message}");
                 await Application.Current!.MainPage!.DisplayAlert("Error", $"Error al enviar mensajes: {ex.Message}", "OK");
             }
         }
@@ -282,19 +292,35 @@ namespace App_CrediVnzl.ViewModels
             if (!confirmacion) return;
 
             var exitosos = 0;
+            var fallidos = 0;
+            
             foreach (var pago in PagosProximos)
             {
-                var mensaje = GenerarMensajeRecordatorio(pago);
-                var enviado = await _whatsAppService.EnviarMensajeAsync(pago.ClienteTelefono ?? "", mensaje);
-                if (enviado) exitosos++;
+                if (string.IsNullOrWhiteSpace(pago.ClienteTelefono))
+                {
+                    fallidos++;
+                    continue;
+                }
+                
+                var mensajeRecordatorio = GenerarMensajeRecordatorio(pago);
+                var enviado = await _whatsAppService.EnviarMensajeAsync(pago.ClienteTelefono, mensajeRecordatorio);
+                
+                if (enviado) 
+                    exitosos++;
+                else
+                    fallidos++;
                 
                 // Pequeña pausa entre mensajes
                 await Task.Delay(500);
             }
 
+            var mensajeResultado = fallidos > 0 
+                ? $"Se abrieron {exitosos} conversaciones de WhatsApp.\n{fallidos} clientes no tienen teléfono registrado."
+                : $"Se abrieron {exitosos} conversaciones de WhatsApp exitosamente.";
+
             await Application.Current.MainPage.DisplayAlert(
                 "Envío completado",
-                $"Se abrieron {exitosos} de {TotalMensajesRecordatorios} conversaciones de WhatsApp.",
+                mensajeResultado,
                 "OK");
         }
 
@@ -302,7 +328,10 @@ namespace App_CrediVnzl.ViewModels
         {
             if (ClienteSeleccionado == null || string.IsNullOrWhiteSpace(ClienteSeleccionado.Telefono))
             {
-                await Application.Current!.MainPage!.DisplayAlert("Error", "El cliente no tiene número de teléfono registrado", "OK");
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error", 
+                    "El cliente no tiene número de teléfono registrado", 
+                    "OK");
                 return;
             }
 
@@ -310,9 +339,20 @@ namespace App_CrediVnzl.ViewModels
 
             if (enviado)
             {
-                await Application.Current.MainPage.DisplayAlert("Éxito", "WhatsApp se ha abierto con el mensaje listo para enviar", "OK");
+                await Application.Current.MainPage.DisplayAlert(
+                    "Éxito", 
+                    "WhatsApp se ha abierto con el mensaje listo para enviar", 
+                    "OK");
+                
                 MensajePersonalizado = string.Empty;
                 ClienteSeleccionado = null;
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error", 
+                    "No se pudo abrir WhatsApp. Verifica que esté instalado en tu dispositivo.", 
+                    "OK");
             }
         }
 
@@ -327,18 +367,34 @@ namespace App_CrediVnzl.ViewModels
             if (!confirmacion) return;
 
             var exitosos = 0;
+            var fallidos = 0;
+            
             foreach (var pago in PagosProximos)
             {
-                var mensaje = $"Hola {pago.ClienteNombre},\n\n{MensajeMasivo}";
-                var enviado = await _whatsAppService.EnviarMensajeAsync(pago.ClienteTelefono ?? "", mensaje);
-                if (enviado) exitosos++;
+                if (string.IsNullOrWhiteSpace(pago.ClienteTelefono))
+                {
+                    fallidos++;
+                    continue;
+                }
+                
+                var mensajeParaEnviar = $"Hola {pago.ClienteNombre},\n\n{MensajeMasivo}\n\nCrediVnzl";
+                var enviado = await _whatsAppService.EnviarMensajeAsync(pago.ClienteTelefono, mensajeParaEnviar);
+                
+                if (enviado)
+                    exitosos++;
+                else
+                    fallidos++;
                 
                 await Task.Delay(500);
             }
 
+            var mensajeResultado = fallidos > 0 
+                ? $"Se abrieron {exitosos} conversaciones de WhatsApp.\n{fallidos} clientes no tienen teléfono registrado."
+                : $"Se abrieron {exitosos} conversaciones de WhatsApp exitosamente.";
+
             await Application.Current.MainPage.DisplayAlert(
                 "Envío completado",
-                $"Se abrieron {exitosos} de {TotalMensajesMasivos} conversaciones de WhatsApp.",
+                mensajeResultado,
                 "OK");
 
             MensajeMasivo = string.Empty;

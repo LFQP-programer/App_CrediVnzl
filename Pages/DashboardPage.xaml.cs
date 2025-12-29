@@ -137,12 +137,23 @@ namespace App_CrediVnzl.Pages
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("*** OnClientesTapped - Iniciando navegación ***");
+                System.Diagnostics.Debug.WriteLine($"*** Shell.Current: {Shell.Current != null} ***");
+                System.Diagnostics.Debug.WriteLine($"*** Shell.Current.Navigation: {Shell.Current?.Navigation != null} ***");
+                
                 await Shell.Current.GoToAsync("clientes");
+                
+                System.Diagnostics.Debug.WriteLine("*** OnClientesTapped - Navegación completada ***");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnClientesTapped ***: {ex.Message}");
-                await DisplayAlert("Error", ex.Message, "OK");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine($"*** InnerException: {ex.InnerException?.Message}");
+                
+                await DisplayAlert("Error de navegación", 
+                    $"No se pudo navegar a Clientes.\n\nError: {ex.Message}\n\nDetalles: {ex.InnerException?.Message ?? "N/A"}", 
+                    "OK");
             }
         }
 
@@ -181,6 +192,19 @@ namespace App_CrediVnzl.Pages
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnConfiguracionTapped ***: {ex.Message}");
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
+        }
+
+        private async void OnReportesTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                await Shell.Current.GoToAsync("reportes");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnReportesTapped ***: {ex.Message}");
                 await DisplayAlert("Error", ex.Message, "OK");
             }
         }

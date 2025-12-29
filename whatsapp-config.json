@@ -1,0 +1,47 @@
+{
+  "WhatsAppBusiness": {
+    "Comentario": "INSTRUCCIONES PARA OBTENER ESTAS CREDENCIALES:",
+    "Paso1": "1. Ve a https://business.facebook.com/",
+    "Paso2": "2. Crea una cuenta de Facebook Business Manager",
+    "Paso3": "3. Ve a https://developers.facebook.com/",
+    "Paso4": "4. Crea una nueva App ? Selecciona 'WhatsApp' ? 'Cloud API'",
+    "Paso5": "5. Copia los valores de Phone Number ID y Access Token",
+    "Paso6": "6. Reemplaza los valores 'TU_XXX_AQUI' con tus credenciales reales",
+    
+    "BusinessAccountId": "TU_BUSINESS_ACCOUNT_ID_AQUI",
+    "PhoneNumberId": "TU_PHONE_NUMBER_ID_AQUI",
+    "AccessToken": "TU_ACCESS_TOKEN_AQUI",
+    "ApiVersion": "v18.0",
+    "WebhookVerifyToken": "MI_TOKEN_SECRETO_ALEATORIO_123",
+    
+    "Notas": {
+      "BusinessAccountId": "Lo encuentras en: Facebook Business Manager ? WhatsApp Manager",
+      "PhoneNumberId": "Lo encuentras en: Panel de Cloud API ? Phone Numbers ? Selecciona tu número",
+      "AccessToken": "Lo generas en: Panel de Cloud API ? Access Tokens ? Generate Token (usa 'Never expire' para producción)",
+      "WebhookVerifyToken": "Es una cadena aleatoria que TÚ defines. Úsala cuando configures webhooks.",
+      "Seguridad": "?? NUNCA compartas este archivo en repositorios públicos. Agrégalo a .gitignore"
+    },
+    
+    "Plantillas": [
+      {
+        "Nombre": "recordatorio_pago",
+        "Descripcion": "Plantilla para recordatorios de pago",
+        "Mensaje": "Hola {{1}}, te recordamos que tienes un pago de ${{2}} programado para {{3}}. ¡Gracias!",
+        "Parametros": [
+          "{{1}} = Nombre del cliente",
+          "{{2}} = Monto del pago",
+          "{{3}} = Fecha del pago"
+        ],
+        "Estado": "Pendiente de aprobación en Meta",
+        "Link": "https://business.facebook.com/wa/manage/message-templates/"
+      }
+    ],
+    
+    "Limites": {
+      "MensajesPorDia_Nivel1": 1000,
+      "MensajesPorDia_Nivel2": 10000,
+      "MensajesPorDia_Nivel3": 100000,
+      "NotaImportante": "Empiezas en Nivel 1 (1000 mensajes/día). El límite aumenta automáticamente con buen uso."
+    }
+  }
+}

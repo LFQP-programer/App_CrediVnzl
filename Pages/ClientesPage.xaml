@@ -7,22 +7,19 @@
              Shell.NavBarIsVisible="True"
              Shell.BackgroundColor="{StaticResource Tertiary}"
              Shell.ForegroundColor="{StaticResource White}"
-             Shell.TitleColor="{StaticResource White}">
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Agregar" Command="{Binding AddClienteCommand}" />
-    </ContentPage.ToolbarItems>
+             Shell.TitleColor="{StaticResource White}"
+             BackgroundColor="#F5F5F5">
 
     <Grid RowDefinitions="Auto,*" Padding="0" RowSpacing="0">
-        
+
         <!-- Buscador -->
         <Frame Grid.Row="0" 
-               BackgroundColor="{StaticResource White}"
+               BackgroundColor="White"
                CornerRadius="25"
                Padding="15,10"
                Margin="15,15,15,10"
                HasShadow="True">
-            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                 <Label Grid.Column="0" 
                        Text="🔍"
                        FontSize="20"
@@ -31,28 +28,25 @@
                        Placeholder="Buscar por nombre, telefono o cedula..."
                        Text="{Binding SearchText}"
                        BackgroundColor="Transparent" />
+                <!-- Botón Agregar -->
+                <Button Grid.Column="2"
+                        Text="+"
+                        BackgroundColor="{StaticResource Tertiary}"
+                        TextColor="White"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        WidthRequest="45"
+                        HeightRequest="45"
+                        CornerRadius="22"
+                        Padding="0"
+                        VerticalOptions="Center"
+                        Command="{Binding AddClienteCommand}" />
             </Grid>
         </Frame>
 
-        <!-- Contenedor principal con boton y lista -->
-        <Grid Grid.Row="1" RowDefinitions="Auto,*" Padding="0" RowSpacing="0">
-            
-            <!-- Boton Agregar -->
-            <Button Grid.Row="0"
-                    Text="+ Agregar Nuevo Cliente"
-                    BackgroundColor="{StaticResource Secondary}"
-                    TextColor="{StaticResource White}"
-                    FontSize="16"
-                    FontAttributes="Bold"
-                    CornerRadius="15"
-                    Margin="15,0,15,10"
-                    HeightRequest="50"
-                    VerticalOptions="Start"
-                    Command="{Binding AddClienteCommand}" />
-
-            <!-- Lista de Clientes -->
-            <RefreshView Grid.Row="1"
-                         IsRefreshing="{Binding IsRefreshing}"
+        <!-- Lista de Clientes -->
+        <Grid Grid.Row="1" RowDefinitions="*" Padding="0" RowSpacing="0">
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding Clientes}"
                                Margin="15,0">
@@ -79,7 +73,7 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame BackgroundColor="{StaticResource White}"
+                            <Frame BackgroundColor="{StaticResource Beige}"
                                    CornerRadius="15"
                                    Padding="20"
                                    Margin="0,0,0,15"

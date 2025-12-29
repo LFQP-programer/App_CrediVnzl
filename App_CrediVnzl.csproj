@@ -64,10 +64,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- MAUI Core -->
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+		
+		<!-- Database SQLite -->
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
+		
+		<!-- WhatsApp Business API - Cliente HTTP -->
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
+		
+		<!-- JSON Serialization -->
+		<PackageReference Include="System.Text.Json" Version="10.0.1" />
+		
+		<!-- Configuration (para almacenar credenciales de forma segura) -->
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -92,9 +105,6 @@
 	  <MauiXaml Update="Pages\HistorialPrestamosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\HistorialPrestamosPage_NEW.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Pages\NuevoClientePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -102,6 +112,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\RegistrarPagoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ReportesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

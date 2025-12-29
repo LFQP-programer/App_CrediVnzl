@@ -23,6 +23,7 @@ namespace App_CrediVnzl
                 Routing.RegisterRoute("calendario", typeof(CalendarioPagosPage));
                 Routing.RegisterRoute("mensajes", typeof(EnviarMensajesPage));
                 Routing.RegisterRoute("configuracion", typeof(ConfiguracionPage));
+                Routing.RegisterRoute("reportes", typeof(ReportesPage));
                 
                 System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - Rutas registradas OK ***");
             }

@@ -95,7 +95,7 @@
 
                     <!-- Capital Card -->
                     <Frame Grid.Row="1" Grid.Column="0"
-                           BackgroundColor="#4CAF50"
+                           BackgroundColor="{StaticResource Beige}"
                            CornerRadius="20"
                            Padding="15"
                            HasShadow="True">
@@ -105,23 +105,23 @@
                         <VerticalStackLayout Spacing="5">
                             <Label Text="$ Capital"
                                    FontSize="12"
-                                   TextColor="White"
+                                   TextColor="{StaticResource Gray800}"
                                    Opacity="0.9" />
                             <Label Text="{Binding CapitalInicial, StringFormat='${0:N0}'}"
                                    FontSize="20"
                                    FontAttributes="Bold"
-                                   TextColor="White"
+                                   TextColor="{StaticResource Gray900}"
                                    LineBreakMode="TailTruncation" />
                             <Label Text="{Binding CapitalDisponible, StringFormat='Disponible: ${0:N0}'}"
                                    FontSize="10"
-                                   TextColor="White"
+                                   TextColor="{StaticResource Gray700}"
                                    Opacity="0.8" />
                         </VerticalStackLayout>
                     </Frame>
 
                     <!-- Ganancias Card -->
                     <Frame Grid.Row="1" Grid.Column="1"
-                           BackgroundColor="#FF9800"
+                           BackgroundColor="{StaticResource Beige}"
                            CornerRadius="20"
                            Padding="15"
                            HasShadow="True">
@@ -131,16 +131,16 @@
                         <VerticalStackLayout Spacing="5">
                             <Label Text="↗ Ganancias"
                                    FontSize="12"
-                                   TextColor="White"
+                                   TextColor="{StaticResource Gray800}"
                                    Opacity="0.9" />
                             <Label Text="{Binding GananciaTotal, StringFormat='${0:N0}'}"
                                    FontSize="20"
                                    FontAttributes="Bold"
-                                   TextColor="White"
+                                   TextColor="{StaticResource Gray900}"
                                    LineBreakMode="TailTruncation" />
                             <Label Text="{Binding InteresesAcumulados, StringFormat='Pendiente: ${0:N0}'}"
                                    FontSize="10"
-                                   TextColor="White"
+                                   TextColor="{StaticResource Gray700}"
                                    Opacity="0.8" />
                         </VerticalStackLayout>
                     </Frame>
@@ -232,6 +232,9 @@
                            CornerRadius="20"
                            Padding="18"
                            HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnReportesTapped" />
+                        </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8">
                             <Label Text="&#x1F4CA;"
                                    FontSize="36"

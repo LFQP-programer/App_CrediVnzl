@@ -26,6 +26,7 @@ namespace App_CrediVnzl
                 // Registrar servicios
                 builder.Services.AddSingleton<DatabaseService>();
                 builder.Services.AddSingleton<WhatsAppService>();
+                builder.Services.AddSingleton<ReportesService>();
 
                 // Registrar paginas
                 builder.Services.AddTransient<DashboardPage>();
@@ -39,7 +40,8 @@ namespace App_CrediVnzl
                 builder.Services.AddTransient<CalendarioPagosPage>();
                 builder.Services.AddTransient<EnviarMensajesPage>();
                 builder.Services.AddTransient<ConfiguracionPage>();
-
+                builder.Services.AddTransient<ReportesPage>();
+                
                 var app = builder.Build();
                 
                 // Configurar manejo de excepciones no controladas
