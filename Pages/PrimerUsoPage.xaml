@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.PrimerUsoPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+
+            <Label Text="??" 
+                   FontSize="80" 
+                   HorizontalOptions="Center"/>
+
+            <Label Text="¡Bienvenido!" 
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   TextColor="#212121"/>
+
+            <Label Text="Configure su cuenta de administrador" 
+                   FontSize="16" 
+                   HorizontalOptions="Center"
+                   TextColor="#757575"
+                   Margin="0,0,0,20"/>
+
+            <Frame CornerRadius="15" 
+                   Padding="20" 
+                   HasShadow="True"
+                   BackgroundColor="White">
+                <VerticalStackLayout Spacing="15">
+
+                    <Label Text="Nombre completo *" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Entry Placeholder="Ej: Juan Pérez"
+                               Text="{Binding NombreCompleto}"
+                               Margin="10,5"/>
+                    </Frame>
+
+                    <Label Text="Usuario *" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Entry Placeholder="Ej: admin"
+                               Text="{Binding NombreUsuario}"
+                               Margin="10,5"/>
+                    </Frame>
+
+                    <Label Text="Contraseña *" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Entry Placeholder="Mínimo 6 caracteres"
+                               Text="{Binding Password}"
+                               IsPassword="True"
+                               Margin="10,5"/>
+                    </Frame>
+
+                    <Label Text="Confirmar contraseña *" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Entry Placeholder="Repita la contraseña"
+                               Text="{Binding ConfirmarPassword}"
+                               IsPassword="True"
+                               Margin="10,5"/>
+                    </Frame>
+
+                    <Label Text="Teléfono" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Entry Placeholder="Ej: +58 412 1234567"
+                               Text="{Binding Telefono}"
+                               Keyboard="Telephone"
+                               Margin="10,5"/>
+                    </Frame>
+
+                    <Label Text="Email" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Entry Placeholder="correo@ejemplo.com"
+                               Text="{Binding Email}"
+                               Keyboard="Email"
+                               Margin="10,5"/>
+                    </Frame>
+
+                    <Button Text="CREAR CUENTA DE ADMINISTRADOR"
+                            Command="{Binding CrearAdminCommand}"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="50"
+                            FontAttributes="Bold"
+                            Margin="0,20,0,0"
+                            IsEnabled="{Binding EstaOcupado, Converter={StaticResource InvertedBoolConverter}}"/>
+
+                    <ActivityIndicator IsRunning="{Binding EstaOcupado}"
+                                       IsVisible="{Binding EstaOcupado}"
+                                       Color="#4CAF50"
+                                       HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

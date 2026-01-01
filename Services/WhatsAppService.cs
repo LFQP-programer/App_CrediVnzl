@@ -15,8 +15,8 @@ namespace App_CrediVnzl.Services
                     return false;
                 }
 
-                // Validar que el número tenga al menos 10 dígitos
-                if (numeroLimpio.Length < 10)
+                // Validar que el número tenga al menos 9 dígitos (formato Perú)
+                if (numeroLimpio.Length < 9)
                 {
                     System.Diagnostics.Debug.WriteLine($"Número de teléfono muy corto: {numeroLimpio}");
                     return false;
@@ -26,7 +26,7 @@ namespace App_CrediVnzl.Services
                 var mensajeCodificado = Uri.EscapeDataString(mensaje);
 
                 // Construir la URL de WhatsApp
-                // Formato: https://wa.me/58XXXXXXXXXX?text=mensaje
+                // Formato: https://wa.me/51XXXXXXXXX?text=mensaje
                 var url = $"https://wa.me/{numeroLimpio}?text={mensajeCodificado}";
 
                 System.Diagnostics.Debug.WriteLine($"Abriendo WhatsApp con URL: {url}");
@@ -79,26 +79,28 @@ namespace App_CrediVnzl.Services
                 numeroLimpio = numeroLimpio.TrimStart('+');
             }
 
-            // Si el número no comienza con código de país, intentar detectarlo
-            // Para Venezuela: si tiene 10 dígitos y empieza con 0, cambiar 0 por 58
-            // Si tiene 10 dígitos y empieza con 4, agregar 58
-            if (numeroLimpio.Length == 10)
+            // Detección automática de formato peruano
+            // Perú: 9 dígitos, código de país 51
+            
+            if (numeroLimpio.Length == 9)
             {
-                if (numeroLimpio.StartsWith("0"))
+                // Formato: 987654321 -> 51987654321
+                // Verificar que empiece con 9 (móviles en Perú)
+                if (numeroLimpio.StartsWith("9"))
                 {
-                    // Formato: 0424XXXXXXX -> 58424XXXXXXX
-                    numeroLimpio = "58" + numeroLimpio.Substring(1);
-                }
-                else if (numeroLimpio.StartsWith("4"))
-                {
-                    // Formato: 424XXXXXXX -> 58424XXXXXXX
-                    numeroLimpio = "58" + numeroLimpio;
+                    numeroLimpio = "51" + numeroLimpio;
                 }
             }
-            else if (numeroLimpio.Length == 11 && numeroLimpio.StartsWith("58"))
+            else if (numeroLimpio.Length == 11 && numeroLimpio.StartsWith("51"))
             {
-                // Ya tiene el formato correcto: 58424XXXXXXX
+                // Ya tiene el formato correcto: 51987654321
                 // No hacer nada
+            }
+            else if (numeroLimpio.Length == 10 && numeroLimpio.StartsWith("51"))
+            {
+                // Posible error, faltan dígitos
+                // Intentar agregar un 9 después del 51
+                System.Diagnostics.Debug.WriteLine($"Número posiblemente incorrecto: {numeroLimpio}");
             }
 
             return numeroLimpio;
@@ -111,8 +113,10 @@ namespace App_CrediVnzl.Services
 
             var numeroLimpio = LimpiarNumeroTelefono(numero);
             
-            // Un número de teléfono válido debe tener al menos 10 dígitos
-            return numeroLimpio.Length >= 10 && numeroLimpio.Length <= 15;
+            // Número peruano válido: 11 dígitos (51 + 9 dígitos)
+            // O 9 dígitos sin código de país
+            return (numeroLimpio.Length == 11 && numeroLimpio.StartsWith("51")) || 
+                   (numeroLimpio.Length == 9 && numeroLimpio.StartsWith("9"));
         }
 
         public string FormatearNumeroTelefono(string numero)
@@ -122,24 +126,32 @@ namespace App_CrediVnzl.Services
             if (string.IsNullOrWhiteSpace(numeroLimpio))
                 return string.Empty;
 
-            // Si es número venezolano (58 + 10 dígitos)
-            if (numeroLimpio.Length == 12 && numeroLimpio.StartsWith("58"))
+            // Si es número peruano completo (51 + 9 dígitos)
+            if (numeroLimpio.Length == 11 && numeroLimpio.StartsWith("51"))
             {
-                // Formato: +58 (424) 123-4567
-                return $"+{numeroLimpio.Substring(0, 2)} ({numeroLimpio.Substring(2, 3)}) {numeroLimpio.Substring(5, 3)}-{numeroLimpio.Substring(8, 4)}";
+                // Formato: +51 987 654 321
+                return $"+{numeroLimpio.Substring(0, 2)} {numeroLimpio.Substring(2, 3)} {numeroLimpio.Substring(5, 3)} {numeroLimpio.Substring(8, 3)}";
             }
 
-            // Si es formato venezolano sin código de país
-            if (numeroLimpio.Length == 10 && numeroLimpio.StartsWith("4"))
+            // Si es formato peruano sin código de país (9 dígitos)
+            if (numeroLimpio.Length == 9 && numeroLimpio.StartsWith("9"))
             {
-                // Formato: (424) 123-4567
-                return $"({numeroLimpio.Substring(0, 3)}) {numeroLimpio.Substring(3, 3)}-{numeroLimpio.Substring(6, 4)}";
+                // Formato: 987 654 321
+                return $"{numeroLimpio.Substring(0, 3)} {numeroLimpio.Substring(3, 3)} {numeroLimpio.Substring(6, 3)}";
             }
 
-            // Formato genérico con espacios cada 3-4 dígitos
+            // Formato genérico con espacios cada 3 dígitos
             if (numeroLimpio.Length > 6)
             {
-                return $"{numeroLimpio.Substring(0, numeroLimpio.Length - 6)} {numeroLimpio.Substring(numeroLimpio.Length - 6, 3)} {numeroLimpio.Substring(numeroLimpio.Length - 3)}";
+                var formatted = "";
+                for (int i = 0; i < numeroLimpio.Length; i += 3)
+                {
+                    int length = Math.Min(3, numeroLimpio.Length - i);
+                    formatted += numeroLimpio.Substring(i, length);
+                    if (i + length < numeroLimpio.Length)
+                        formatted += " ";
+                }
+                return formatted;
             }
 
             return numeroLimpio;

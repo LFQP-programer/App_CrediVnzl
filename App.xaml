@@ -24,6 +24,8 @@
             <converters:BoolToExpandIconConverter x:Key="BoolToExpandIconConverter" />
             <converters:BoolToFontAttributesConverter x:Key="BoolToFontAttributesConverter" />
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converters:PercentToDecimalConverter x:Key="PercentToDecimalConverter" />
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

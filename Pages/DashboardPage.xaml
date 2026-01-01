@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
              x:Class="App_CrediVnzl.Pages.DashboardPage"
-             Title="CrediVnzl"
+             Title="Dashboard"
              Shell.NavBarIsVisible="False">
 
     <Grid>
@@ -11,7 +11,7 @@
         <ScrollView>
             <VerticalStackLayout Padding="0" Spacing="0">
                 
-                <!-- Header -->
+                <!-- Header Unificado con Menú Hamburguesa a la Derecha -->
                 <Grid BackgroundColor="{StaticResource Tertiary}" Padding="20,40,20,20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -19,7 +19,7 @@
                     </Grid.ColumnDefinitions>
 
                     <VerticalStackLayout Grid.Column="0" Spacing="5">
-                        <Label Text="CrediVnzl"
+                        <Label Text="CrediVzla"
                                FontSize="28"
                                FontAttributes="Bold"
                                TextColor="{StaticResource White}" />
@@ -29,20 +29,22 @@
                                Opacity="0.9" />
                     </VerticalStackLayout>
 
+                    <!-- Menú Hamburguesa a la Derecha -->
                     <Frame Grid.Column="1"
                            BackgroundColor="Transparent"
-                           BorderColor="{StaticResource White}"
-                           CornerRadius="8"
-                           Padding="8"
+                           BorderColor="White"
+                           CornerRadius="10"
+                           Padding="10"
                            HasShadow="False"
-                           WidthRequest="50"
-                           HeightRequest="50"
                            VerticalOptions="Center">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <BoxView Color="{StaticResource White}" HeightRequest="3" WidthRequest="30" CornerRadius="1.5" />
-                            <BoxView Color="{StaticResource White}" HeightRequest="3" WidthRequest="30" CornerRadius="1.5" />
-                            <BoxView Color="{StaticResource White}" HeightRequest="3" WidthRequest="30" CornerRadius="1.5" />
-                        </VerticalStackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMenuTapped" />
+                        </Frame.GestureRecognizers>
+                        <Label Text="☰"
+                               FontSize="28"
+                               TextColor="White"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center" />
                     </Frame>
                 </Grid>
 

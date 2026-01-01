@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.SolicitudPendientePage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="30" Padding="30" VerticalOptions="Center">
+
+            <Label Text="?" FontSize="120" HorizontalOptions="Center"/>
+
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Solicitud Enviada" 
+                       FontSize="32" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center"
+                       TextColor="#FF9800"/>
+            </VerticalStackLayout>
+
+            <Frame CornerRadius="20" Padding="25" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="20">
+                    
+                    <Label Text="{Binding NombreNegocio, StringFormat='Tu solicitud ha sido enviada a {0}'}"
+                           FontSize="18"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           TextColor="#212121"
+                           LineBreakMode="WordWrap"/>
+
+                    <BoxView HeightRequest="1" Color="#E0E0E0"/>
+
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout Spacing="15">
+                            <Label Text="??" FontSize="30" VerticalOptions="Start"/>
+                            <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                                <Label Text="Revisi�n en proceso"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#212121"/>
+                                <Label Text="El administrador revisar� tu informaci�n"
+                                       FontSize="13"
+                                       TextColor="#757575"
+                                       LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="15">
+                            <Label Text="??" FontSize="30" VerticalOptions="Start"/>
+                            <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                                <Label Text="Recibir�s notificaci�n"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#212121"/>
+                                <Label Text="Te avisaremos cuando sea aprobada"
+                                       FontSize="13"
+                                       TextColor="#757575"
+                                       LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="15">
+                            <Label Text="??" FontSize="30" VerticalOptions="Start"/>
+                            <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                                <Label Text="Tiempo estimado"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#212121"/>
+                                <Label Text="Normalmente 1-2 d�as h�biles"
+                                       FontSize="13"
+                                       TextColor="#757575"
+                                       LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame CornerRadius="15" Padding="20" BackgroundColor="#E3F2FD" HasShadow="False" BorderColor="#2196F3">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="?? Mientras tanto..."
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#1976D2"/>
+                    <Label Text="� Guarda tus datos de acceso en un lugar seguro"
+                           FontSize="13"
+                           TextColor="#424242"/>
+                    <Label Text="� Mant�n tu tel�fono activo para recibir notificaciones"
+                           FontSize="13"
+                           TextColor="#424242"/>
+                    <Label Text="� Puedes intentar iniciar sesi�n m�s tarde"
+                           FontSize="13"
+                           TextColor="#424242"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <VerticalStackLayout Spacing="15">
+                <Button Text="Intentar Iniciar Sesi�n"
+                        Command="{Binding VolverLoginCommand}"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        CornerRadius="15"
+                        HeightRequest="55"
+                        FontSize="16"
+                        FontAttributes="Bold"/>
+
+                <Button Text="Volver al Inicio"
+                        Command="{Binding VolverInicioCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#2196F3"
+                        BorderColor="#2196F3"
+                        BorderWidth="2"
+                        CornerRadius="15"
+                        HeightRequest="55"
+                        FontSize="16"
+                        FontAttributes="Bold"/>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

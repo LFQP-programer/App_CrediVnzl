@@ -85,6 +85,7 @@ namespace App_CrediVnzl.ViewModels
         public ICommand CancelarCapitalCommand { get; }
         public ICommand VerGananciasCommand { get; }
         public ICommand CerrarGananciasCommand { get; }
+        public ICommand CerrarSesionCommand { get; }
 
         public DashboardViewModel(DatabaseService databaseService, DashboardPage? page = null)
         {
@@ -97,6 +98,13 @@ namespace App_CrediVnzl.ViewModels
             CancelarCapitalCommand = new Command(async () => await OnCancelarCapitalAsync());
             VerGananciasCommand = new Command(async () => await OnVerGananciasAsync());
             CerrarGananciasCommand = new Command(async () => await OnCerrarGananciasAsync());
+            CerrarSesionCommand = new Command(OnCerrarSesion);
+        }
+
+        private void OnCerrarSesion()
+        {
+            // Cerrar sesión y navegar al login
+            Shell.Current.GoToAsync("//login");
         }
 
         public async Task LoadDashboardDataAsync()

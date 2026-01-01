@@ -8,13 +8,185 @@
     Title="CrediVnzl"
     Shell.BackgroundColor="{StaticResource Tertiary}"
     Shell.ForegroundColor="{StaticResource White}"
-    Shell.TitleColor="{StaticResource Primary}"
+    Shell.TitleColor="{StaticResource White}"
     Shell.TabBarBackgroundColor="{StaticResource Tertiary}"
-    Shell.TabBarForegroundColor="{StaticResource White}">
+    Shell.TabBarForegroundColor="{StaticResource White}"
+    FlyoutBackgroundColor="{StaticResource Tertiary}">
+
+    <!-- Estilo del Flyout Header con colores del Dashboard -->
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid BackgroundColor="{StaticResource Tertiary}"
+                  HeightRequest="200"
+                  Padding="20">
+                <VerticalStackLayout VerticalOptions="Center" Spacing="10">
+                    <!-- Círculo con ícono de usuario -->
+                    <Frame CornerRadius="50"
+                           WidthRequest="100"
+                           HeightRequest="100"
+                           Padding="0"
+                           HasShadow="True"
+                           BackgroundColor="{StaticResource Primary}"
+                           BorderColor="{StaticResource White}"
+                           HorizontalOptions="Center">
+                        <Label Text="👤"
+                               FontSize="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+                    
+                    <!-- Nombre del rol -->
+                    <Label Text="Administrador"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource White}"
+                           HorizontalOptions="Center" />
+                    
+                    <!-- Subtítulo -->
+                    <Label Text="Sistema de Préstamos"
+                           FontSize="14"
+                           TextColor="{StaticResource White}"
+                           Opacity="0.9"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+
+    <!-- Estilo del Flyout Footer -->
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <Grid BackgroundColor="{StaticResource TertiaryDark}"
+                  HeightRequest="60"
+                  Padding="20,10">
+                <Label Text="© 2024 CrediVnzl"
+                       FontSize="12"
+                       TextColor="{StaticResource White}"
+                       Opacity="0.8"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
+
+    <!-- Estilo personalizado para los items del Flyout -->
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="15,10"
+                  BackgroundColor="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <!-- Ícono -->
+                <Label Grid.Column="0"
+                       Text="{Binding FlyoutIcon}"
+                       FontSize="24"
+                       TextColor="{StaticResource Primary}"
+                       VerticalOptions="Center"
+                       Margin="0,0,15,0" />
+                
+                <!-- Título -->
+                <Label Grid.Column="1"
+                       Text="{Binding Title}"
+                       FontSize="16"
+                       TextColor="{StaticResource White}"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <!-- Estilo para MenuItem -->
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <Grid Padding="15,10"
+                  BackgroundColor="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <!-- Ícono -->
+                <Label Grid.Column="0"
+                       Text="🚪"
+                       FontSize="24"
+                       TextColor="{StaticResource Secondary}"
+                       VerticalOptions="Center"
+                       Margin="0,0,15,0" />
+                
+                <!-- Texto -->
+                <Label Grid.Column="1"
+                       Text="{Binding Text}"
+                       FontSize="16"
+                       TextColor="{StaticResource White}"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- PÁGINA INICIAL: BIENVENIDA (Primera y por defecto)    -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    
+    <!-- Esta es la página que se muestra al iniciar la app -->
+    <ShellContent
+        ContentTemplate="{DataTemplate pages:BienvenidaPage}"
+        Route="bienvenida"
+        Shell.FlyoutBehavior="Disabled" />
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- PÁGINAS OCULTAS DEL MENÚ (Sin FlyoutItem)              -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    
+    <!-- Estas páginas están fuera del Flyout y no aparecen en el menú -->
+    <ShellContent
+        ContentTemplate="{DataTemplate pages:PrimerUsoPage}"
+        Route="primeruso"
+        Shell.FlyoutBehavior="Disabled"
+        IsVisible="False" />
 
     <ShellContent
-        Title="Dashboard"
-        ContentTemplate="{DataTemplate pages:DashboardPage}"
-        Route="DashboardPage" />
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="login"
+        Shell.FlyoutBehavior="Disabled"
+        IsVisible="False" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate pages:DashboardClientePage}"
+        Route="dashboardcliente"
+        Shell.FlyoutBehavior="Disabled"
+        IsVisible="False" />
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- MENÚ DEL ADMINISTRADOR (Solo opciones necesarias)      -->
+    <!-- Los FlyoutItems se agregarán dinámicamente después del login -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- Dashboard -->
+    <FlyoutItem Title="Dashboard" 
+                FlyoutIcon="🏠"
+                Route="dashboard"
+                IsVisible="False">
+        <ShellContent ContentTemplate="{DataTemplate pages:DashboardPage}" />
+    </FlyoutItem>
+
+    <!-- Gestionar Usuarios -->
+    <FlyoutItem Title="Gestionar Usuarios" 
+                FlyoutIcon="👥"
+                Route="gestionarusuarios"
+                IsVisible="False">
+        <ShellContent ContentTemplate="{DataTemplate pages:GestionarUsuariosPage}" />
+    </FlyoutItem>
+
+    <!-- Mi Cuenta -->
+    <FlyoutItem Title="Mi Cuenta" 
+                FlyoutIcon="⚙️"
+                Route="configuracioncuenta"
+                IsVisible="False">
+        <ShellContent ContentTemplate="{DataTemplate pages:ConfiguracionCuentaPage}" />
+    </FlyoutItem>
 
 </Shell>

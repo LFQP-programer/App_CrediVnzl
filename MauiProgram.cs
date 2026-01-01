@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using App_CrediVnzl.Services;
 using App_CrediVnzl.Pages;
+using App_CrediVnzl.ViewModels;
 
 namespace App_CrediVnzl
 {
@@ -27,8 +28,29 @@ namespace App_CrediVnzl
                 builder.Services.AddSingleton<DatabaseService>();
                 builder.Services.AddSingleton<WhatsAppService>();
                 builder.Services.AddSingleton<ReportesService>();
+                builder.Services.AddSingleton<AuthService>();
 
-                // Registrar paginas
+                // Registrar ViewModels con sus dependencias
+                builder.Services.AddTransient<ConfiguracionCuentaViewModel>(sp =>
+                {
+                    var authService = sp.GetRequiredService<AuthService>();
+                    var databaseService = sp.GetRequiredService<DatabaseService>();
+                    return new ConfiguracionCuentaViewModel(authService, databaseService);
+                });
+
+                // Registrar páginas de autenticación
+                builder.Services.AddTransient<LoginPage>();
+                builder.Services.AddTransient<LoginAdminPage>();
+                builder.Services.AddTransient<LoginClientePage>();
+                builder.Services.AddTransient<PrimerUsoPage>();
+                builder.Services.AddTransient<DashboardClientePage>();
+                builder.Services.AddTransient<GestionarUsuariosPage>();
+                builder.Services.AddTransient<ConfiguracionCuentaPage>();
+
+                // Registrar páginas simplificadas
+                builder.Services.AddTransient<BienvenidaPage>();
+
+                // Registrar páginas existentes
                 builder.Services.AddTransient<DashboardPage>();
                 builder.Services.AddTransient<ClientesPage>();
                 builder.Services.AddTransient<NuevoClientePage>();

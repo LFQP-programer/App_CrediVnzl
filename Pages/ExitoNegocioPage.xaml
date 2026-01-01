@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.ExitoNegocioPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="30" Padding="30" VerticalOptions="Center">
+
+            <!-- Animación de éxito -->
+            <Label Text="??" 
+                   FontSize="120" 
+                   HorizontalOptions="Center"/>
+
+            <!-- Título -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="¡Negocio Creado!" 
+                       FontSize="32" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center"
+                       TextColor="#4CAF50"/>
+
+                <Label Text="{Binding NombreNegocio}" 
+                       FontSize="20" 
+                       HorizontalOptions="Center"
+                       TextColor="#212121"
+                       Margin="0,0,0,20"/>
+            </VerticalStackLayout>
+
+            <!-- Código del negocio -->
+            <Frame CornerRadius="20" 
+                   Padding="30" 
+                   BackgroundColor="#E8F5E9"
+                   HasShadow="True"
+                   BorderColor="#4CAF50">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Tu código de negocio es:"
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           TextColor="#2E7D32"/>
+                    
+                    <Frame CornerRadius="15"
+                           Padding="20"
+                           BackgroundColor="White"
+                           HasShadow="False"
+                           BorderColor="#4CAF50">
+                        <Label Text="{Binding CodigoNegocio}"
+                               FontSize="36"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               TextColor="#4CAF50"/>
+                    </Frame>
+
+                    <Label Text="Comparte este código con tus clientes"
+                           FontSize="14"
+                           HorizontalOptions="Center"
+                           TextColor="#424242"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Acciones -->
+            <VerticalStackLayout Spacing="15">
+                
+                <Button Text="?? Copiar Código"
+                        Command="{Binding CopiarCodigoCommand}"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        CornerRadius="15"
+                        HeightRequest="55"
+                        FontSize="16"
+                        FontAttributes="Bold"/>
+
+                <Button Text="?? Compartir por WhatsApp"
+                        Command="{Binding CompartirWhatsAppCommand}"
+                        BackgroundColor="#25D366"
+                        TextColor="White"
+                        CornerRadius="15"
+                        HeightRequest="55"
+                        FontSize="16"
+                        FontAttributes="Bold"/>
+
+            </VerticalStackLayout>
+
+            <!-- Información adicional -->
+            <Frame CornerRadius="15" 
+                   Padding="20" 
+                   BackgroundColor="#FFF3E0"
+                   HasShadow="False"
+                   BorderColor="#FF9800"
+                   Margin="0,20,0,0">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="?? Pasos siguientes:"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#E65100"/>
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="1??" FontSize="20" VerticalOptions="Start"/>
+                        <Label Text="Tus clientes descargan CrediVnzl"
+                               FontSize="14"
+                               TextColor="#424242"
+                               LineBreakMode="WordWrap"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="2??" FontSize="20" VerticalOptions="Start"/>
+                        <Label Text="Seleccionan 'Soy cliente' e ingresan tu código"
+                               FontSize="14"
+                               TextColor="#424242"
+                               LineBreakMode="WordWrap"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="3??" FontSize="20" VerticalOptions="Start"/>
+                        <Label Text="Tú apruebas sus solicitudes desde tu panel"
+                               FontSize="14"
+                               TextColor="#424242"
+                               LineBreakMode="WordWrap"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botón continuar -->
+            <Button Text="IR A MI DASHBOARD ?"
+                    Command="{Binding IrDashboardCommand}"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="15"
+                    HeightRequest="60"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    Margin="0,30,0,20"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

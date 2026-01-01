@@ -8,10 +8,10 @@ namespace App_CrediVnzl.Pages
     {
         private readonly NuevoClienteViewModel _viewModel;
 
-        public NuevoClientePage(DatabaseService databaseService)
+        public NuevoClientePage(DatabaseService databaseService, AuthService authService, WhatsAppService whatsAppService)
         {
             InitializeComponent();
-            _viewModel = new NuevoClienteViewModel(databaseService);
+            _viewModel = new NuevoClienteViewModel(databaseService, authService, whatsAppService);
             BindingContext = _viewModel;
         }
 

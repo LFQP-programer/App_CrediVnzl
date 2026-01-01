@@ -23,6 +23,7 @@ namespace App_CrediVnzl.ViewModels
         public ICommand ActualizarInformacionCommand { get; }
         public ICommand LimpiarDatosCommand { get; }
         public ICommand ReiniciarBaseDeDatosCommand { get; }
+        public ICommand GestionarUsuariosCommand { get; }
 
         public ConfiguracionViewModel(DatabaseService databaseService)
         {
@@ -32,6 +33,12 @@ namespace App_CrediVnzl.ViewModels
             ActualizarInformacionCommand = new Command(async () => await CargarInformacionAsync());
             LimpiarDatosCommand = new Command(async () => await LimpiarDatosAsync());
             ReiniciarBaseDeDatosCommand = new Command(async () => await ReiniciarBaseDeDatosAsync());
+            GestionarUsuariosCommand = new Command(async () => await OnGestionarUsuariosAsync());
+        }
+
+        private async Task OnGestionarUsuariosAsync()
+        {
+            await Shell.Current.GoToAsync("gestionarusuarios");
         }
 
         public async Task CargarInformacionAsync()

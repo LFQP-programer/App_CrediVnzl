@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.BuscarNegocioPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30">
+
+            <!-- Header -->
+            <Button Text="? Volver"
+                    Command="{Binding VolverCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="#2196F3"
+                    FontSize="16"
+                    HorizontalOptions="Start"
+                    Margin="0,10,0,0"/>
+
+            <Label Text="??" 
+                   FontSize="80" 
+                   HorizontalOptions="Center"/>
+
+            <Label Text="Buscar Mi Negocio" 
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   TextColor="#212121"/>
+
+            <Label Text="Encuentra tu negocio de préstamos" 
+                   FontSize="16" 
+                   HorizontalOptions="Center"
+                   TextColor="#757575"
+                   Margin="0,0,0,10"/>
+
+            <!-- Búsqueda por código -->
+            <Frame CornerRadius="15" Padding="20" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    
+                    <Label Text="¿Tienes el código del negocio?" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+
+                    <Label Text="Es la forma más rápida de encontrarlo" 
+                           FontSize="13"
+                           TextColor="#757575"/>
+
+                    <Frame CornerRadius="10" Padding="0" HasShadow="False" BorderColor="#2196F3">
+                        <Entry Placeholder="Ej: JPREZ2024"
+                               Text="{Binding CodigoBusqueda}"
+                               CharacterSpacing="2"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextTransform="Uppercase"
+                               HorizontalTextAlignment="Center"
+                               Margin="15,10"/>
+                    </Frame>
+
+                    <Button Text="?? Buscar por Código"
+                            Command="{Binding BuscarPorCodigoCommand}"
+                            BackgroundColor="#2196F3"
+                            TextColor="White"
+                            CornerRadius="12"
+                            HeightRequest="50"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            IsEnabled="{Binding EstaOcupado, Converter={StaticResource InvertedBoolConverter}}"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Separador -->
+            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10" Margin="0,10">
+                <BoxView Grid.Column="0" Color="#E0E0E0" HeightRequest="1" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="o" FontSize="16" TextColor="#757575" VerticalOptions="Center"/>
+                <BoxView Grid.Column="2" Color="#E0E0E0" HeightRequest="1" VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- Búsqueda por nombre -->
+            <Frame CornerRadius="15" Padding="20" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    
+                    <Label Text="Buscar por nombre o teléfono" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+
+                    <Label Text="Si no tienes el código" 
+                           FontSize="13"
+                           TextColor="#757575"/>
+
+                    <Frame CornerRadius="10" Padding="0" HasShadow="False" BorderColor="#E0E0E0">
+                        <Entry Placeholder="Nombre del negocio o teléfono"
+                               Text="{Binding NombreBusqueda}"
+                               FontSize="16"
+                               Margin="15,10"/>
+                    </Frame>
+
+                    <Button Text="?? Buscar por Nombre"
+                            Command="{Binding BuscarPorNombreCommand}"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            CornerRadius="12"
+                            HeightRequest="50"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            IsEnabled="{Binding EstaOcupado, Converter={StaticResource InvertedBoolConverter}}"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Indicador de carga -->
+            <ActivityIndicator IsRunning="{Binding EstaOcupado}"
+                               IsVisible="{Binding EstaOcupado}"
+                               Color="#2196F3"
+                               HeightRequest="50"
+                               Margin="0,20"/>
+
+            <!-- Resultados -->
+            <Frame CornerRadius="15" 
+                   Padding="20" 
+                   BackgroundColor="White" 
+                   HasShadow="True"
+                   IsVisible="{Binding MostrarResultados}">
+                <VerticalStackLayout Spacing="15">
+                    
+                    <Label Text="Resultados:" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+
+                    <CollectionView ItemsSource="{Binding ResultadosBusqueda}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame CornerRadius="12" 
+                                       Padding="15" 
+                                       Margin="0,5" 
+                                       BackgroundColor="#F5F5F5" 
+                                       HasShadow="False"
+                                       BorderColor="#2196F3">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SeleccionarNegocioCommand}"
+                                            CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+                                    
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+                                        <Frame Grid.Column="0"
+                                               CornerRadius="30"
+                                               WidthRequest="60"
+                                               HeightRequest="60"
+                                               Padding="0"
+                                               HasShadow="False"
+                                               BackgroundColor="#E3F2FD">
+                                            <Label Text="??"
+                                                   FontSize="30"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                        </Frame>
+                                        
+                                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                                            <Label Text="{Binding NombreNegocio}"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#212121"/>
+                                            <Label Text="{Binding NombreAdministrador}"
+                                                   FontSize="13"
+                                                   TextColor="#757575"/>
+                                            <Label Text="{Binding TelefonoAdministrador}"
+                                                   FontSize="12"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding CodigoNegocio, StringFormat='Código: {0}'}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2196F3"/>
+                                        </VerticalStackLayout>
+
+                                        <Label Grid.Column="2"
+                                               Text="?"
+                                               FontSize="30"
+                                               TextColor="#2196F3"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.GestionarUsuariosPage"
+             Title="Gestionar Usuarios"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Solicitudes Pendientes -->
+            <Label Text="📋 Solicitudes Pendientes"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#7B1FA2"/>
+
+            <Frame CornerRadius="15" Padding="15" BackgroundColor="White" HasShadow="True">
+                <CollectionView ItemsSource="{Binding SolicitudesPendientes}">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout Padding="20" Spacing="10">
+                            <Label Text="✅"
+                                   FontSize="48"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="No hay solicitudes pendientes"
+                                   TextColor="#9E9E9E"
+                                   HorizontalOptions="Center"
+                                   FontSize="14"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="10" Padding="15" Margin="0,5" BackgroundColor="#FFF3E0" HasShadow="False" BorderColor="#FF9800">
+                                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="5">
+                                    
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding NombreCompleto}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#212121"/>
+                                    
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Text="{Binding NombreUsuario, StringFormat='DNI: {0}'}"
+                                           FontSize="14"
+                                           TextColor="#757575"/>
+                                    
+                                    <Label Grid.Row="2" Grid.Column="0"
+                                           Text="{Binding FechaSolicitud, StringFormat='Solicitud: {0:dd/MM/yyyy HH:mm}'}"
+                                           FontSize="12"
+                                           TextColor="#9E9E9E"/>
+                                    
+                                    <VerticalStackLayout Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" 
+                                                        Spacing="5" VerticalOptions="Center">
+                                        <Button Text="✅ Aprobar"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AprobarSolicitudCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#4CAF50"
+                                                TextColor="White"
+                                                FontSize="12"
+                                                CornerRadius="8"
+                                                Padding="15,8"/>
+                                        <Button Text="❌ Rechazar"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RechazarSolicitudCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#F44336"
+                                                TextColor="White"
+                                                FontSize="12"
+                                                CornerRadius="8"
+                                                Padding="15,8"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Frame>
+
+            <!-- Crear Usuario para Cliente Existente -->
+            <Label Text="👤 Crear Usuario para Cliente"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#7B1FA2"
+                   Margin="0,20,0,0"/>
+
+            <Frame CornerRadius="15" Padding="20" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+
+                    <Frame BackgroundColor="#E3F2FD" CornerRadius="10" Padding="15" HasShadow="False">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="ℹ️" FontSize="20" VerticalOptions="Center"/>
+                            <Label FontSize="13" TextColor="#1565C0" VerticalOptions="Center">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="El usuario será el DNI del cliente y se generará una contraseña de 6 dígitos automáticamente"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                    <Label Text="Seleccionar Cliente" FontSize="14" FontAttributes="Bold" TextColor="#212121"/>
+                    <Frame CornerRadius="10" Padding="0" HasShadow="False" BorderColor="#E0E0E0" BackgroundColor="#F9FAFB">
+                        <Picker ItemsSource="{Binding ClientesSinUsuario}"
+                                ItemDisplayBinding="{Binding NombreCompleto}"
+                                SelectedItem="{Binding ClienteSeleccionado}"
+                                Title="Seleccione un cliente"
+                                Margin="10,5"
+                                TextColor="#212121"/>
+                    </Frame>
+
+                    <Button Text="🔑 GENERAR CREDENCIALES"
+                            Command="{Binding CrearUsuarioCommand}"
+                            BackgroundColor="#7B1FA2"
+                            TextColor="White"
+                            CornerRadius="12"
+                            HeightRequest="55"
+                            FontSize="16"
+                            FontAttributes="Bold"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Usuarios Activos -->
+            <Label Text="👥 Usuarios Activos"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#7B1FA2"
+                   Margin="0,20,0,0"/>
+
+            <Frame CornerRadius="15" Padding="15" BackgroundColor="White" HasShadow="True">
+                <CollectionView ItemsSource="{Binding UsuariosClientes}">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout Padding="20" Spacing="10">
+                            <Label Text="👤"
+                                   FontSize="48"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="No hay usuarios activos"
+                                   TextColor="#9E9E9E"
+                                   HorizontalOptions="Center"
+                                   FontSize="14"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="10" Padding="15" Margin="0,5" BackgroundColor="#F9FAFB" HasShadow="False" BorderColor="#E0E0E0">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="5">
+                                    
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding NombreCompleto}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#212121"/>
+                                    
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Text="{Binding NombreUsuario, StringFormat='📱 Usuario: {0}'}"
+                                           FontSize="14"
+                                           TextColor="#757575"/>
+                                    
+                                    <Label Grid.Row="2" Grid.Column="0"
+                                           Text="{Binding Telefono, StringFormat='📞 {0}'}"
+                                           FontSize="12"
+                                           TextColor="#9E9E9E"/>
+                                    
+                                    <Label Grid.Row="3" Grid.Column="0"
+                                           Text="{Binding UltimoAcceso, StringFormat='⏰ Último acceso: {0:dd/MM/yyyy HH:mm}'}"
+                                           FontSize="11"
+                                           TextColor="#9E9E9E"/>
+                                    
+                                    <VerticalStackLayout Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" 
+                                                        Spacing="5" VerticalOptions="Center">
+                                        <Button Text="🔄 Nueva Password"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RegenerarPasswordCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#FF9800"
+                                                TextColor="White"
+                                                FontSize="11"
+                                                CornerRadius="8"
+                                                Padding="10,5"/>
+                                        <Button Text="❌ Desactivar"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DesactivarUsuarioCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#F44336"
+                                                TextColor="White"
+                                                FontSize="11"
+                                                CornerRadius="8"
+                                                Padding="10,5"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Frame>
+
+            <ActivityIndicator IsRunning="{Binding EstaOcupado}"
+                               IsVisible="{Binding EstaOcupado}"
+                               Color="#7B1FA2"
+                               HorizontalOptions="Center"
+                               Margin="0,20"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

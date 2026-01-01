@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+ï»¿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
@@ -13,7 +13,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="0" Spacing="0">
 
-            <!-- Header con navegación de mes -->
+            <!-- Header con navegacion de mes -->
             <Grid BackgroundColor="{StaticResource Primary}" Padding="20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -78,7 +78,7 @@
                    HasShadow="True">
                 <VerticalStackLayout Spacing="10">
                     
-                    <!-- Encabezados de días de la semana -->
+                    <!-- Encabezados de dÃ­as de la semana -->
                     <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="5">
                         <Label Grid.Column="0" Text="DOM" FontSize="12" FontAttributes="Bold" 
                                TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
@@ -86,17 +86,17 @@
                                TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
                         <Label Grid.Column="2" Text="MAR" FontSize="12" FontAttributes="Bold" 
                                TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
-                        <Label Grid.Column="3" Text="MIÉ" FontSize="12" FontAttributes="Bold" 
+                        <Label Grid.Column="3" Text="MIÃ‰" FontSize="12" FontAttributes="Bold" 
                                TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
                         <Label Grid.Column="4" Text="JUE" FontSize="12" FontAttributes="Bold" 
                                TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
                         <Label Grid.Column="5" Text="VIE" FontSize="12" FontAttributes="Bold" 
                                TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
-                        <Label Grid.Column="6" Text="SÁB" FontSize="12" FontAttributes="Bold" 
+                        <Label Grid.Column="6" Text="SÃB" FontSize="12" FontAttributes="Bold" 
                                TextColor="{StaticResource Gray600}" HorizontalOptions="Center" />
                     </Grid>
 
-                    <!-- Grid de días (6 filas x 7 columnas = 42 días) -->
+                    <!-- Grid de dÃ­as (6 filas x 7 columnas = 42 dÃ­as) -->
                     <CollectionView ItemsSource="{Binding DiasCalendario}"
                                    SelectionMode="None">
                         <CollectionView.ItemsLayout>
@@ -121,7 +121,7 @@
                                     </Frame.GestureRecognizers>
                                     
                                     <Grid RowDefinitions="Auto,*,Auto">
-                                        <!-- Número del día -->
+                                        <!-- NÃºmero del dÃ­a -->
                                         <Label Grid.Row="0"
                                                Text="{Binding Dia}"
                                                FontSize="14"
@@ -155,7 +155,7 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Resumen del día seleccionado -->
+            <!-- Resumen del dÃ­a seleccionado -->
             <Frame Margin="15,15,15,0"
                    BackgroundColor="#F5F5F5"
                    CornerRadius="15"
@@ -251,7 +251,7 @@
                         CommandParameter="Pagados" />
             </HorizontalStackLayout>
 
-            <!-- Lista de pagos del día -->
+            <!-- Lista de pagos del dÃ­a -->
             <VerticalStackLayout Padding="15,0,15,20" Spacing="10">
                 <Label Text="{Binding FechaSeleccionada, StringFormat='Pagos del {0:dd/MM/yyyy}'}"
                        FontSize="16"
@@ -301,7 +301,7 @@
                                                TextColor="White" />
                                     </Frame>
 
-                                    <!-- Información del pago -->
+                                    <!-- InformaciÃ³n del pago -->
                                     <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Spacing="15">
                                         <Label Text="{Binding MontoPago, StringFormat='${0:N2}'}"
                                                FontSize="20"
@@ -317,7 +317,7 @@
                                                VerticalOptions="Center" />
                                     </HorizontalStackLayout>
 
-                                    <!-- Botones de acción -->
+                                    <!-- Botones de acciÃ³n -->
                                     <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Spacing="10">
                                         <Button Text="&#x2713; Marcar Pagado"
                                                 BackgroundColor="#4CAF50"

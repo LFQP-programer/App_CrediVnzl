@@ -14,7 +14,7 @@ namespace App_CrediVnzl.Models
         [MaxLength(20)]
         public string Telefono { get; set; } = string.Empty;
 
-        [MaxLength(20)]
+        [MaxLength(20), Indexed]
         public string Cedula { get; set; } = string.Empty;
 
         [MaxLength(500)]

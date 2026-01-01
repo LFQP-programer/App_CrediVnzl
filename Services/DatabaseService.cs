@@ -21,6 +21,7 @@ namespace App_CrediVnzl.Services
             await _database.CreateTableAsync<HistorialPago>();
             await _database.CreateTableAsync<CapitalConfig>();
             await _database.CreateTableAsync<PagoCalendario>();
+            await _database.CreateTableAsync<Usuario>();
         }
 
         private async Task<SQLiteAsyncConnection> GetDatabaseAsync()
@@ -30,7 +31,15 @@ namespace App_CrediVnzl.Services
             return _database!;
         }
 
-        // Metodos para Clientes
+        public async Task<Cliente?> GetClienteByCedulaAsync(string cedula)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Cliente>()
+                .Where(c => c.Cedula == cedula)
+                .FirstOrDefaultAsync();
+        }
+
+        // Métodos para Clientes
         public async Task<List<Cliente>> GetClientesAsync()
         {
             var db = await GetDatabaseAsync();
@@ -666,6 +675,57 @@ namespace App_CrediVnzl.Services
         {
             var result = await MarcarPagoComoPagadoAsync(pagoId);
             return result > 0;
+        }
+
+        // Métodos para Usuarios
+        public async Task<List<Usuario>> GetUsuariosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>().ToListAsync();
+        }
+
+        public async Task<Usuario?> GetUsuarioAsync(int id)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>().Where(u => u.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<Usuario?> GetUsuarioByNombreUsuarioAsync(string nombreUsuario)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>().Where(u => u.NombreUsuario == nombreUsuario).FirstOrDefaultAsync();
+        }
+
+        public async Task<Usuario?> GetUsuarioByClienteIdAsync(int clienteId)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>().Where(u => u.ClienteId == clienteId).FirstOrDefaultAsync();
+        }
+
+        public async Task<int> SaveUsuarioAsync(Usuario usuario)
+        {
+            var db = await GetDatabaseAsync();
+            
+            if (usuario.Id != 0)
+            {
+                return await db.UpdateAsync(usuario);
+            }
+            else
+            {
+                return await db.InsertAsync(usuario);
+            }
+        }
+
+        public async Task<int> DeleteUsuarioAsync(Usuario usuario)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.DeleteAsync(usuario);
+        }
+
+        public async Task<List<Usuario>> GetUsuariosClientesAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>().Where(u => u.Rol == RolesUsuario.Cliente).ToListAsync();
         }
     }
 

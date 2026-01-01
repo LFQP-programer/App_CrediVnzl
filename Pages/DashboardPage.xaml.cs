@@ -133,6 +133,19 @@ namespace App_CrediVnzl.Pages
             });
         }
 
+        private void OnMenuTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("*** OnMenuTapped - Abriendo Flyout ***");
+                Shell.Current.FlyoutIsPresented = true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnMenuTapped ***: {ex.Message}");
+            }
+        }
+
         private async void OnClientesTapped(object sender, EventArgs e)
         {
             try
