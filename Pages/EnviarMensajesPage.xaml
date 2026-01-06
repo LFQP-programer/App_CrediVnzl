@@ -108,7 +108,7 @@
                            FontSize="14"
                            TextColor="#757575"
                            HorizontalOptions="Center"
-                           IsVisible="{Binding TienePagosProximos, Converter={StaticResource InvertBoolConverter}}"/>
+                           IsVisible="{Binding TienePagosProximos, Converter={StaticResource InvertedBoolConverter}}"/>
                 </VerticalStackLayout>
             </Frame>
 

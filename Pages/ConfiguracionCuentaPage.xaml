@@ -21,12 +21,12 @@
                     <Label Text="??"
                            FontSize="60"
                            HorizontalOptions="Center"/>
-                    <Label Text="Configuración de Cuenta"
+                    <Label Text="Configuraciï¿½n de Cuenta"
                            FontSize="22"
                            FontAttributes="Bold"
                            TextColor="White"
                            HorizontalOptions="Center"/>
-                    <Label Text="Actualiza tu información personal"
+                    <Label Text="Actualiza tu informaciï¿½n personal"
                            FontSize="14"
                            TextColor="White"
                            Opacity="0.9"
@@ -70,12 +70,12 @@
                            HasShadow="False"
                            BorderColor="#E0E0E0"
                            BackgroundColor="#F9FAFB">
-                        <Entry Placeholder="Usuario para iniciar sesión"
+                        <Entry Placeholder="Usuario para iniciar sesiï¿½n"
                                Text="{Binding NombreUsuario}"
                                Margin="15,10"/>
                     </Frame>
 
-                    <Label Text="Teléfono" 
+                    <Label Text="Telï¿½fono" 
                            FontSize="14" 
                            FontAttributes="Bold"
                            TextColor="#212121"
@@ -85,13 +85,13 @@
                            HasShadow="False"
                            BorderColor="#E0E0E0"
                            BackgroundColor="#F9FAFB">
-                        <Entry Placeholder="Tu número de teléfono"
+                        <Entry Placeholder="Tu nï¿½mero de telï¿½fono"
                                Text="{Binding Telefono}"
                                Keyboard="Telephone"
                                Margin="15,10"/>
                     </Frame>
 
-                    <Label Text="Correo Electrónico" 
+                    <Label Text="Correo Electrï¿½nico" 
                            FontSize="14" 
                            FontAttributes="Bold"
                            TextColor="#212121"
@@ -110,8 +110,8 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Cambiar Contraseña -->
-            <Label Text="?? Cambiar Contraseña"
+            <!-- Cambiar Contraseï¿½a -->
+            <Label Text="?? Cambiar Contraseï¿½a"
                    FontSize="20"
                    FontAttributes="Bold"
                    TextColor="#7B1FA2"
@@ -126,7 +126,7 @@
                     <Label Text="??" 
                            FontSize="20" 
                            VerticalOptions="Center"/>
-                    <Label Text="Deja estos campos vacíos si no deseas cambiar tu contraseña"
+                    <Label Text="Deja estos campos vacï¿½os si no deseas cambiar tu contraseï¿½a"
                            FontSize="12"
                            TextColor="#E65100"
                            LineBreakMode="WordWrap"
@@ -140,7 +140,7 @@
                    HasShadow="True">
                 <VerticalStackLayout Spacing="15">
 
-                    <Label Text="Contraseña Actual" 
+                    <Label Text="Contraseï¿½a Actual" 
                            FontSize="14" 
                            FontAttributes="Bold"
                            TextColor="#212121"/>
@@ -149,13 +149,13 @@
                            HasShadow="False"
                            BorderColor="#E0E0E0"
                            BackgroundColor="#F9FAFB">
-                        <Entry Placeholder="Tu contraseña actual"
+                        <Entry Placeholder="Tu contraseï¿½a actual"
                                Text="{Binding PasswordActual}"
                                IsPassword="True"
                                Margin="15,10"/>
                     </Frame>
 
-                    <Label Text="Nueva Contraseña" 
+                    <Label Text="Nueva Contraseï¿½a" 
                            FontSize="14" 
                            FontAttributes="Bold"
                            TextColor="#212121"
@@ -165,13 +165,13 @@
                            HasShadow="False"
                            BorderColor="#E0E0E0"
                            BackgroundColor="#F9FAFB">
-                        <Entry Placeholder="Nueva contraseña (mín. 6 caracteres)"
+                        <Entry Placeholder="Nueva contraseï¿½a (mï¿½n. 6 caracteres)"
                                Text="{Binding PasswordNuevo}"
                                IsPassword="True"
                                Margin="15,10"/>
                     </Frame>
 
-                    <Label Text="Confirmar Nueva Contraseña" 
+                    <Label Text="Confirmar Nueva Contraseï¿½a" 
                            FontSize="14" 
                            FontAttributes="Bold"
                            TextColor="#212121"
@@ -181,7 +181,7 @@
                            HasShadow="False"
                            BorderColor="#E0E0E0"
                            BackgroundColor="#F9FAFB">
-                        <Entry Placeholder="Repite la nueva contraseña"
+                        <Entry Placeholder="Repite la nueva contraseï¿½a"
                                Text="{Binding PasswordConfirmar}"
                                IsPassword="True"
                                Margin="15,10"/>

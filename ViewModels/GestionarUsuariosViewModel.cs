@@ -37,6 +37,7 @@ namespace App_CrediVnzl.ViewModels
         public ICommand AprobarSolicitudCommand { get; }
         public ICommand RechazarSolicitudCommand { get; }
         public ICommand RegenerarPasswordCommand { get; }
+        public ICommand VolverCommand { get; }
 
         public GestionarUsuariosViewModel(DatabaseService databaseService, AuthService authService, WhatsAppService whatsAppService)
         {
@@ -50,6 +51,7 @@ namespace App_CrediVnzl.ViewModels
             AprobarSolicitudCommand = new Command<Usuario>(async (usuario) => await OnAprobarSolicitudAsync(usuario));
             RechazarSolicitudCommand = new Command<Usuario>(async (usuario) => await OnRechazarSolicitudAsync(usuario));
             RegenerarPasswordCommand = new Command<Usuario>(async (usuario) => await OnRegenerarPasswordAsync(usuario));
+            VolverCommand = new Command(async () => await OnVolverAsync());
         }
 
         public async Task LoadDataAsync()
@@ -104,7 +106,7 @@ namespace App_CrediVnzl.ViewModels
         {
             if (ClienteSeleccionado == null)
             {
-                await Application.Current!.MainPage!.DisplayAlert("Error", "Seleccione un cliente", "OK");
+                await Shell.Current.DisplayAlert("Error", "Seleccione un cliente", "OK");
                 return;
             }
 
@@ -124,17 +126,17 @@ namespace App_CrediVnzl.ViewModels
                     var mensajeWhatsApp = $"¡Bienvenido a CrediVnzl! ??\n\n" +
                                          $"Tu cuenta ha sido creada exitosamente.\n\n" +
                                          $"?? *Tus credenciales de acceso:*\n" +
-                                         $"Usuario: *{ClienteSeleccionado.Cedula}* (tu DNI)\n" +
+                                         $"Usuario: *{ClienteSeleccionado.NumeroDocumento}* (tu documento)\n" +
                                          $"Contraseña: *{passwordGenerada}*\n\n" +
                                          $"?? Descarga la app y accede con estas credenciales.\n\n" +
                                          $"?? Por seguridad, te recomendamos cambiar tu contraseña desde la opción 'Mi Cuenta' en la app.\n\n" +
                                          $"¡Gracias por confiar en nosotros!";
 
                     // Preguntar si desea enviar WhatsApp
-                    var enviarWhatsApp = await Application.Current!.MainPage!.DisplayAlert(
+                    var enviarWhatsApp = await Shell.Current.DisplayAlert(
                         "? Usuario Creado",
                         $"Usuario creado para: {ClienteSeleccionado.NombreCompleto}\n\n" +
-                        $"?? Usuario (DNI): {ClienteSeleccionado.Cedula}\n" +
+                        $"?? Usuario (DNI): {ClienteSeleccionado.NumeroDocumento}\n" +
                         $"?? Contraseña: {passwordGenerada}\n\n" +
                         $"¿Deseas enviar las credenciales por WhatsApp ahora?",
                         "Sí, enviar WhatsApp",
@@ -147,14 +149,14 @@ namespace App_CrediVnzl.ViewModels
 
                         if (enviado)
                         {
-                            await Application.Current!.MainPage!.DisplayAlert(
+                            await Shell.Current.DisplayAlert(
                                 "WhatsApp Enviado",
                                 "Se ha abierto WhatsApp con el mensaje de credenciales. Por favor, envíalo al cliente.",
                                 "OK");
                         }
                         else
                         {
-                            await Application.Current!.MainPage!.DisplayAlert(
+                            await Shell.Current.DisplayAlert(
                                 "Error",
                                 "No se pudo abrir WhatsApp. Verifica el número de teléfono del cliente.",
                                 "OK");
@@ -163,9 +165,9 @@ namespace App_CrediVnzl.ViewModels
                     else
                     {
                         // Solo mostrar las credenciales para copiar manualmente
-                        await Application.Current!.MainPage!.DisplayAlert(
+                        await Shell.Current.DisplayAlert(
                             "Credenciales Generadas",
-                            $"Usuario: {ClienteSeleccionado.Cedula}\n" +
+                            $"Usuario: {ClienteSeleccionado.NumeroDocumento}\n" +
                             $"Contraseña: {passwordGenerada}\n\n" +
                             $"Comunica estas credenciales al cliente.",
                             "OK");
@@ -179,13 +181,13 @@ namespace App_CrediVnzl.ViewModels
                 }
                 else
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Error", mensaje, "OK");
+                    await Shell.Current.DisplayAlert("Error", mensaje, "OK");
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error creando usuario: {ex.Message}");
-                await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             }
             finally
             {
@@ -197,7 +199,7 @@ namespace App_CrediVnzl.ViewModels
         {
             if (usuario == null) return;
 
-            var confirmar = await Application.Current!.MainPage!.DisplayAlert(
+            var confirmar = await Shell.Current.DisplayAlert(
                 "Aprobar Solicitud",
                 $"¿Aprobar la solicitud de {usuario.NombreCompleto}?\n\n" +
                 $"Se generará una contraseña automática de 6 dígitos.",
@@ -233,7 +235,7 @@ namespace App_CrediVnzl.ViewModels
                                              $"¡Gracias por confiar en nosotros!";
 
                         // Preguntar si desea enviar WhatsApp
-                        var enviarWhatsApp = await Application.Current!.MainPage!.DisplayAlert(
+                        var enviarWhatsApp = await Shell.Current.DisplayAlert(
                             "? Cliente Aprobado",
                             $"Cliente: {usuario.NombreCompleto}\n\n" +
                             $"?? Usuario (DNI): {usuario.NombreUsuario}\n" +
@@ -249,14 +251,14 @@ namespace App_CrediVnzl.ViewModels
 
                             if (enviado)
                             {
-                                await Application.Current!.MainPage!.DisplayAlert(
+                                await Shell.Current.DisplayAlert(
                                     "WhatsApp Enviado",
                                     "Se ha abierto WhatsApp con el mensaje de credenciales. Por favor, envíalo al cliente.",
                                     "OK");
                             }
                             else
                             {
-                                await Application.Current!.MainPage!.DisplayAlert(
+                                await Shell.Current.DisplayAlert(
                                     "Error",
                                     "No se pudo abrir WhatsApp. Verifica el número de teléfono del cliente.",
                                     "OK");
@@ -265,7 +267,7 @@ namespace App_CrediVnzl.ViewModels
                         else
                         {
                             // Solo mostrar las credenciales
-                            await Application.Current!.MainPage!.DisplayAlert(
+                            await Shell.Current.DisplayAlert(
                                 "Credenciales",
                                 $"Usuario: {usuario.NombreUsuario}\n" +
                                 $"Contraseña: {password}\n\n" +
@@ -278,13 +280,13 @@ namespace App_CrediVnzl.ViewModels
                 }
                 else
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Error", mensaje, "OK");
+                    await Shell.Current.DisplayAlert("Error", mensaje, "OK");
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error aprobando solicitud: {ex.Message}");
-                await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             }
             finally
             {
@@ -296,7 +298,7 @@ namespace App_CrediVnzl.ViewModels
         {
             if (usuario == null) return;
 
-            var confirmar = await Application.Current!.MainPage!.DisplayAlert(
+            var confirmar = await Shell.Current.DisplayAlert(
                 "Rechazar Solicitud",
                 $"¿Rechazar la solicitud de {usuario.NombreCompleto}?",
                 "Sí, rechazar",
@@ -312,7 +314,7 @@ namespace App_CrediVnzl.ViewModels
 
                 if (exito)
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Solicitud Rechazada", 
+                    await Shell.Current.DisplayAlert("Solicitud Rechazada", 
                         $"La solicitud de {usuario.NombreCompleto} ha sido rechazada.", 
                         "OK");
                     
@@ -320,13 +322,13 @@ namespace App_CrediVnzl.ViewModels
                 }
                 else
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Error", mensaje, "OK");
+                    await Shell.Current.DisplayAlert("Error", mensaje, "OK");
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error rechazando solicitud: {ex.Message}");
-                await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             }
             finally
             {
@@ -338,7 +340,7 @@ namespace App_CrediVnzl.ViewModels
         {
             if (usuario == null) return;
 
-            var confirmar = await Application.Current!.MainPage!.DisplayAlert(
+            var confirmar = await Shell.Current.DisplayAlert(
                 "Regenerar Contraseña",
                 $"¿Generar una nueva contraseña para {usuario.NombreCompleto}?\n\n" +
                 $"La contraseña actual dejará de funcionar.",
@@ -372,8 +374,8 @@ namespace App_CrediVnzl.ViewModels
                                              $"Si no solicitaste este cambio, contacta inmediatamente al administrador.";
 
                         // Preguntar si desea enviar WhatsApp
-                        var enviarWhatsApp = await Application.Current!.MainPage!.DisplayAlert(
-                            "? Contraseña Regenerada",
+                        var enviarWhatsApp = await Shell.Current.DisplayAlert(
+                            "?? Contraseña Regenerada",
                             $"Cliente: {usuario.NombreCompleto}\n\n" +
                             $"?? Usuario (DNI): {usuario.NombreUsuario}\n" +
                             $"?? Nueva Contraseña: {passwordGenerada}\n\n" +
@@ -388,14 +390,14 @@ namespace App_CrediVnzl.ViewModels
 
                             if (enviado)
                             {
-                                await Application.Current!.MainPage!.DisplayAlert(
+                                await Shell.Current.DisplayAlert(
                                     "WhatsApp Enviado",
                                     "Se ha abierto WhatsApp con la nueva contraseña. Por favor, envíalo al cliente.",
                                     "OK");
                             }
                             else
                             {
-                                await Application.Current!.MainPage!.DisplayAlert(
+                                await Shell.Current.DisplayAlert(
                                     "Error",
                                     "No se pudo abrir WhatsApp. Verifica el número de teléfono del cliente.",
                                     "OK");
@@ -404,7 +406,7 @@ namespace App_CrediVnzl.ViewModels
                         else
                         {
                             // Solo mostrar la contraseña
-                            await Application.Current!.MainPage!.DisplayAlert(
+                            await Shell.Current.DisplayAlert(
                                 "Nueva Contraseña",
                                 $"Usuario: {usuario.NombreUsuario}\n" +
                                 $"Nueva Contraseña: {passwordGenerada}\n\n" +
@@ -417,13 +419,13 @@ namespace App_CrediVnzl.ViewModels
                 }
                 else
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Error", mensaje, "OK");
+                    await Shell.Current.DisplayAlert("Error", mensaje, "OK");
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error regenerando contraseña: {ex.Message}");
-                await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             }
             finally
             {
@@ -435,7 +437,7 @@ namespace App_CrediVnzl.ViewModels
         {
             if (usuario == null) return;
 
-            var confirmar = await Application.Current!.MainPage!.DisplayAlert(
+            var confirmar = await Shell.Current.DisplayAlert(
                 "Confirmar",
                 $"¿Desea desactivar el usuario de {usuario.NombreCompleto}?",
                 "Sí",
@@ -448,13 +450,28 @@ namespace App_CrediVnzl.ViewModels
                 usuario.Activo = false;
                 await _databaseService.SaveUsuarioAsync(usuario);
                 
-                await Application.Current!.MainPage!.DisplayAlert("Éxito", "Usuario desactivado", "OK");
+                await Shell.Current.DisplayAlert("Éxito", "Usuario desactivado", "OK");
                 await LoadDataAsync();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error desactivando usuario: {ex.Message}");
-                await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task OnVolverAsync()
+        {
+            try
+            {
+                // Navegar de vuelta al dashboard
+                await Shell.Current.GoToAsync("//dashboard");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error navegando al dashboard: {ex.Message}");
+                // Si falla la navegación por Shell, intentar con el método alternativo
+                await Shell.Current.GoToAsync("..");
             }
         }
 

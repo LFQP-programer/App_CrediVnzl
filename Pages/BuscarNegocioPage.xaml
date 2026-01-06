@@ -27,22 +27,22 @@
                    HorizontalOptions="Center"
                    TextColor="#212121"/>
 
-            <Label Text="Encuentra tu negocio de préstamos" 
+            <Label Text="Encuentra tu negocio de prï¿½stamos" 
                    FontSize="16" 
                    HorizontalOptions="Center"
                    TextColor="#757575"
                    Margin="0,0,0,10"/>
 
-            <!-- Búsqueda por código -->
+            <!-- Bï¿½squeda por cï¿½digo -->
             <Frame CornerRadius="15" Padding="20" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="15">
                     
-                    <Label Text="¿Tienes el código del negocio?" 
+                    <Label Text="ï¿½Tienes el cï¿½digo del negocio?" 
                            FontSize="18" 
                            FontAttributes="Bold"
                            TextColor="#212121"/>
 
-                    <Label Text="Es la forma más rápida de encontrarlo" 
+                    <Label Text="Es la forma mï¿½s rï¿½pida de encontrarlo" 
                            FontSize="13"
                            TextColor="#757575"/>
 
@@ -57,7 +57,7 @@
                                Margin="15,10"/>
                     </Frame>
 
-                    <Button Text="?? Buscar por Código"
+                    <Button Text="?? Buscar por Cï¿½digo"
                             Command="{Binding BuscarPorCodigoCommand}"
                             BackgroundColor="#2196F3"
                             TextColor="White"
@@ -77,21 +77,21 @@
                 <BoxView Grid.Column="2" Color="#E0E0E0" HeightRequest="1" VerticalOptions="Center"/>
             </Grid>
 
-            <!-- Búsqueda por nombre -->
+            <!-- Bï¿½squeda por nombre -->
             <Frame CornerRadius="15" Padding="20" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="15">
                     
-                    <Label Text="Buscar por nombre o teléfono" 
+                    <Label Text="Buscar por nombre o telï¿½fono" 
                            FontSize="18" 
                            FontAttributes="Bold"
                            TextColor="#212121"/>
 
-                    <Label Text="Si no tienes el código" 
+                    <Label Text="Si no tienes el cï¿½digo" 
                            FontSize="13"
                            TextColor="#757575"/>
 
                     <Frame CornerRadius="10" Padding="0" HasShadow="False" BorderColor="#E0E0E0">
-                        <Entry Placeholder="Nombre del negocio o teléfono"
+                        <Entry Placeholder="Nombre del negocio o telï¿½fono"
                                Text="{Binding NombreBusqueda}"
                                FontSize="16"
                                Margin="15,10"/>
@@ -170,7 +170,7 @@
                                             <Label Text="{Binding TelefonoAdministrador}"
                                                    FontSize="12"
                                                    TextColor="#9E9E9E"/>
-                                            <Label Text="{Binding CodigoNegocio, StringFormat='Código: {0}'}"
+                                            <Label Text="{Binding CodigoNegocio, StringFormat='Cï¿½digo: {0}'}"
                                                    FontSize="12"
                                                    FontAttributes="Bold"
                                                    TextColor="#2196F3"/>

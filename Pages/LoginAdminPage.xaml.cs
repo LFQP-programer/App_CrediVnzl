@@ -18,6 +18,21 @@ namespace App_CrediVnzl.Pages
         {
             base.OnAppearing();
             _viewModel.CargarCredencialesGuardadas();
+            
+            // Focus on username entry field
+            Task.Run(async () =>
+            {
+                await Task.Delay(300);
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    UsuarioEntry.Focus();
+                });
+            });
+        }
+
+        private async void OnVolverClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//bienvenida");
         }
     }
 }

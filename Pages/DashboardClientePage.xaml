@@ -11,11 +11,11 @@
             <!-- Header con nombre del cliente -->
             <Frame CornerRadius="15" Padding="20" BackgroundColor="#2196F3" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="{Binding NombreCliente, StringFormat='¡Hola, {0}!'}"
+                    <Label Text="{Binding NombreCliente, StringFormat='ï¿½Hola, {0}!'}"
                            FontSize="24"
                            FontAttributes="Bold"
                            TextColor="White"/>
-                    <Button Text="Cerrar Sesión"
+                    <Button Text="Cerrar Sesiï¿½n"
                             Command="{Binding CerrarSesionCommand}"
                             BackgroundColor="White"
                             TextColor="#2196F3"
@@ -28,10 +28,10 @@
             <!-- Tarjetas de resumen -->
             <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
                 
-                <!-- Préstamos Activos -->
+                <!-- Prï¿½stamos Activos -->
                 <Frame Grid.Column="0" Grid.Row="0" CornerRadius="15" Padding="15" BackgroundColor="White" HasShadow="True">
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Préstamos Activos" FontSize="12" TextColor="#757575"/>
+                        <Label Text="Prï¿½stamos Activos" FontSize="12" TextColor="#757575"/>
                         <Label Text="{Binding PrestamosActivos}" FontSize="32" FontAttributes="Bold" TextColor="#2196F3"/>
                     </VerticalStackLayout>
                 </Frame>
@@ -52,10 +52,10 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Próximo Pago -->
+                <!-- Prï¿½ximo Pago -->
                 <Frame Grid.Column="1" Grid.Row="1" CornerRadius="15" Padding="15" BackgroundColor="White" HasShadow="True">
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Próximo Pago" FontSize="12" TextColor="#757575"/>
+                        <Label Text="Prï¿½ximo Pago" FontSize="12" TextColor="#757575"/>
                         <Label Text="{Binding ProximoPago, StringFormat='${0:N2}'}" FontSize="24" FontAttributes="Bold" TextColor="#FF9800"/>
                         <Label Text="{Binding FechaProximoPago, StringFormat='{0:dd/MM/yyyy}'}" FontSize="10" TextColor="#9E9E9E"/>
                     </VerticalStackLayout>
@@ -63,14 +63,14 @@
 
             </Grid>
 
-            <!-- Mis Préstamos -->
+            <!-- Mis Prï¿½stamos -->
             <Frame CornerRadius="15" Padding="15" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Mis Préstamos" FontSize="18" FontAttributes="Bold" TextColor="#212121"/>
+                    <Label Text="Mis Prï¿½stamos" FontSize="18" FontAttributes="Bold" TextColor="#212121"/>
                     
                     <CollectionView ItemsSource="{Binding MisPrestamos}">
                         <CollectionView.EmptyView>
-                            <Label Text="No tiene préstamos activos" 
+                            <Label Text="No tiene prï¿½stamos activos" 
                                    TextColor="#9E9E9E" 
                                    HorizontalOptions="Center"
                                    Margin="0,20"/>
@@ -81,7 +81,7 @@
                                     <VerticalStackLayout Spacing="8">
                                         <Grid ColumnDefinitions="*,Auto">
                                             <Label Grid.Column="0" 
-                                                   Text="{Binding FechaInicio, StringFormat='Préstamo del {0:dd/MM/yyyy}'}"
+                                                   Text="{Binding FechaInicio, StringFormat='Prï¿½stamo del {0:dd/MM/yyyy}'}"
                                                    FontSize="14"
                                                    FontAttributes="Bold"
                                                    TextColor="#212121"/>
@@ -127,10 +127,10 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Próximos Pagos -->
+            <!-- Prï¿½ximos Pagos -->
             <Frame CornerRadius="15" Padding="15" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Próximos Pagos Programados" FontSize="18" FontAttributes="Bold" TextColor="#212121"/>
+                    <Label Text="Prï¿½ximos Pagos Programados" FontSize="18" FontAttributes="Bold" TextColor="#212121"/>
                     
                     <CollectionView ItemsSource="{Binding ProximosPagos}">
                         <CollectionView.EmptyView>
@@ -170,14 +170,14 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Últimos Pagos Realizados -->
+            <!-- ï¿½ltimos Pagos Realizados -->
             <Frame CornerRadius="15" Padding="15" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Últimos Pagos Realizados" FontSize="18" FontAttributes="Bold" TextColor="#212121"/>
+                    <Label Text="ï¿½ltimos Pagos Realizados" FontSize="18" FontAttributes="Bold" TextColor="#212121"/>
                     
                     <CollectionView ItemsSource="{Binding UltimosPagos}">
                         <CollectionView.EmptyView>
-                            <Label Text="Aún no ha realizado pagos" 
+                            <Label Text="Aï¿½n no ha realizado pagos" 
                                    TextColor="#9E9E9E" 
                                    HorizontalOptions="Center"
                                    Margin="0,20"/>
@@ -214,7 +214,7 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Botón de refrescar -->
+            <!-- Botï¿½n de refrescar -->
             <Button Text="?? Refrescar"
                     Command="{Binding RefrescarCommand}"
                     BackgroundColor="#2196F3"

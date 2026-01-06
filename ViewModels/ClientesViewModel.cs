@@ -12,6 +12,7 @@ namespace App_CrediVnzl.ViewModels
         private readonly DatabaseService _databaseService;
         private string _searchText = string.Empty;
         private bool _isRefreshing;
+        private int _totalClientes;
 
         public ObservableCollection<Cliente> Clientes { get; set; } = new();
 
@@ -36,11 +37,22 @@ namespace App_CrediVnzl.ViewModels
             }
         }
 
+        public int TotalClientes
+        {
+            get => _totalClientes;
+            set
+            {
+                _totalClientes = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand RefreshCommand { get; }
         public ICommand AddClienteCommand { get; }
         public ICommand EditClienteCommand { get; }
         public ICommand ModificarClienteCommand { get; }
         public ICommand EliminarClienteCommand { get; }
+        public ICommand BackCommand { get; }
 
         public ClientesViewModel(DatabaseService databaseService)
         {
@@ -50,6 +62,7 @@ namespace App_CrediVnzl.ViewModels
             EditClienteCommand = new Command<Cliente>(async (cliente) => await NavigateToDetalleCliente(cliente));
             ModificarClienteCommand = new Command<Cliente>(async (cliente) => await ModificarCliente(cliente));
             EliminarClienteCommand = new Command<Cliente>(async (cliente) => await EliminarCliente(cliente));
+            BackCommand = new Command(async () => await GoBack());
         }
 
         public async Task LoadClientesAsync()
@@ -65,6 +78,8 @@ namespace App_CrediVnzl.ViewModels
                 {
                     Clientes.Add(cliente);
                 }
+                
+                TotalClientes = clientes.Count;
             }
             catch (Exception ex)
             {
@@ -93,6 +108,8 @@ namespace App_CrediVnzl.ViewModels
                 {
                     Clientes.Add(cliente);
                 }
+
+                TotalClientes = Clientes.Count;
             }
             catch (Exception ex)
             {
@@ -165,6 +182,18 @@ namespace App_CrediVnzl.ViewModels
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Error", $"No se pudo eliminar el cliente: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task GoBack()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync("//dashboard");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error navegando hacia atrás: {ex.Message}");
             }
         }
 

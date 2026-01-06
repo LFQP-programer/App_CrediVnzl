@@ -11,10 +11,12 @@ namespace App_CrediVnzl.ViewModels
     {
         private readonly DatabaseService _databaseService;
         private int _clienteId;
-        private string _nombreCompleto = string.Empty;
+        private string _nombres = string.Empty;
+        private string _apellidos = string.Empty;
         private string _telefono = string.Empty;
-        private string _cedula = string.Empty;
-        private string _direccion = string.Empty;
+        private string _tipoDocumento = "DNI";
+        private string _numeroDocumento = string.Empty;
+        private string _observaciones = string.Empty;
 
         public int ClienteId
         {
@@ -26,12 +28,22 @@ namespace App_CrediVnzl.ViewModels
             }
         }
 
-        public string NombreCompleto
+        public string Nombres
         {
-            get => _nombreCompleto;
+            get => _nombres;
             set
             {
-                _nombreCompleto = value;
+                _nombres = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Apellidos
+        {
+            get => _apellidos;
+            set
+            {
+                _apellidos = value;
                 OnPropertyChanged();
             }
         }
@@ -46,22 +58,32 @@ namespace App_CrediVnzl.ViewModels
             }
         }
 
-        public string Cedula
+        public string TipoDocumento
         {
-            get => _cedula;
+            get => _tipoDocumento;
             set
             {
-                _cedula = value;
+                _tipoDocumento = value;
                 OnPropertyChanged();
             }
         }
 
-        public string Direccion
+        public string NumeroDocumento
         {
-            get => _direccion;
+            get => _numeroDocumento;
             set
             {
-                _direccion = value;
+                _numeroDocumento = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Observaciones
+        {
+            get => _observaciones;
+            set
+            {
+                _observaciones = value;
                 OnPropertyChanged();
             }
         }
@@ -80,13 +102,15 @@ namespace App_CrediVnzl.ViewModels
         {
             try
             {
-                var cliente = await _databaseService.GetClienteAsync(ClienteId);
+                var cliente = await _databaseService.GetClienteByIdAsync(ClienteId);
                 if (cliente != null)
                 {
-                    NombreCompleto = cliente.NombreCompleto;
+                    Nombres = cliente.Nombres;
+                    Apellidos = cliente.Apellidos;
                     Telefono = cliente.Telefono;
-                    Cedula = cliente.Cedula;
-                    Direccion = cliente.Direccion;
+                    TipoDocumento = cliente.TipoDocumento;
+                    NumeroDocumento = cliente.NumeroDocumento;
+                    Observaciones = cliente.Observaciones ?? string.Empty;
                 }
             }
             catch (Exception ex)
@@ -97,9 +121,15 @@ namespace App_CrediVnzl.ViewModels
 
         private async Task GuardarClienteAsync()
         {
-            if (string.IsNullOrWhiteSpace(NombreCompleto))
+            if (string.IsNullOrWhiteSpace(Nombres))
             {
-                await Shell.Current.DisplayAlert("Error", "El nombre completo es requerido", "OK");
+                await Shell.Current.DisplayAlert("Error", "Los nombres son requeridos", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Apellidos))
+            {
+                await Shell.Current.DisplayAlert("Error", "Los apellidos son requeridos", "OK");
                 return;
             }
 
@@ -109,21 +139,23 @@ namespace App_CrediVnzl.ViewModels
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(Cedula))
+            if (string.IsNullOrWhiteSpace(NumeroDocumento))
             {
-                await Shell.Current.DisplayAlert("Error", "La cédula/DNI es requerida", "OK");
+                await Shell.Current.DisplayAlert("Error", $"El {TipoDocumento} es requerido", "OK");
                 return;
             }
 
             try
             {
-                var cliente = await _databaseService.GetClienteAsync(ClienteId);
+                var cliente = await _databaseService.GetClienteByIdAsync(ClienteId);
                 if (cliente != null)
                 {
-                    cliente.NombreCompleto = NombreCompleto;
+                    cliente.Nombres = Nombres;
+                    cliente.Apellidos = Apellidos;
                     cliente.Telefono = Telefono;
-                    cliente.Cedula = Cedula;
-                    cliente.Direccion = Direccion;
+                    cliente.TipoDocumento = TipoDocumento;
+                    cliente.NumeroDocumento = NumeroDocumento;
+                    cliente.Observaciones = Observaciones;
 
                     await _databaseService.SaveClienteAsync(cliente);
                     await Shell.Current.DisplayAlert("Éxito", "Cliente actualizado correctamente", "OK");

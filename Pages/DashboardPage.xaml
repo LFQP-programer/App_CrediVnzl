@@ -8,277 +8,416 @@
 
     <Grid>
         <!-- Contenido Principal del Dashboard -->
-        <ScrollView>
+        <ScrollView BackgroundColor="#F5F5F5">
             <VerticalStackLayout Padding="0" Spacing="0">
                 
-                <!-- Header Unificado con Menú Hamburguesa a la Derecha -->
-                <Grid BackgroundColor="{StaticResource Tertiary}" Padding="20,40,20,20">
+                <!-- Header azul con logo y menú hamburguesa mejorado -->
+                <Grid BackgroundColor="#2563EB" Padding="20,40,20,20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <VerticalStackLayout Grid.Column="0" Spacing="5">
-                        <Label Text="CrediVzla"
-                               FontSize="28"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource White}" />
-                        <Label Text="Panel de Control"
-                               FontSize="14"
-                               TextColor="{StaticResource White}"
-                               Opacity="0.9" />
-                    </VerticalStackLayout>
+                    <!-- Logo y texto con mejor accesibilidad -->
+                    <HorizontalStackLayout Grid.Column="0" Spacing="12" VerticalOptions="Center">
+                        <Frame BackgroundColor="White" 
+                               CornerRadius="8" 
+                               Padding="8" 
+                               HasShadow="False"
+                               VerticalOptions="Center">
+                            <Image Source="logo_credivzla.png"
+                                   WidthRequest="24"
+                                   HeightRequest="24"
+                                   Aspect="AspectFit"
+                                   SemanticProperties.Description="Logo de CrediVzla" />
+                        </Frame>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="CrediVzla"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   SemanticProperties.HeadingLevel="Level1" />
+                            <Label Text="Panel de Control"
+                                   FontSize="13"
+                                   TextColor="White"
+                                   Opacity="0.9"
+                                   SemanticProperties.Description="Subtítulo del dashboard" />
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
 
-                    <!-- Menú Hamburguesa a la Derecha -->
-                    <Frame Grid.Column="1"
-                           BackgroundColor="Transparent"
-                           BorderColor="White"
-                           CornerRadius="10"
-                           Padding="10"
-                           HasShadow="False"
-                           VerticalOptions="Center">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuTapped" />
-                        </Frame.GestureRecognizers>
-                        <Label Text="☰"
-                               FontSize="28"
-                               TextColor="White"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center" />
-                    </Frame>
+                    <!-- Menú hamburguesa con mejor accesibilidad -->
+                    <Button Grid.Column="1"
+                            x:Name="MenuButton"
+                            Text="☰"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="24"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            CornerRadius="20"
+                            Padding="0"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End"
+                            Clicked="OnMenuButtonClicked"
+                            SemanticProperties.Description="Abrir menú de navegación"
+                            SemanticProperties.Hint="Toca para mostrar las opciones del menú" />
                 </Grid>
 
-                <!-- Dashboard Cards Grid -->
-                <Grid Padding="15,20" RowSpacing="12" ColumnSpacing="12">
+                <!-- Cards de estadísticas mejoradas con accesibilidad -->
+                <Grid Padding="15" RowSpacing="12" ColumnSpacing="12" BackgroundColor="#F5F5F5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Clientes Card -->
+                    <!-- Clientes Card con mejor accesibilidad -->
                     <Frame Grid.Row="0" Grid.Column="0"
-                           BackgroundColor="{StaticResource Beige}"
-                           CornerRadius="20"
-                           Padding="15"
-                           HasShadow="True">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="Clientes"
-                                   FontSize="12"
-                                   TextColor="{StaticResource Gray800}"
-                                   Opacity="0.9" />
-                            <Label Text="{Binding TotalClientes}"
-                                   FontSize="24"
+                           BackgroundColor="White"
+                           CornerRadius="12"
+                           Padding="16"
+                           HasShadow="True"
+                           MinimumHeightRequest="90"
+                           VerticalOptions="FillAndExpand"
+                           SemanticProperties.Description="Tarjeta de estadística de clientes totales">
+                        <VerticalStackLayout Spacing="6" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{StaticResource IconUsers}"
+                                       FontSize="16"
+                                       TextColor="#2563EB"
+                                       VerticalOptions="Center"/>
+                                <Label Text="Clientes"
+                                       FontSize="12"
+                                       TextColor="#666666"
+                                       FontAttributes="None"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.Description="Etiqueta de clientes" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding TotalClientes, FallbackValue='0'}"
+                                   FontSize="32"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}" />
+                                   TextColor="#1F2937"
+                                   HorizontalTextAlignment="Start"
+                                   LineBreakMode="NoWrap"
+                                   SemanticProperties.Description="{Binding TotalClientes, StringFormat='Total de {0} clientes'}" />
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Activos Card -->
+                    <!-- Activos Card con mejor accesibilidad -->
                     <Frame Grid.Row="0" Grid.Column="1"
-                           BackgroundColor="{StaticResource Beige}"
-                           CornerRadius="20"
-                           Padding="15"
-                           HasShadow="True">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="Activos"
-                                   FontSize="12"
-                                   TextColor="{StaticResource Gray800}"
-                                   Opacity="0.9" />
-                            <Label Text="{Binding PrestamosActivos}"
-                                   FontSize="24"
+                           BackgroundColor="White"
+                           CornerRadius="12"
+                           Padding="16"
+                           HasShadow="True"
+                           MinimumHeightRequest="90"
+                           VerticalOptions="FillAndExpand"
+                           SemanticProperties.Description="Tarjeta de préstamos activos">
+                        <VerticalStackLayout Spacing="6" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{StaticResource IconDocument}"
+                                       FontSize="16"
+                                       TextColor="#4CAF50"
+                                       VerticalOptions="Center"/>
+                                <Label Text="Activos"
+                                       FontSize="12"
+                                       TextColor="#666666"
+                                       FontAttributes="None"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.Description="Etiqueta de préstamos activos" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding PrestamosActivos, FallbackValue='0'}"
+                                   FontSize="32"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}" />
+                                   TextColor="#1F2937"
+                                   HorizontalTextAlignment="Start"
+                                   LineBreakMode="NoWrap"
+                                   SemanticProperties.Description="{Binding PrestamosActivos, StringFormat='{0} préstamos activos'}" />
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Capital Card -->
+                    <!-- Capital Card con mejor accesibilidad -->
                     <Frame Grid.Row="1" Grid.Column="0"
-                           BackgroundColor="{StaticResource Beige}"
-                           CornerRadius="20"
-                           Padding="15"
-                           HasShadow="True">
+                           BackgroundColor="White"
+                           CornerRadius="12"
+                           Padding="16"
+                           HasShadow="True"
+                           MinimumHeightRequest="90"
+                           VerticalOptions="FillAndExpand"
+                           SemanticProperties.Description="Tarjeta de capital disponible, toca para configurar">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ConfigurarCapitalCommand}" />
                         </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="$ Capital"
-                                   FontSize="12"
-                                   TextColor="{StaticResource Gray800}"
-                                   Opacity="0.9" />
-                            <Label Text="{Binding CapitalInicial, StringFormat='${0:N0}'}"
-                                   FontSize="20"
+                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{StaticResource IconMoney}"
+                                       FontSize="16"
+                                       TextColor="#F59E0B"
+                                       VerticalOptions="Center"/>
+                                <Label Text="Capital"
+                                       FontSize="12"
+                                       TextColor="#666666"
+                                       FontAttributes="None"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.Description="Etiqueta de capital" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding CapitalInicial, StringFormat='${0:N0}', FallbackValue='$0'}"
+                                   FontSize="24"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}"
-                                   LineBreakMode="TailTruncation" />
-                            <Label Text="{Binding CapitalDisponible, StringFormat='Disponible: ${0:N0}'}"
+                                   TextColor="#1F2937"
+                                   HorizontalTextAlignment="Start"
+                                   LineBreakMode="TailTruncation"
+                                   SemanticProperties.Description="{Binding CapitalInicial, StringFormat='Capital inicial de {0} pesos'}" />
+                            <Label Text="{Binding CapitalDisponible, StringFormat='Disponible: ${0:N0}', FallbackValue='Disponible: $0'}"
                                    FontSize="10"
-                                   TextColor="{StaticResource Gray700}"
-                                   Opacity="0.8" />
+                                   TextColor="#F59E0B"
+                                   FontAttributes="None"
+                                   HorizontalTextAlignment="Start"
+                                   LineBreakMode="TailTruncation"
+                                   SemanticProperties.Description="{Binding CapitalDisponible, StringFormat='Capital disponible: {0} pesos'}" />
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Ganancias Card -->
+                    <!-- Ganancias Card con mejor accesibilidad -->
                     <Frame Grid.Row="1" Grid.Column="1"
-                           BackgroundColor="{StaticResource Beige}"
-                           CornerRadius="20"
-                           Padding="15"
-                           HasShadow="True">
+                           BackgroundColor="White"
+                           CornerRadius="12"
+                           Padding="16"
+                           HasShadow="True"
+                           MinimumHeightRequest="90"
+                           VerticalOptions="FillAndExpand"
+                           SemanticProperties.Description="Tarjeta de ganancias, toca para ver detalles">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding VerGananciasCommand}" />
                         </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="↗ Ganancias"
-                                   FontSize="12"
-                                   TextColor="{StaticResource Gray800}"
-                                   Opacity="0.9" />
-                            <Label Text="{Binding GananciaTotal, StringFormat='${0:N0}'}"
-                                   FontSize="20"
+                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{StaticResource IconTrendUp}"
+                                       FontSize="16"
+                                       TextColor="#10B981"
+                                       VerticalOptions="Center"/>
+                                <Label Text="Ganancias"
+                                       FontSize="12"
+                                       TextColor="#666666"
+                                       FontAttributes="None"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.Description="Etiqueta de ganancias" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding GananciaTotal, StringFormat='${0:N0}', FallbackValue='$0'}"
+                                   FontSize="24"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}"
-                                   LineBreakMode="TailTruncation" />
-                            <Label Text="{Binding InteresesAcumulados, StringFormat='Pendiente: ${0:N0}'}"
+                                   TextColor="#1F2937"
+                                   HorizontalTextAlignment="Start"
+                                   LineBreakMode="TailTruncation"
+                                   SemanticProperties.Description="{Binding GananciaTotal, StringFormat='Ganancia total de {0} pesos'}" />
+                            <Label Text="{Binding InteresesAcumulados, StringFormat='Pendiente: ${0:N0}', FallbackValue='Pendiente: $0'}"
                                    FontSize="10"
-                                   TextColor="{StaticResource Gray700}"
-                                   Opacity="0.8" />
+                                   TextColor="#2563EB"
+                                   FontAttributes="None"
+                                   HorizontalTextAlignment="Start"
+                                   LineBreakMode="TailTruncation"
+                                   SemanticProperties.Description="{Binding InteresesAcumulados, StringFormat='Intereses pendientes: {0} pesos'}" />
                         </VerticalStackLayout>
                     </Frame>
                 </Grid>
 
-                <!-- Menu Cards Grid -->
-                <Grid Padding="15,0,15,20" RowSpacing="12" ColumnSpacing="12">
+                <!-- Botones de menú centrados con iconos mejorados y accesibilidad -->
+                <Grid Padding="15" RowSpacing="12" ColumnSpacing="12" BackgroundColor="#F5F5F5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Clientes Menu -->
+                    <!-- Clientes Menu con accesibilidad -->
                     <Frame Grid.Row="0" Grid.Column="0"
-                           BackgroundColor="{StaticResource White}"
-                           CornerRadius="20"
-                           Padding="18"
-                           HasShadow="True">
+                           BackgroundColor="White"
+                           CornerRadius="12"
+                           Padding="16"
+                           HasShadow="True"
+                           MinimumHeightRequest="110"
+                           VerticalOptions="FillAndExpand"
+                           SemanticProperties.Description="Ir a la gestión de clientes">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnClientesTapped" />
                         </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="8">
-                            <Label Text="&#x1F465;"
-                                   FontSize="36"
-                                   HorizontalOptions="Start" />
+                        <VerticalStackLayout Spacing="8" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Frame BackgroundColor="#2563EB"
+                                   CornerRadius="8"
+                                   WidthRequest="40"
+                                   HeightRequest="40"
+                                   Padding="0"
+                                   HasShadow="False"
+                                   HorizontalOptions="Center">
+                                <Label Text="{StaticResource IconUsers}"
+                                       FontSize="20"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
                             <Label Text="Clientes"
-                                   FontSize="15"
+                                   FontSize="14"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}" />
+                                   TextColor="#1F2937"
+                                   HorizontalTextAlignment="Center" />
                             <Label Text="Gestionar"
                                    FontSize="11"
-                                   TextColor="{StaticResource Gray600}" />
+                                   TextColor="#6B7280"
+                                   HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Calendario Menu -->
+                    <!-- Calendario Menu con accesibilidad -->
                     <Frame Grid.Row="0" Grid.Column="1"
-                           BackgroundColor="{StaticResource White}"
-                           CornerRadius="20"
-                           Padding="18"
-                           HasShadow="True">
+                           BackgroundColor="White"
+                           CornerRadius="12"
+                           Padding="16"
+                           HasShadow="True"
+                           MinimumHeightRequest="110"
+                           VerticalOptions="FillAndExpand"
+                           SemanticProperties.Description="Ver calendario de pagos">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnCalendarioTapped" />
                         </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="8">
-                            <Label Text="&#x1F4C5;"
-                                   FontSize="36"
-                                   HorizontalOptions="Start" />
+                        <VerticalStackLayout Spacing="8" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Frame BackgroundColor="#F59E0B"
+                                   CornerRadius="8"
+                                   WidthRequest="40"
+                                   HeightRequest="40"
+                                   Padding="0"
+                                   HasShadow="False"
+                                   HorizontalOptions="Center">
+                                <Label Text="{StaticResource IconCalendar}"
+                                       FontSize="20"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
                             <Label Text="Calendario"
-                                   FontSize="15"
+                                   FontSize="14"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}" />
+                                   TextColor="#1F2937"
+                                   HorizontalTextAlignment="Center" />
                             <Label Text="Pagos"
                                    FontSize="11"
-                                   TextColor="{StaticResource Gray600}" />
+                                   TextColor="#6B7280"
+                                   HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Mensajes Menu -->
+                    <!-- Mensajes Menu con accesibilidad -->
                     <Frame Grid.Row="1" Grid.Column="0"
-                           BackgroundColor="{StaticResource White}"
-                           CornerRadius="20"
-                           Padding="18"
-                           HasShadow="True">
+                           BackgroundColor="White"
+                           CornerRadius="12"
+                           Padding="16"
+                           HasShadow="True"
+                           MinimumHeightRequest="110"
+                           VerticalOptions="FillAndExpand"
+                           SemanticProperties.Description="Enviar mensajes por WhatsApp">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnMensajesTapped" />
                         </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="8">
-                            <Label Text="&#x1F4AC;"
-                                   FontSize="36"
-                                   HorizontalOptions="Start" />
+                        <VerticalStackLayout Spacing="8" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Frame BackgroundColor="#EF4444"
+                                   CornerRadius="8"
+                                   WidthRequest="40"
+                                   HeightRequest="40"
+                                   Padding="0"
+                                   HasShadow="False"
+                                   HorizontalOptions="Center">
+                                <Label Text="{StaticResource IconWhatsApp}"
+                                       FontSize="20"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
                             <Label Text="Mensajes"
-                                   FontSize="15"
+                                   FontSize="14"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}" />
+                                   TextColor="#1F2937"
+                                   HorizontalTextAlignment="Center" />
                             <Label Text="WhatsApp"
                                    FontSize="11"
-                                   TextColor="{StaticResource Gray600}" />
+                                   TextColor="#6B7280"
+                                   HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Reportes Menu -->
+                    <!-- Reportes Menu con accesibilidad -->
                     <Frame Grid.Row="1" Grid.Column="1"
-                           BackgroundColor="{StaticResource White}"
-                           CornerRadius="20"
-                           Padding="18"
-                           HasShadow="True">
+                           BackgroundColor="White"
+                           CornerRadius="12"
+                           Padding="16"
+                           HasShadow="True"
+                           MinimumHeightRequest="110"
+                           VerticalOptions="FillAndExpand"
+                           SemanticProperties.Description="Ver reportes y estadísticas">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnReportesTapped" />
                         </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="8">
-                            <Label Text="&#x1F4CA;"
-                                   FontSize="36"
-                                   HorizontalOptions="Start" />
+                        <VerticalStackLayout Spacing="8" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Frame BackgroundColor="#2563EB"
+                                   CornerRadius="8"
+                                   WidthRequest="40"
+                                   HeightRequest="40"
+                                   Padding="0"
+                                   HasShadow="False"
+                                   HorizontalOptions="Center">
+                                <Label Text="{StaticResource IconChart}"
+                                       FontSize="20"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
                             <Label Text="Reportes"
-                                   FontSize="15"
+                                   FontSize="14"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}" />
-                            <Label Text="Estadisticas"
+                                   TextColor="#1F2937"
+                                   HorizontalTextAlignment="Center" />
+                            <Label Text="Estadísticas"
                                    FontSize="11"
-                                   TextColor="{StaticResource Gray600}" />
+                                   TextColor="#6B7280"
+                                   HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                     </Frame>
                 </Grid>
 
                 <!-- Prestamos Activos Section -->
-                <VerticalStackLayout Padding="15,20" Spacing="15">
-                    <Label Text="Prestamos Activos"
-                           FontSize="20"
+                <VerticalStackLayout Padding="20" Spacing="15" BackgroundColor="#F5F5F5">
+                    <Label Text="Préstamos Activos"
+                           FontSize="18"
                            FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
+                           TextColor="#333333"
+                           SemanticProperties.HeadingLevel="Level2" />
 
                     <CollectionView ItemsSource="{Binding PrestamosActivosList}">
                         <CollectionView.EmptyView>
                             <VerticalStackLayout Padding="20" Spacing="10">
-                                <Label Text="&#x1F4CB;"
+                                <Label Text="{StaticResource IconDocument}"
                                        FontSize="48"
-                                       HorizontalOptions="Center" />
-                                <Label Text="No hay prestamos activos"
+                                       HorizontalOptions="Center"
+                                       TextColor="#CCCCCC"
+                                       SemanticProperties.Description="No hay préstamos activos" />
+                                <Label Text="No hay préstamos activos"
                                        FontSize="16"
-                                       TextColor="{StaticResource Gray600}"
+                                       TextColor="#666666"
                                        HorizontalOptions="Center" />
                             </VerticalStackLayout>
                         </CollectionView.EmptyView>
                         
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame BackgroundColor="{StaticResource White}"
+                                <Frame BackgroundColor="White"
                                        CornerRadius="15"
                                        Padding="20"
                                        Margin="0,0,0,15"
                                        HasShadow="True">
+                                    <!-- Contenido del préstamo activo igual que antes -->
                                     <Grid RowSpacing="10">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
@@ -297,15 +436,15 @@
                                                Text="{Binding ClienteNombre}"
                                                FontSize="18"
                                                FontAttributes="Bold"
-                                               TextColor="{StaticResource Gray900}" />
+                                               TextColor="#333333" />
 
                                         <Frame Grid.Row="0" Grid.Column="1"
-                                               BackgroundColor="{StaticResource Success}"
+                                               BackgroundColor="#4CAF50"
                                                CornerRadius="12"
                                                Padding="10,5"
                                                HasShadow="False">
                                             <Label Text="{Binding PorcentajePagado, StringFormat='{0}%'}"
-                                                   TextColor="{StaticResource White}"
+                                                   TextColor="White"
                                                    FontSize="14"
                                                    FontAttributes="Bold" />
                                         </Frame>
@@ -313,29 +452,29 @@
                                         <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                                Text="{Binding MontoInicial, StringFormat='${0:N2} inicial'}"
                                                FontSize="14"
-                                               TextColor="{StaticResource Gray600}" />
+                                               TextColor="#666666" />
 
                                         <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                               Text="{Binding InteresSemanal, StringFormat='Interes semanal: ${0:N2}'}"
+                                               Text="{Binding InteresSemanal, StringFormat='Interés semanal: ${0:N2}'}"
                                                FontSize="14"
-                                               TextColor="{StaticResource Success}" />
+                                               TextColor="#4CAF50" />
 
                                         <ProgressBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                                                      Progress="{Binding PorcentajePagado, Converter={StaticResource PercentageConverter}}"
-                                                     ProgressColor="{StaticResource Success}"
+                                                     ProgressColor="#4CAF50"
                                                      HeightRequest="8" />
 
                                         <HorizontalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                                                               Spacing="10">
                                             <Label Text="{Binding MontoPagado, StringFormat='Pagado: ${0:N2}'}"
                                                    FontSize="12"
-                                                   TextColor="{StaticResource Success}" />
+                                                   TextColor="#4CAF50" />
                                             <Label Text="/"
                                                    FontSize="12"
-                                                   TextColor="{StaticResource Gray600}" />
+                                                   TextColor="#666666" />
                                             <Label Text="{Binding MontoPendiente, StringFormat='${0:N2}'}"
                                                    FontSize="12"
-                                                   TextColor="{StaticResource Gray600}" />
+                                                   TextColor="#666666" />
                                         </HorizontalStackLayout>
 
                                         <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
@@ -388,7 +527,7 @@
                               Padding="20"
                               ColumnDefinitions="*,Auto">
                             <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                <Label Text="&#x1F4B0; Configurar Capital"
+                                <Label Text="$ Configurar Capital"
                                        FontSize="22"
                                        FontAttributes="Bold"
                                        TextColor="White" />
@@ -399,7 +538,7 @@
                             </VerticalStackLayout>
                             
                             <Button Grid.Column="1"
-                                    Text="&#x2715;"
+                                    Text="✕"
                                     BackgroundColor="Transparent"
                                     TextColor="White"
                                     FontSize="24"
@@ -413,20 +552,21 @@
 
                         <VerticalStackLayout Padding="20" Spacing="20">
                             
+
                             <VerticalStackLayout Spacing="10">
                                 <Label Text="Capital Total Inicial"
                                        FontSize="15"
                                        FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray900}" />
+                                       TextColor="#333333" />
                                 
                                 <Frame BackgroundColor="#F5F5F5"
                                        CornerRadius="12"
                                        Padding="0"
                                        HasShadow="False"
-                                       BorderColor="{StaticResource Primary}">
+                                       BorderColor="#2563EB">
                                     <Grid ColumnDefinitions="Auto,*,Auto" Padding="15">
                                         <Label Grid.Column="0"
-                                               Text="&#x1F4B0;"
+                                               Text="$"
                                                FontSize="24"
                                                VerticalOptions="Center"
                                                Margin="0,0,10,0" />
@@ -436,33 +576,34 @@
                                                Keyboard="Numeric"
                                                FontSize="18"
                                                FontAttributes="Bold"
-                                               TextColor="{StaticResource Gray900}"
+                                               TextColor="#333333"
                                                BackgroundColor="Transparent"
                                                VerticalOptions="Center" />
                                         <Label Grid.Column="2"
                                                Text="$"
                                                FontSize="18"
                                                FontAttributes="Bold"
-                                               TextColor="{StaticResource Primary}"
+                                               TextColor="#2563EB"
                                                VerticalOptions="Center" />
                                     </Grid>
                                 </Frame>
                                 
-                                <Label Text="&#x1F4A1; Ingresa el monto total que tienes disponible para prestar"
+
+                                <Label Text="• Ingresa el monto total que tienes disponible para prestar"
                                        FontSize="12"
-                                       TextColor="{StaticResource Gray600}"
+                                       TextColor="#666666"
                                        Margin="5,0,0,0" />
                             </VerticalStackLayout>
 
                             <BoxView HeightRequest="1"
-                                     Color="{StaticResource Gray300}"
+                                     Color="#E0E0E0"
                                      Margin="0,5,0,5" />
 
                             <VerticalStackLayout Spacing="15">
-                                <Label Text="&#x1F4CA; Resumen de Capital"
+                                <Label Text="▣ Resumen de Capital"
                                        FontSize="15"
                                        FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray900}" />
+                                       TextColor="#333333" />
                                 
                                 <Frame BackgroundColor="#E8F5E9"
                                        CornerRadius="15"
@@ -480,7 +621,7 @@
                                                FontAttributes="Bold"
                                                TextColor="#2E7D32" />
                                         <Label Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                                               Text="&#x1F4B5;"
+                                               Text="$"
                                                FontSize="40"
                                                VerticalOptions="Center"
                                                HorizontalOptions="End" />
@@ -503,7 +644,7 @@
                                                FontAttributes="Bold"
                                                TextColor="#1565C0" />
                                         <Label Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                                               Text="&#x1F6A6;"
+                                               Text="▣"
                                                FontSize="40"
                                                VerticalOptions="Center"
                                                HorizontalOptions="End" />
@@ -526,7 +667,7 @@
                                                FontAttributes="Bold"
                                                TextColor="#E65100" />
                                         <Label Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                                               Text="&#x1F4C8;"
+                                               Text="↗"
                                                FontSize="40"
                                                VerticalOptions="Center"
                                                HorizontalOptions="End" />
@@ -541,7 +682,7 @@
                                    BorderColor="#3F51B5">
                                 <VerticalStackLayout Spacing="8">
                                     <HorizontalStackLayout Spacing="8">
-                                        <Label Text="&#x2139;&#xFE0F;"
+                                        <Label Text="i"
                                                FontSize="18"
                                                VerticalOptions="Start" />
                                         <Label Text="¿Como funciona?"
@@ -551,7 +692,7 @@
                                                VerticalOptions="Center" />
                                     </HorizontalStackLayout>
                                     
-                                    <Label Text="• El capital disponible se actualiza automaticamente al hacer prestamos"
+                                    <Label Text="• El capital disponible se actualiza automáticamente al hacer préstamos"
                                            FontSize="12"
                                            TextColor="#424242"
                                            Margin="26,0,0,0" />
@@ -568,9 +709,9 @@
 
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,0">
                                 <Button Grid.Column="0"
-                                        Text="&#x21A9; Cancelar"
-                                        BackgroundColor="{StaticResource Gray300}"
-                                        TextColor="{StaticResource Gray800}"
+                                        Text="← Cancelar"
+                                        BackgroundColor="#E0E0E0"
+                                        TextColor="#333333"
                                         FontSize="16"
                                         FontAttributes="Bold"
                                         CornerRadius="12"
@@ -578,8 +719,8 @@
                                         Command="{Binding CancelarCapitalCommand}" />
                                 
                                 <Button Grid.Column="1"
-                                        Text="&#x1F4BE; Guardar"
-                                        BackgroundColor="{StaticResource Primary}"
+                                        Text="✓ Guardar"
+                                        BackgroundColor="#2563EB"
                                         TextColor="White"
                                         FontSize="16"
                                         FontAttributes="Bold"
@@ -628,7 +769,7 @@
                               Padding="20"
                               ColumnDefinitions="*,Auto">
                             <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                <Label Text="&#x1F4C8; Resumen de Ganancias"
+                                <Label Text="↗ Resumen de Ganancias"
                                        FontSize="22"
                                        FontAttributes="Bold"
                                        TextColor="White" />
@@ -639,7 +780,7 @@
                             </VerticalStackLayout>
                             
                             <Button Grid.Column="1"
-                                    Text="&#x2715;"
+                                    Text="✕"
                                     BackgroundColor="Transparent"
                                     TextColor="White"
                                     FontSize="24"
@@ -672,7 +813,7 @@
                                                TextColor="#757575" />
                                     </VerticalStackLayout>
                                     <Label Grid.Column="1"
-                                           Text="&#x1F4B0;"
+                                           Text="$"
                                            FontSize="60"
                                            VerticalOptions="Center" />
                                 </Grid>
@@ -692,72 +833,72 @@
                                                FontSize="36"
                                                FontAttributes="Bold"
                                                TextColor="#1565C0" />
-                                        <Label Text="Por cobrar de prestamos activos"
+                                        <Label Text="Por cobrar de préstamos activos"
                                                FontSize="12"
                                                TextColor="#757575" />
                                     </VerticalStackLayout>
                                     <Label Grid.Column="1"
-                                           Text="&#x23F0;"
+                                           Text="○"
                                            FontSize="60"
                                            VerticalOptions="Center" />
                                 </Grid>
                             </Frame>
 
                             <BoxView HeightRequest="1"
-                                     Color="{StaticResource Gray300}" />
+                                     Color="#E0E0E0" />
 
                             <VerticalStackLayout Spacing="15">
-                                <Label Text="&#x1F4CA; Desglose Detallado"
+                                <Label Text="▣ Desglose Detallado"
                                        FontSize="15"
                                        FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray900}" />
+                                       TextColor="#333333" />
                                 
                                 <Frame BackgroundColor="White"
                                        CornerRadius="12"
                                        Padding="15"
                                        HasShadow="False"
-                                       BorderColor="{StaticResource Gray300}">
+                                       BorderColor="#E0E0E0">
                                     <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
                                         
                                         <Label Grid.Row="0" Grid.Column="0"
                                                Text="Capital en la calle"
                                                FontSize="13"
-                                               TextColor="{StaticResource Gray700}" />
+                                               TextColor="#666666" />
                                         <Label Grid.Row="0" Grid.Column="1"
                                                Text="{Binding CapitalEnCalle, StringFormat='${0:N2}'}"
                                                FontSize="13"
                                                FontAttributes="Bold"
-                                               TextColor="{StaticResource Gray900}" />
+                                               TextColor="#333333" />
                                         
                                         <Label Grid.Row="1" Grid.Column="0"
-                                               Text="Prestamos activos"
+                                               Text="Préstamos activos"
                                                FontSize="13"
-                                               TextColor="{StaticResource Gray700}" />
+                                               TextColor="#666666" />
                                         <Label Grid.Row="1" Grid.Column="1"
                                                Text="{Binding PrestamosActivos}"
                                                FontSize="13"
                                                FontAttributes="Bold"
-                                               TextColor="{StaticResource Gray900}" />
+                                               TextColor="#333333" />
                                         
                                         <Label Grid.Row="2" Grid.Column="0"
                                                Text="Total de clientes"
                                                FontSize="13"
-                                               TextColor="{StaticResource Gray700}" />
+                                               TextColor="#666666" />
                                         <Label Grid.Row="2" Grid.Column="1"
                                                Text="{Binding TotalClientes}"
                                                FontSize="13"
                                                FontAttributes="Bold"
-                                               TextColor="{StaticResource Gray900}" />
+                                               TextColor="#333333" />
                                         
                                         <BoxView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                                                 HeightRequest="1"
-                                                Color="{StaticResource Gray300}"
+                                                Color="#E0E0E0"
                                                 Margin="0,8,0,8" />
                                     </Grid>
                                 </Frame>
                             </VerticalStackLayout>
 
-                            <Button Text="&#x2713; Cerrar"
+                            <Button Text="✓ Cerrar"
                                     BackgroundColor="#FF9800"
                                     TextColor="White"
                                     FontSize="16"

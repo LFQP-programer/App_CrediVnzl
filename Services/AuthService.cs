@@ -89,17 +89,17 @@ namespace App_CrediVnzl.Services
                     return (false, "Este cliente ya tiene una cuenta de usuario", null);
                 }
 
-                var usuarioPorDNI = await _databaseService.GetUsuarioByNombreUsuarioAsync(cliente.Cedula);
+                var usuarioPorDNI = await _databaseService.GetUsuarioByNombreUsuarioAsync(cliente.NumeroDocumento);
                 if (usuarioPorDNI != null)
                 {
-                    return (false, "Ya existe un usuario con este DNI", null);
+                    return (false, "Ya existe un usuario con este documento", null);
                 }
 
                 string passwordTemporal = GenerarPasswordTemporal();
 
                 var nuevoUsuario = new Usuario
                 {
-                    NombreUsuario = cliente.Cedula,
+                    NombreUsuario = cliente.NumeroDocumento,
                     NombreCompleto = cliente.NombreCompleto,
                     PasswordHash = HashPassword(passwordTemporal),
                     Rol = RolesUsuario.Cliente,
