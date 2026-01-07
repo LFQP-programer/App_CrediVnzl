@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    
+    <!-- Usuarios y personas -->
+    <x:String x:Key="IconUser">&#x1F464;</x:String>
+    <x:String x:Key="IconUsers">&#x1F465;</x:String>
+    <x:String x:Key="IconAdmin">&#x1F451;</x:String>
+    
+    <!-- Seguridad -->
+    <x:String x:Key="IconLock">&#x1F512;</x:String>
+    <x:String x:Key="IconUnlock">&#x1F513;</x:String>
+    <x:String x:Key="IconKey">&#x1F511;</x:String>
+    
+    <!-- Comunicacion -->
+    <x:String x:Key="IconPhone">&#x1F4F1;</x:String>
+    <x:String x:Key="IconEmail">&#x2709;</x:String>
+    <x:String x:Key="IconMessage">&#x1F4AC;</x:String>
+    <x:String x:Key="IconWhatsApp">&#x1F4F2;</x:String>
+    
+    <!-- Finanzas -->
+    <x:String x:Key="IconMoney">&#x1F4B0;</x:String>
+    <x:String x:Key="IconDollar">&#x1F4B5;</x:String>
+    <x:String x:Key="IconChart">&#x1F4CA;</x:String>
+    <x:String x:Key="IconTrendUp">&#x1F4C8;</x:String>
+    <x:String x:Key="IconTrendDown">&#x1F4C9;</x:String>
+    
+    <!-- Tiempo -->
+    <x:String x:Key="IconCalendar">&#x1F4C5;</x:String>
+    <x:String x:Key="IconClock">&#x23F0;</x:String>
+    <x:String x:Key="IconTimer">&#x23F1;</x:String>
+    
+    <!-- Estados -->
+    <x:String x:Key="IconSuccess">&#x2705;</x:String>
+    <x:String x:Key="IconError">&#x274C;</x:String>
+    <x:String x:Key="IconWarning">&#x26A0;</x:String>
+    <x:String x:Key="IconInfo">&#x2139;</x:String>
+    <x:String x:Key="IconQuestion">&#x2753;</x:String>
+    
+    <!-- Documentos -->
+    <x:String x:Key="IconDocument">&#x1F4C4;</x:String>
+    <x:String x:Key="IconFile">&#x1F4C1;</x:String>
+    <x:String x:Key="IconNote">&#x1F4DD;</x:String>
+    
+    <!-- Acciones -->
+    <x:String x:Key="IconSearch">&#x1F50D;</x:String>
+    <x:String x:Key="IconSettings">&#x2699;</x:String>
+    <x:String x:Key="IconMenu">&#x1F4CB;</x:String>
+    <x:String x:Key="IconHome">&#x1F3E0;</x:String>
+    
+    <!-- Navegacion -->
+    <x:String x:Key="ArrowRight">&#x25B6;</x:String>
+    <x:String x:Key="ArrowLeft">&#x25C0;</x:String>
+    <x:String x:Key="ArrowUp">&#x25B2;</x:String>
+    <x:String x:Key="ArrowDown">&#x25BC;</x:String>
+    <x:String x:Key="ArrowBack">&#x2190;</x:String>
+    
+    <!-- Formas geometricas -->
+    <x:String x:Key="IconCircle">&#x25CF;</x:String>
+    <x:String x:Key="IconSquare">&#x25A0;</x:String>
+    <x:String x:Key="IconDiamond">&#x25C6;</x:String>
+    <x:String x:Key="IconStar">&#x2605;</x:String>
+    
+    <!-- Simbolos de utilidad -->
+    <x:String x:Key="IconCheck">&#x2713;</x:String>
+    <x:String x:Key="IconCross">&#x2717;</x:String>
+    <x:String x:Key="IconPlus">&#x2795;</x:String>
+    <x:String x:Key="IconMinus">&#x2796;</x:String>
+    
+    <!-- Nuevos iconos para mejor accesibilidad -->
+    <x:String x:Key="IconCopy">&#x1F4CB;</x:String>
+    <x:String x:Key="IconEdit">&#x270F;</x:String>
+    <x:String x:Key="IconDelete">&#x1F5D1;</x:String>
+    <x:String x:Key="IconSave">&#x1F4BE;</x:String>
+    <x:String x:Key="IconPrint">&#x1F5A8;</x:String>
+    <x:String x:Key="IconRefresh">&#x1F504;</x:String>
+    <x:String x:Key="IconSync">&#x1F503;</x:String>
+    <x:String x:Key="IconDownload">&#x2B07;</x:String>
+    <x:String x:Key="IconUpload">&#x2B06;</x:String>
+    <x:String x:Key="IconShare">&#x1F517;</x:String>
+    
+    <!-- Iconos de estado mejorados -->
+    <x:String x:Key="IconPending">&#x23F3;</x:String>
+    <x:String x:Key="IconCompleted">&#x2714;</x:String>
+    <x:String x:Key="IconCancelled">&#x274E;</x:String>
+    <x:String x:Key="IconActive">&#x1F7E2;</x:String>
+    <x:String x:Key="IconInactive">&#x1F534;</x:String>
+    
+    <!-- Estilos para iconos pequenos -->
+    <Style x:Key="SmallIcon" TargetType="Label">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+    </Style>
+    
+    <!-- Estilos para iconos medianos -->
+    <Style x:Key="MediumIcon" TargetType="Label">
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="TextColor" Value="#2563EB"/>
+    </Style>
+    
+    <!-- Estilos para iconos grandes -->
+    <Style x:Key="LargeIcon" TargetType="Label">
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="TextColor" Value="#2563EB"/>
+    </Style>
+    
+    <!-- Estilo para iconos de estado exitoso -->
+    <Style x:Key="SuccessIcon" TargetType="Label" BasedOn="{StaticResource MediumIcon}">
+        <Setter Property="TextColor" Value="#4CAF50"/>
+    </Style>
+    
+    <!-- Estilo para iconos de error -->
+    <Style x:Key="ErrorIcon" TargetType="Label" BasedOn="{StaticResource MediumIcon}">
+        <Setter Property="TextColor" Value="#F44336"/>
+    </Style>
+    
+    <!-- Estilo para iconos de advertencia -->
+    <Style x:Key="WarningIcon" TargetType="Label" BasedOn="{StaticResource MediumIcon}">
+        <Setter Property="TextColor" Value="#FF9800"/>
+    </Style>
+    
+    <!-- Estilo para iconos de informacion -->
+    <Style x:Key="InfoIcon" TargetType="Label" BasedOn="{StaticResource MediumIcon}">
+        <Setter Property="TextColor" Value="#2196F3"/>
+    </Style>
+    
+    <!-- Estilo para iconos accesibles con focus -->
+    <Style x:Key="AccessibleIcon" TargetType="Label" BasedOn="{StaticResource MediumIcon}">
+        <Setter Property="SemanticProperties.Description" Value="Icono interactivo"/>
+        <Setter Property="Padding" Value="8"/>
+    </Style>
+    
+</ResourceDictionary>

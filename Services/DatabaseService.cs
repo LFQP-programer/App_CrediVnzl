@@ -35,8 +35,28 @@ namespace App_CrediVnzl.Services
         {
             var db = await GetDatabaseAsync();
             return await db.Table<Cliente>()
-                .Where(c => c.Cedula == cedula)
+                .Where(c => c.NumeroDocumento == cedula)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<Cliente?> GetClienteByDocumentoAsync(string numeroDocumento)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Cliente>()
+                .Where(c => c.NumeroDocumento == numeroDocumento)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Cliente?> GetClienteByIdAsync(int id)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Cliente>().Where(c => c.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Cliente>> GetAllClientesAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Cliente>().OrderBy(c => c.Apellidos).ThenBy(c => c.Nombres).ToListAsync();
         }
 
         // Métodos para Clientes
@@ -77,9 +97,10 @@ namespace App_CrediVnzl.Services
             var db = await GetDatabaseAsync();
             
             return await db.Table<Cliente>()
-                .Where(c => c.NombreCompleto.Contains(searchText) || 
+                .Where(c => c.Nombres.Contains(searchText) || 
+                           c.Apellidos.Contains(searchText) ||
                            c.Telefono.Contains(searchText) || 
-                           c.Cedula.Contains(searchText))
+                           c.NumeroDocumento.Contains(searchText))
                 .ToListAsync();
         }
 

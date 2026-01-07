@@ -12,10 +12,41 @@ namespace App_CrediVnzl
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - Iniciando ***");
+                System.Diagnostics.Debug.WriteLine("");
+                System.Diagnostics.Debug.WriteLine("╔═══════════════════════════════════════════════════════════╗");
+                System.Diagnostics.Debug.WriteLine("║                 CREANDO APPSHELL                         ║");
+                System.Diagnostics.Debug.WriteLine("╚═══════════════════════════════════════════════════════════╝");
+                
+                System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - Iniciando InitializeComponent ***");
                 InitializeComponent();
                 System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - InitializeComponent OK ***");
 
+                System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - Registrando rutas ***");
+                RegisterRoutes();
+                System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - Rutas registradas OK ***");
+                
+                System.Diagnostics.Debug.WriteLine("");
+                System.Diagnostics.Debug.WriteLine("╔═══════════════════════════════════════════════════════════╗");
+                System.Diagnostics.Debug.WriteLine("║               ✅ APPSHELL LISTO ✅                        ║");
+                System.Diagnostics.Debug.WriteLine("╚═══════════════════════════════════════════════════════════╝");
+                System.Diagnostics.Debug.WriteLine("");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("");
+                System.Diagnostics.Debug.WriteLine("❌❌❌ ERROR EN AppShell Constructor ❌❌❌");
+                System.Diagnostics.Debug.WriteLine($"Mensaje: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                System.Diagnostics.Debug.WriteLine("");
+                throw;
+            }
+        }
+
+        private void RegisterRoutes()
+        {
+            try
+            {
                 // Registrar rutas de login específicas
                 Routing.RegisterRoute("loginadmin", typeof(LoginAdminPage));
                 Routing.RegisterRoute("logincliente", typeof(LoginClientePage));
@@ -37,13 +68,11 @@ namespace App_CrediVnzl
                 Routing.RegisterRoute("reportes", typeof(ReportesPage));
                 Routing.RegisterRoute("gestionarusuarios", typeof(GestionarUsuariosPage));
                 
-                System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - Rutas registradas OK ***");
+                System.Diagnostics.Debug.WriteLine("   → Todas las rutas registradas correctamente");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR EN AppShell Constructor ***: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
-                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR registrando rutas: {ex.Message}");
                 throw;
             }
         }
@@ -74,7 +103,7 @@ namespace App_CrediVnzl
                     {
                         Text = "Cerrar Sesión"
                     };
-                    _cerrarSesionMenuItem.Clicked += OnCerrarSesionClicked;
+                    _cerrarSesionMenuItem.Clicked += OnCerrarSesionMenuClicked;
                     Items.Add(_cerrarSesionMenuItem);
                     System.Diagnostics.Debug.WriteLine("   - MenuItem 'Cerrar Sesión' agregado");
                 }
@@ -109,7 +138,7 @@ namespace App_CrediVnzl
                 if (_cerrarSesionMenuItem != null)
                 {
                     Items.Remove(_cerrarSesionMenuItem);
-                    _cerrarSesionMenuItem.Clicked -= OnCerrarSesionClicked;
+                    _cerrarSesionMenuItem.Clicked -= OnCerrarSesionMenuClicked;
                     _cerrarSesionMenuItem = null;
                     System.Diagnostics.Debug.WriteLine("   - MenuItem 'Cerrar Sesión' removido");
                 }
@@ -124,18 +153,39 @@ namespace App_CrediVnzl
 
         private AuthService GetAuthService()
         {
-            if (_authService == null)
+            try
             {
-                _authService = Handler?.MauiContext?.Services.GetService<AuthService>();
+                if (_authService == null)
+                {
+                    _authService = Handler?.MauiContext?.Services.GetService<AuthService>();
+                }
+                return _authService ?? throw new InvalidOperationException("AuthService no disponible");
             }
-            return _authService ?? throw new InvalidOperationException("AuthService no disponible");
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR obteniendo AuthService: {ex.Message}");
+                throw;
+            }
         }
 
-        private async void OnCerrarSesionClicked(object? sender, EventArgs e)
+        // Event handler para el TapGestureRecognizer (Tapped)
+        private async void OnCerrarSesionClicked(object? sender, TappedEventArgs e)
+        {
+            await CerrarSesionAsync();
+        }
+
+        // Event handler para el MenuItem (Clicked)
+        private async void OnCerrarSesionMenuClicked(object? sender, EventArgs e)
+        {
+            await CerrarSesionAsync();
+        }
+
+        // Método común para cerrar sesión
+        private async Task CerrarSesionAsync()
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("*** OnCerrarSesionClicked - Iniciando ***");
+                System.Diagnostics.Debug.WriteLine("*** CerrarSesionAsync - Iniciando ***");
 
                 bool respuesta = await DisplayAlert(
                     "Cerrar Sesión",
@@ -192,7 +242,7 @@ namespace App_CrediVnzl
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR FATAL en OnCerrarSesionClicked: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR FATAL en CerrarSesionAsync: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
                 System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
                 

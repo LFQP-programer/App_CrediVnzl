@@ -8,9 +8,9 @@ namespace App_CrediVnzl.Converters
         {
             if (value is bool expandido)
             {
-                return expandido ? "??" : "??";
+                return expandido ? "?" : "?";
             }
-            return "??";
+            return "?";
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

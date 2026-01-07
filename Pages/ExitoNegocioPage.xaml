@@ -8,14 +8,14 @@
     <ScrollView>
         <VerticalStackLayout Spacing="30" Padding="30" VerticalOptions="Center">
 
-            <!-- Animación de éxito -->
+            <!-- Animaciï¿½n de ï¿½xito -->
             <Label Text="??" 
                    FontSize="120" 
                    HorizontalOptions="Center"/>
 
-            <!-- Título -->
+            <!-- Tï¿½tulo -->
             <VerticalStackLayout Spacing="10">
-                <Label Text="¡Negocio Creado!" 
+                <Label Text="ï¿½Negocio Creado!" 
                        FontSize="32" 
                        FontAttributes="Bold" 
                        HorizontalOptions="Center"
@@ -28,14 +28,14 @@
                        Margin="0,0,0,20"/>
             </VerticalStackLayout>
 
-            <!-- Código del negocio -->
+            <!-- Cï¿½digo del negocio -->
             <Frame CornerRadius="20" 
                    Padding="30" 
                    BackgroundColor="#E8F5E9"
                    HasShadow="True"
                    BorderColor="#4CAF50">
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="Tu código de negocio es:"
+                    <Label Text="Tu cï¿½digo de negocio es:"
                            FontSize="16"
                            HorizontalOptions="Center"
                            TextColor="#2E7D32"/>
@@ -52,7 +52,7 @@
                                TextColor="#4CAF50"/>
                     </Frame>
 
-                    <Label Text="Comparte este código con tus clientes"
+                    <Label Text="Comparte este cï¿½digo con tus clientes"
                            FontSize="14"
                            HorizontalOptions="Center"
                            TextColor="#424242"/>
@@ -62,7 +62,7 @@
             <!-- Acciones -->
             <VerticalStackLayout Spacing="15">
                 
-                <Button Text="?? Copiar Código"
+                <Button Text="?? Copiar Cï¿½digo"
                         Command="{Binding CopiarCodigoCommand}"
                         BackgroundColor="#2196F3"
                         TextColor="White"
@@ -82,7 +82,7 @@
 
             </VerticalStackLayout>
 
-            <!-- Información adicional -->
+            <!-- Informaciï¿½n adicional -->
             <Frame CornerRadius="15" 
                    Padding="20" 
                    BackgroundColor="#FFF3E0"
@@ -106,7 +106,7 @@
 
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="2??" FontSize="20" VerticalOptions="Start"/>
-                        <Label Text="Seleccionan 'Soy cliente' e ingresan tu código"
+                        <Label Text="Seleccionan 'Soy cliente' e ingresan tu cï¿½digo"
                                FontSize="14"
                                TextColor="#424242"
                                LineBreakMode="WordWrap"
@@ -115,7 +115,7 @@
 
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="3??" FontSize="20" VerticalOptions="Start"/>
-                        <Label Text="Tú apruebas sus solicitudes desde tu panel"
+                        <Label Text="Tï¿½ apruebas sus solicitudes desde tu panel"
                                FontSize="14"
                                TextColor="#424242"
                                LineBreakMode="WordWrap"
@@ -124,7 +124,7 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Botón continuar -->
+            <!-- Botï¿½n continuar -->
             <Button Text="IR A MI DASHBOARD ?"
                     Command="{Binding IrDashboardCommand}"
                     BackgroundColor="#4CAF50"

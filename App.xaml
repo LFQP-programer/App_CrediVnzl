@@ -9,6 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <!-- Converters -->
@@ -18,12 +19,10 @@
             <converters:EstadoToColorConverter x:Key="EstadoToColorConverter" />
             <converters:EsPendienteConverter x:Key="EsPendienteConverter" />
             <converters:TipoMensajeToColorConverter x:Key="TipoMensajeToColorConverter" />
-            <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
             <converters:FiltroToColorConverter x:Key="FiltroToColorConverter" />
             <converters:IsNotNullOrEmptyConverter x:Key="IsNotNullOrEmptyConverter" />
             <converters:BoolToExpandIconConverter x:Key="BoolToExpandIconConverter" />
             <converters:BoolToFontAttributesConverter x:Key="BoolToFontAttributesConverter" />
-            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:PercentToDecimalConverter x:Key="PercentToDecimalConverter" />
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>

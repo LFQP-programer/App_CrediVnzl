@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.ConfiguracionInicialPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+
+            <!-- Icono de bienvenida más amigable -->
+            <Frame BackgroundColor="#2563EB"
+                   CornerRadius="40"
+                   WidthRequest="80"
+                   HeightRequest="80"
+                   Padding="0"
+                   HasShadow="True"
+                   HorizontalOptions="Center">
+                <Label Text="{StaticResource IconUser}" 
+                       FontSize="40" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="White"/>
+            </Frame>
+
+            <Label Text="¡Bienvenido!" 
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   TextColor="#212121"/>
+
+            <Label Text="Configure su cuenta de administrador" 
+                   FontSize="16" 
+                   HorizontalOptions="Center"
+                   TextColor="#757575"
+                   Margin="0,0,0,20"/>
+
+            <Frame CornerRadius="15" 
+                   Padding="20" 
+                   HasShadow="True"
+                   BackgroundColor="White">
+                <VerticalStackLayout Spacing="15">
+
+                    <!-- Nombre completo con icono -->
+                    <Label Text="Nombre completo *" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Grid ColumnDefinitions="Auto,*" Padding="10,5">
+                            <Label Grid.Column="0"
+                                   Text="{StaticResource IconUser}"
+                                   FontSize="16"
+                                   TextColor="#2563EB"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,8,0"/>
+                            <Entry Grid.Column="1"
+                                   Placeholder="Ej: Juan Pérez"
+                                   Text="{Binding NombreCompleto}"
+                                   BackgroundColor="Transparent"/>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Usuario con icono -->
+                    <Label Text="Usuario *" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Grid ColumnDefinitions="Auto,*" Padding="10,5">
+                            <Label Grid.Column="0"
+                                   Text="{StaticResource IconCircle}"
+                                   FontSize="16"
+                                   TextColor="#2563EB"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,8,0"/>
+                            <Entry Grid.Column="1"
+                                   Placeholder="Ej: admin"
+                                   Text="{Binding NombreUsuario}"
+                                   BackgroundColor="Transparent"/>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Contraseña con icono -->
+                    <Label Text="Contraseña *" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Grid ColumnDefinitions="Auto,*" Padding="10,5">
+                            <Label Grid.Column="0"
+                                   Text="{StaticResource IconLock}"
+                                   FontSize="16"
+                                   TextColor="#2563EB"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,8,0"/>
+                            <Entry Grid.Column="1"
+                                   Placeholder="Mínimo 6 caracteres"
+                                   Text="{Binding Password}"
+                                   IsPassword="True"
+                                   BackgroundColor="Transparent"/>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Confirmar contraseña con icono -->
+                    <Label Text="Confirmar contraseña *" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Grid ColumnDefinitions="Auto,*" Padding="10,5">
+                            <Label Grid.Column="0"
+                                   Text="{StaticResource IconLock}"
+                                   FontSize="16"
+                                   TextColor="#FF6B35"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,8,0"/>
+                            <Entry Grid.Column="1"
+                                   Placeholder="Repita la contraseña"
+                                   Text="{Binding ConfirmarPassword}"
+                                   IsPassword="True"
+                                   BackgroundColor="Transparent"/>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Teléfono con icono -->
+                    <Label Text="Teléfono" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Grid ColumnDefinitions="Auto,*" Padding="10,5">
+                            <Label Grid.Column="0"
+                                   Text="{StaticResource IconPhone}"
+                                   FontSize="16"
+                                   TextColor="#4CAF50"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,8,0"/>
+                            <Entry Grid.Column="1"
+                                   Placeholder="Ej: +58 412 1234567"
+                                   Text="{Binding Telefono}"
+                                   Keyboard="Telephone"
+                                   BackgroundColor="Transparent"/>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Email con icono -->
+                    <Label Text="Email" 
+                           FontSize="14" 
+                           TextColor="#757575"/>
+                    <Frame CornerRadius="10" 
+                           Padding="0" 
+                           HasShadow="False"
+                           BorderColor="#E0E0E0">
+                        <Grid ColumnDefinitions="Auto,*" Padding="10,5">
+                            <Label Grid.Column="0"
+                                   Text="{StaticResource IconEmail}"
+                                   FontSize="16"
+                                   TextColor="#FF9800"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,8,0"/>
+                            <Entry Grid.Column="1"
+                                   Placeholder="correo@ejemplo.com"
+                                   Text="{Binding Email}"
+                                   Keyboard="Email"
+                                   BackgroundColor="Transparent"/>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Botón mejorado con icono -->
+                    <Button BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="50"
+                            FontAttributes="Bold"
+                            Margin="0,20,0,0"
+                            Command="{Binding CrearAdminCommand}"
+                            IsEnabled="{Binding EstaOcupado, Converter={StaticResource InvertedBoolConverter}}">
+                        <Button.Text>
+                            <MultiBinding StringFormat="{}{0} CREAR CUENTA DE ADMINISTRADOR">
+                                <Binding Source="{StaticResource IconSuccess}" />
+                            </MultiBinding>
+                        </Button.Text>
+                    </Button>
+
+                    <ActivityIndicator IsRunning="{Binding EstaOcupado}"
+                                       IsVisible="{Binding EstaOcupado}"
+                                       Color="#4CAF50"
+                                       HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Información adicional con iconos -->
+            <Frame CornerRadius="10" 
+                   Padding="15" 
+                   BackgroundColor="White" 
+                   HasShadow="False"
+                   BorderColor="#E3F2FD">
+                <HorizontalStackLayout Spacing="10">
+                    <Label Text="{StaticResource IconInfo}"
+                           FontSize="18"
+                           TextColor="#2196F3"
+                           VerticalOptions="Start"/>
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Información importante:"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#1976D2"/>
+                        <Label Text="• Esta será su cuenta principal de administrador"
+                               FontSize="12"
+                               TextColor="#666"/>
+                        <Label Text="• Podrá cambiar estos datos más adelante"
+                               FontSize="12"
+                               TextColor="#666"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
