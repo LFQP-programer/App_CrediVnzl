@@ -26,7 +26,7 @@
 
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                         <Button Grid.Column="0"
-                                Text="📢&#x0A;Recordatorios"
+                                Text="📢 Recordatorios"
                                 Command="{Binding SeleccionarTipoMensajeCommand}"
                                 CommandParameter="Recordatorios"
                                 BackgroundColor="{Binding TipoMensajeSeleccionado, Converter={StaticResource TipoMensajeToColorConverter}, ConverterParameter='Recordatorios'}"
@@ -36,7 +36,7 @@
                                 FontSize="12"/>
 
                         <Button Grid.Column="1"
-                                Text="👤&#x0A;Individual"
+                                Text="👤 Individual"
                                 Command="{Binding SeleccionarTipoMensajeCommand}"
                                 CommandParameter="Individual"
                                 BackgroundColor="{Binding TipoMensajeSeleccionado, Converter={StaticResource TipoMensajeToColorConverter}, ConverterParameter='Individual'}"
@@ -46,7 +46,7 @@
                                 FontSize="12"/>
 
                         <Button Grid.Column="2"
-                                Text="👥&#x0A;Masivo"
+                                Text="👥 Masivo"
                                 Command="{Binding SeleccionarTipoMensajeCommand}"
                                 CommandParameter="Masivo"
                                 BackgroundColor="{Binding TipoMensajeSeleccionado, Converter={StaticResource TipoMensajeToColorConverter}, ConverterParameter='Masivo'}"

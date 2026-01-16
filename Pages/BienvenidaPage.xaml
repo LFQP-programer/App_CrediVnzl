@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.BienvenidaPage"
+             Shell.NavBarIsVisible="False">
+
+    <!-- Fondo degradado morado -->
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#7C3AED" Offset="0.0" />
+            <GradientStop Color="#5B21B6" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid Padding="30" RowDefinitions="Auto,*,Auto">
+        
+        <!-- Logo superior -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Margin="0,40,0,0">
+            <Image Source="logo_credivzla.png"
+                   WidthRequest="280"
+                   HeightRequest="280"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <!-- Opciones principales -->
+        <VerticalStackLayout Grid.Row="1" 
+                             Spacing="20" 
+                             VerticalOptions="Center"
+                             Margin="0,20,0,40">
+
+            <!-- Opción Administrador -->
+            <Frame CornerRadius="20" 
+                   Padding="0" 
+                   HasShadow="False"
+                   BackgroundColor="White"
+                   HeightRequest="100">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AdminLoginCommand}" />
+                </Frame.GestureRecognizers>
+                
+                <Grid Padding="20" ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Frame Grid.Column="0"
+                           CornerRadius="30"
+                           WidthRequest="60"
+                           HeightRequest="60"
+                           Padding="0"
+                           HasShadow="False"
+                           BackgroundColor="#F3E8FF"
+                           VerticalOptions="Center">
+                        <Label Text="🔐"
+                               FontSize="30"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Frame>
+                    
+                    <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                        <Label Text="Administrador"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#1F2937"/>
+                        <Label Text="Gestionar préstamos y clientes"
+                               FontSize="13"
+                               TextColor="#6B7280"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Opción Cliente -->
+            <Frame CornerRadius="20" 
+                   Padding="0" 
+                   HasShadow="False"
+                   BackgroundColor="White"
+                   HeightRequest="100">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ClienteLoginCommand}" />
+                </Frame.GestureRecognizers>
+                
+                <Grid Padding="20" ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Frame Grid.Column="0"
+                           CornerRadius="30"
+                           WidthRequest="60"
+                           HeightRequest="60"
+                           Padding="0"
+                           HasShadow="False"
+                           BackgroundColor="#DBEAFE"
+                           VerticalOptions="Center">
+                        <Label Text="👤"
+                               FontSize="30"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Frame>
+                    
+                    <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                        <Label Text="Cliente"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#1F2937"/>
+                        <Label Text="Consultar mis préstamos"
+                               FontSize="13"
+                               TextColor="#6B7280"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+        </VerticalStackLayout>
+
+        <!-- Footer -->
+        <Label Grid.Row="2" 
+               Text="Soluciones financieras para peruanos/venezolanos" 
+               FontSize="12" 
+               HorizontalOptions="Center"
+               TextColor="White"
+               Opacity="0.8"
+               Margin="0,0,0,20"/>
+
+    </Grid>
+
+</ContentPage>

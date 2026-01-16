@@ -80,7 +80,7 @@ namespace App_CrediVnzl.ViewModels
         public ICommand RegistrarPagoCommand { get; }
         public ICommand VerHistorialCommand { get; }
         public ICommand ToggleExpandirPrestamoCommand { get; }
-        public ICommand ModificarClienteCommand { get; }
+        public ICommand EditarClienteCommand { get; }
         public ICommand EliminarClienteCommand { get; }
         public ICommand GenerarPasswordCommand { get; }
         public ICommand RestablecerPasswordCommand { get; }
@@ -96,7 +96,7 @@ namespace App_CrediVnzl.ViewModels
             RegistrarPagoCommand = new Command<Prestamo>(async (prestamo) => await RegistrarPago(prestamo));
             VerHistorialCommand = new Command(async () => await VerHistorial());
             ToggleExpandirPrestamoCommand = new Command<Prestamo>(ToggleExpandirPrestamo);
-            ModificarClienteCommand = new Command(async () => await ModificarCliente());
+            EditarClienteCommand = new Command(async () => await ModificarCliente());
             EliminarClienteCommand = new Command(async () => await EliminarCliente());
             GenerarPasswordCommand = new Command(async () => await GenerarPasswordAsync());
             RestablecerPasswordCommand = new Command(async () => await RestablecerPasswordAsync());

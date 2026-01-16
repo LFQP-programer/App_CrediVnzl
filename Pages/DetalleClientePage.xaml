@@ -171,6 +171,29 @@
                     HeightRequest="50"
                     Command="{Binding VerHistorialCommand}" />
 
+            <!-- Botones de Acciones -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Grid.Column="0"
+                        Text="✏️ Editar Cliente"
+                        BackgroundColor="#FF9800"
+                        TextColor="White"
+                        FontSize="14"
+                        FontAttributes="Bold"
+                        CornerRadius="15"
+                        HeightRequest="50"
+                        Command="{Binding EditarClienteCommand}" />
+                
+                <Button Grid.Column="1"
+                        Text="🗑️ Eliminar Cliente"
+                        BackgroundColor="#F44336"
+                        TextColor="White"
+                        FontSize="14"
+                        FontAttributes="Bold"
+                        CornerRadius="15"
+                        HeightRequest="50"
+                        Command="{Binding EliminarClienteCommand}" />
+            </Grid>
+
             <!-- Prestamos Activos -->
             <Label Text="Prestamos Activos"
                    FontSize="18"

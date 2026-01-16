@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_CrediVnzl.Pages.EleccionAdminPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="30" Padding="30" VerticalOptions="Center">
+
+            <!-- Botón volver -->
+            <Button Text="? Volver"
+                    Command="{Binding VolverCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="#2196F3"
+                    FontSize="16"
+                    HorizontalOptions="Start"
+                    Margin="0,0,0,20"/>
+
+            <!-- Icono -->
+            <Label Text="?????" 
+                   FontSize="100" 
+                   HorizontalOptions="Center"/>
+
+            <!-- Título -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Cuenta de Administrador" 
+                       FontSize="28" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center"
+                       TextColor="#212121"/>
+
+                <Label Text="¿Ya tienes un negocio registrado?" 
+                       FontSize="16" 
+                       HorizontalOptions="Center"
+                       TextColor="#757575"
+                       Margin="0,0,0,30"/>
+            </VerticalStackLayout>
+
+            <!-- Opciones -->
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Crear nuevo negocio -->
+                <Frame CornerRadius="20" 
+                       Padding="25" 
+                       HasShadow="True"
+                       BackgroundColor="#2196F3">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CrearNuevoCommand}" />
+                    </Frame.GestureRecognizers>
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="? Crear Nuevo Negocio"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Registra tu negocio de préstamos y obtén tu código único"
+                               FontSize="14"
+                               TextColor="White"
+                               Opacity="0.9"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Ya tengo negocio -->
+                <Frame CornerRadius="20" 
+                       Padding="25" 
+                       HasShadow="True"
+                       BackgroundColor="White"
+                       BorderColor="#2196F3">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding YaTengoCommand}" />
+                    </Frame.GestureRecognizers>
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="?? Ya tengo un negocio"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#2196F3"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Inicia sesión con tu cuenta existente"
+                               FontSize="14"
+                               TextColor="#757575"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
