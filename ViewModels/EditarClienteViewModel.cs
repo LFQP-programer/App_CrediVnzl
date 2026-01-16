@@ -1,4 +1,4 @@
-using System.ComponentModel;
+ï»¿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using App_CrediVnzl.Models;
@@ -105,13 +105,13 @@ namespace App_CrediVnzl.ViewModels
 
             if (string.IsNullOrWhiteSpace(Telefono))
             {
-                await Shell.Current.DisplayAlert("Error", "El teléfono es requerido", "OK");
+                await Shell.Current.DisplayAlert("Error", "El telefono es requerido", "OK");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(Cedula))
             {
-                await Shell.Current.DisplayAlert("Error", "La cédula/DNI es requerida", "OK");
+                await Shell.Current.DisplayAlert("Error", "La cedula/DNI es requerida", "OK");
                 return;
             }
 
@@ -120,13 +120,16 @@ namespace App_CrediVnzl.ViewModels
                 var cliente = await _databaseService.GetClienteAsync(ClienteId);
                 if (cliente != null)
                 {
-                    cliente.NombreCompleto = NombreCompleto;
-                    cliente.Telefono = Telefono;
-                    cliente.Cedula = Cedula;
-                    cliente.Direccion = Direccion;
+                    // Actualizar usando las propiedades reales del modelo
+                    var nombres = NombreCompleto.Split(' ');
+                    cliente.Nombres = nombres.Length > 0 ? nombres[0] : NombreCompleto;
+                    cliente.Apellidos = nombres.Length > 1 ? string.Join(" ", nombres.Skip(1)) : "";
+                    cliente.NumeroCelular = Telefono;
+                    cliente.NumeroDocumento = Cedula;
+                    cliente.AvalDireccion = Direccion;
 
                     await _databaseService.SaveClienteAsync(cliente);
-                    await Shell.Current.DisplayAlert("Éxito", "Cliente actualizado correctamente", "OK");
+                    await Shell.Current.DisplayAlert("Exito", "Cliente actualizado correctamente", "OK");
                     await Shell.Current.GoToAsync("..");
                 }
             }

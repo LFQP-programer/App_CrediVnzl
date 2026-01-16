@@ -7,10 +7,10 @@ namespace App_CrediVnzl.Pages
     {
         private readonly DetalleClienteViewModel _viewModel;
 
-        public DetalleClientePage(DatabaseService databaseService)
+        public DetalleClientePage(DatabaseService databaseService, WhatsAppService whatsAppService)
         {
             InitializeComponent();
-            _viewModel = new DetalleClienteViewModel(databaseService);
+            _viewModel = new DetalleClienteViewModel(databaseService, whatsAppService);
             BindingContext = _viewModel;
         }
 

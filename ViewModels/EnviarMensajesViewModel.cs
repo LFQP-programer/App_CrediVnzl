@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+ï»¿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -197,7 +197,7 @@ namespace App_CrediVnzl.ViewModels
                     Clientes.Add(cliente);
                 }
 
-                // Cargar pagos próximos (hoy y mañana)
+                // Cargar pagos prï¿½ximos (hoy y maï¿½ana)
                 var hoy = DateTime.Today;
                 var manana = hoy.AddDays(1);
                 
@@ -234,7 +234,7 @@ namespace App_CrediVnzl.ViewModels
         {
             if (!TienePagosProximos)
             {
-                VistaPrevia = "No hay pagos pendientes próximos";
+                VistaPrevia = "No hay pagos pendientes prï¿½ximos";
                 return;
             }
 
@@ -248,7 +248,7 @@ namespace App_CrediVnzl.ViewModels
 
         private string GenerarMensajeRecordatorio(Pago pago)
         {
-            var fecha = pago.FechaProgramada.Date == DateTime.Today ? "hoy" : "mañana";
+            var fecha = pago.FechaProgramada.Date == DateTime.Today ? "hoy" : "maï¿½ana";
             return $"Hola {pago.ClienteNombre},\n\n" +
                    $"Te recordamos que tienes un pago programado para {fecha}.\n\n" +
                    $"?? Monto: ${pago.MontoPago:N2}\n" +
@@ -284,9 +284,9 @@ namespace App_CrediVnzl.ViewModels
         private async Task EnviarRecordatorios()
         {
             var confirmacion = await Application.Current!.MainPage!.DisplayAlert(
-                "Confirmar envío",
-                $"¿Deseas enviar {TotalMensajesRecordatorios} recordatorios por WhatsApp?",
-                "Sí, enviar",
+                "Confirmar envï¿½o",
+                $"ï¿½Deseas enviar {TotalMensajesRecordatorios} recordatorios por WhatsApp?",
+                "Sï¿½, enviar",
                 "Cancelar");
 
             if (!confirmacion) return;
@@ -310,16 +310,16 @@ namespace App_CrediVnzl.ViewModels
                 else
                     fallidos++;
                 
-                // Pequeña pausa entre mensajes
+                // Pequeï¿½a pausa entre mensajes
                 await Task.Delay(500);
             }
 
             var mensajeResultado = fallidos > 0 
-                ? $"Se abrieron {exitosos} conversaciones de WhatsApp.\n{fallidos} clientes no tienen teléfono registrado."
+                ? $"Se abrieron {exitosos} conversaciones de WhatsApp.\n{fallidos} clientes no tienen telï¿½fono registrado."
                 : $"Se abrieron {exitosos} conversaciones de WhatsApp exitosamente.";
 
             await Application.Current.MainPage.DisplayAlert(
-                "Envío completado",
+                "Envï¿½o completado",
                 mensajeResultado,
                 "OK");
         }
@@ -330,7 +330,7 @@ namespace App_CrediVnzl.ViewModels
             {
                 await Application.Current!.MainPage!.DisplayAlert(
                     "Error", 
-                    "El cliente no tiene número de teléfono registrado", 
+                    "El cliente no tiene nï¿½mero de telï¿½fono registrado", 
                     "OK");
                 return;
             }
@@ -340,7 +340,7 @@ namespace App_CrediVnzl.ViewModels
             if (enviado)
             {
                 await Application.Current.MainPage.DisplayAlert(
-                    "Éxito", 
+                    "ï¿½xito", 
                     "WhatsApp se ha abierto con el mensaje listo para enviar", 
                     "OK");
                 
@@ -351,7 +351,7 @@ namespace App_CrediVnzl.ViewModels
             {
                 await Application.Current.MainPage.DisplayAlert(
                     "Error", 
-                    "No se pudo abrir WhatsApp. Verifica que esté instalado en tu dispositivo.", 
+                    "No se pudo abrir WhatsApp. Verifica que estï¿½ instalado en tu dispositivo.", 
                     "OK");
             }
         }
@@ -359,9 +359,9 @@ namespace App_CrediVnzl.ViewModels
         private async Task EnviarMensajesMasivos()
         {
             var confirmacion = await Application.Current!.MainPage!.DisplayAlert(
-                "Confirmar envío",
-                $"¿Deseas enviar este mensaje a {TotalMensajesMasivos} clientes por WhatsApp?",
-                "Sí, enviar",
+                "Confirmar envï¿½o",
+                $"ï¿½Deseas enviar este mensaje a {TotalMensajesMasivos} clientes por WhatsApp?",
+                "Sï¿½, enviar",
                 "Cancelar");
 
             if (!confirmacion) return;
@@ -389,11 +389,11 @@ namespace App_CrediVnzl.ViewModels
             }
 
             var mensajeResultado = fallidos > 0 
-                ? $"Se abrieron {exitosos} conversaciones de WhatsApp.\n{fallidos} clientes no tienen teléfono registrado."
+                ? $"Se abrieron {exitosos} conversaciones de WhatsApp.\n{fallidos} clientes no tienen telï¿½fono registrado."
                 : $"Se abrieron {exitosos} conversaciones de WhatsApp exitosamente.";
 
             await Application.Current.MainPage.DisplayAlert(
-                "Envío completado",
+                "Envï¿½o completado",
                 mensajeResultado,
                 "OK");
 

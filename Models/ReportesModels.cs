@@ -15,14 +15,14 @@ namespace App_CrediVnzl.Models
         public decimal TasaRecuperacion { get; set; }
         public DateTime FechaGeneracion { get; set; } = DateTime.Now;
         
-        // Comparativas con período anterior
+        // Comparativas con periodo anterior
         public decimal CambioGanancias { get; set; }
         public decimal CambioCapitalEnCalle { get; set; }
         public decimal PorcentajeCambioGanancias { get; set; }
     }
 
     /// <summary>
-    /// Modelo para reporte de préstamos
+    /// Modelo para reporte de prestamos
     /// </summary>
     public class ReportePrestamos
     {
@@ -36,7 +36,7 @@ namespace App_CrediVnzl.Models
         public decimal MontoTotalPrestado { get; set; }
         public decimal MontoTotalRecuperado { get; set; }
         
-        // Distribución por estado
+        // Distribucion por estado
         public Dictionary<string, int> PrestamosPorEstado { get; set; } = new();
     }
 
@@ -118,13 +118,13 @@ namespace App_CrediVnzl.Models
         public int PromedioDiasAtraso { get; set; }
         public decimal MontoTotalPagos { get; set; }
         
-        // Análisis por día de la semana
+        // Analisis por dia de la semana
         public Dictionary<DayOfWeek, int> PagosPorDiaSemana { get; set; } = new();
         public DayOfWeek MejorDiaCobro { get; set; }
     }
 
     /// <summary>
-    /// Dato para gráficos
+    /// Dato para graficos
     /// </summary>
     public class DatoGrafico
     {
@@ -136,7 +136,7 @@ namespace App_CrediVnzl.Models
     }
 
     /// <summary>
-    /// Enumeración de períodos de reporte
+    /// Enumeracion de periodos de reporte
     /// </summary>
     public enum PeriodoReporte
     {
@@ -144,7 +144,7 @@ namespace App_CrediVnzl.Models
         Semana,
         Mes,
         Trimestre,
-        Año,
+        Anio,
         Personalizado
     }
 

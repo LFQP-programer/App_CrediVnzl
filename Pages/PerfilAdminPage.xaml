@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
+             xmlns:helpers="clr-namespace:App_CrediVnzl.Helpers"
+             x:Class="App_CrediVnzl.Pages.PerfilAdminPage"
+             Title="Perfil Administrador"
+             BackgroundColor="{StaticResource Tertiary}"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodels:PerfilAdminViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30"
+            Spacing="20">
+
+            <!-- Botón Volver -->
+            <Button
+                BackgroundColor="Transparent"
+                TextColor="{StaticResource Surface}"
+                FontSize="16"
+                HorizontalOptions="Start"
+                Command="{Binding VolverCommand}"
+                Margin="0,10,0,10"
+                Padding="0"
+                ImageSource="{x:Static helpers:IconPaths.Back}"
+                Text=" Volver" />
+
+            <!-- Card de Perfil -->
+            <Frame
+                BackgroundColor="{StaticResource Surface}"
+                CornerRadius="20"
+                HasShadow="True"
+                Padding="30"
+                MaximumWidthRequest="500">
+
+                <VerticalStackLayout Spacing="25">
+                    
+                    <!-- Avatar / Icono -->
+                    <Frame
+                        BackgroundColor="{StaticResource Tertiary}"
+                        CornerRadius="60"
+                        HasShadow="False"
+                        Padding="25"
+                        WidthRequest="120"
+                        HeightRequest="120"
+                        HorizontalOptions="Center">
+                        <Image Source="{x:Static helpers:IconPaths.Admin}"
+                               WidthRequest="70"
+                               HeightRequest="70"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+
+                    <Label
+                        Text="Perfil del Administrador"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Tertiary}"
+                        HorizontalOptions="Center" />
+
+                    <!-- Campo Nombre de Usuario -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="Nombre de Usuario"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource Tertiary}" />
+                        <Frame
+                            BorderColor="{StaticResource Gray300}"
+                            CornerRadius="10"
+                            HasShadow="False"
+                            Padding="0">
+                            <Grid ColumnDefinitions="50,*" Padding="0">
+                                <Border Grid.Column="0"
+                                        Padding="8"
+                                        BackgroundColor="Transparent">
+                                    <Image Source="{x:Static helpers:IconPaths.User}"
+                                           WidthRequest="24"
+                                           HeightRequest="24"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center" />
+                                </Border>
+                                <Entry
+                                    Grid.Column="1"
+                                    Placeholder="Usuario"
+                                    Text="{Binding Username}"
+                                    FontSize="16"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Campo Nombre Completo -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="Nombre Completo"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource Tertiary}" />
+                        <Frame
+                            BorderColor="{StaticResource Gray300}"
+                            CornerRadius="10"
+                            HasShadow="False"
+                            Padding="0">
+                            <Grid ColumnDefinitions="50,*" Padding="0">
+                                <Border Grid.Column="0"
+                                        Padding="8"
+                                        BackgroundColor="Transparent">
+                                    <Image Source="{x:Static helpers:IconPaths.User}"
+                                           WidthRequest="24"
+                                           HeightRequest="24"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center" />
+                                </Border>
+                                <Entry
+                                    Grid.Column="1"
+                                    Placeholder="Nombre completo"
+                                    Text="{Binding NombreCompleto}"
+                                    FontSize="16"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Botón Guardar Cambios -->
+                    <Button
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        BackgroundColor="{StaticResource Tertiary}"
+                        TextColor="{StaticResource Surface}"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Command="{Binding GuardarCambiosCommand}"
+                        Margin="0,10,0,0"
+                        ImageSource="{x:Static helpers:IconPaths.Save}"
+                        Text=" Guardar Cambios" />
+
+                    <!-- Botón Cambiar Contraseña -->
+                    <Button
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        BackgroundColor="{StaticResource Gray300}"
+                        TextColor="{StaticResource Gray900}"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Command="{Binding CambiarContrasenaCommand}"
+                        ImageSource="{x:Static helpers:IconPaths.Lock}"
+                        Text=" Cambiar Contraseña" />
+
+                    <!-- Indicador de carga -->
+                    <ActivityIndicator
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}"
+                        Color="{StaticResource Tertiary}"
+                        HorizontalOptions="Center" />
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

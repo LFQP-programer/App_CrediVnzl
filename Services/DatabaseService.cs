@@ -1,4 +1,4 @@
-using SQLite;
+﻿using SQLite;
 using App_CrediVnzl.Models;
 
 namespace App_CrediVnzl.Services
@@ -15,12 +15,65 @@ namespace App_CrediVnzl.Services
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "prestafacil.db3");
             _database = new SQLiteAsyncConnection(dbPath);
             
+            // Crear o actualizar tablas (SQLite automáticamente agrega nuevas columnas)
             await _database.CreateTableAsync<Cliente>();
             await _database.CreateTableAsync<Prestamo>();
             await _database.CreateTableAsync<Pago>();
             await _database.CreateTableAsync<HistorialPago>();
             await _database.CreateTableAsync<CapitalConfig>();
-            await _database.CreateTableAsync<PagoCalendario>();
+            
+            // Verificar y agregar columnas faltantes en Cliente (para migración)
+            await MigrarTablaClienteAsync();
+        }
+        
+        private async Task MigrarTablaClienteAsync()
+        {
+            try
+            {
+                var db = await GetDatabaseAsync();
+                
+                // Intentar agregar columnas nuevas si no existen
+                // SQLite-net automáticamente maneja esto con CreateTableAsync, pero por seguridad:
+                try
+                {
+                    await db.ExecuteAsync("ALTER TABLE clientes ADD COLUMN TieneAccesoApp INTEGER DEFAULT 0");
+                }
+                catch
+                {
+                    // La columna ya existe, ignorar
+                }
+                
+                try
+                {
+                    await db.ExecuteAsync("ALTER TABLE clientes ADD COLUMN PasswordTemporal TEXT");
+                }
+                catch
+                {
+                    // La columna ya existe, ignorar
+                }
+                
+                try
+                {
+                    await db.ExecuteAsync("ALTER TABLE clientes ADD COLUMN RequiereCambioPassword INTEGER DEFAULT 1");
+                }
+                catch
+                {
+                    // La columna ya existe, ignorar
+                }
+                
+                try
+                {
+                    await db.ExecuteAsync("ALTER TABLE clientes ADD COLUMN FechaGeneracionPassword TEXT");
+                }
+                catch
+                {
+                    // La columna ya existe, ignorar
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en migración de tabla Cliente: {ex.Message}");
+            }
         }
 
         private async Task<SQLiteAsyncConnection> GetDatabaseAsync()
@@ -30,7 +83,7 @@ namespace App_CrediVnzl.Services
             return _database!;
         }
 
-        // Metodos para Clientes
+        // Métodos para Clientes
         public async Task<List<Cliente>> GetClientesAsync()
         {
             var db = await GetDatabaseAsync();
@@ -93,13 +146,13 @@ namespace App_CrediVnzl.Services
             return clientes.Sum(c => c.DeudaPendiente);
         }
 
-        // Metodos para Pagos
+        // Métodos para Pagos
         public async Task<List<Pago>> GetPagosAsync()
         {
             var db = await GetDatabaseAsync();
             var pagos = await db.Table<Pago>().OrderBy(p => p.FechaProgramada).ToListAsync();
             
-            // Cargar informacion del cliente
+            // Cargar información del cliente
             foreach (var pago in pagos)
             {
                 var cliente = await GetClienteAsync(pago.ClienteId);
@@ -181,21 +234,6 @@ namespace App_CrediVnzl.Services
             return pagos;
         }
 
-        public async Task<ResumenPagos> GetResumenPagosMesAsync(int year, int month)
-        {
-            var pagos = await GetPagosByMesAsync(year, month);
-            var hoy = DateTime.Today;
-            
-            return new ResumenPagos
-            {
-                TotalMes = pagos.Count,
-                MontoEsperado = pagos.Sum(p => p.MontoPago),
-                Pendientes = pagos.Count(p => p.Estado == "Pendiente" && p.FechaProgramada >= hoy),
-                Vencidos = pagos.Count(p => p.Estado == "Pendiente" && p.FechaProgramada < hoy),
-                Pagados = pagos.Count(p => p.Estado == "Pagado")
-            };
-        }
-
         public async Task<int> SavePagoAsync(Pago pago)
         {
             var db = await GetDatabaseAsync();
@@ -241,7 +279,7 @@ namespace App_CrediVnzl.Services
             }
         }
 
-        // Metodos para Prestamos
+        // Métodos para Prestamos
         public async Task<List<Prestamo>> GetPrestamosAsync()
         {
             var db = await GetDatabaseAsync();
@@ -299,7 +337,7 @@ namespace App_CrediVnzl.Services
             
             foreach (var prestamo in prestamosActivos)
             {
-                // Calcular semanas desde el ultimo pago o desde el inicio
+                // Calcular semanas desde el último pago o desde el inicio
                 var fechaReferencia = prestamo.FechaUltimoPago ?? prestamo.FechaInicio;
                 var dias = (DateTime.Now - fechaReferencia).Days;
                 var semanasTranscurridas = Math.Max(0, dias / 7);
@@ -307,24 +345,24 @@ namespace App_CrediVnzl.Services
                 // Solo actualizar si han pasado semanas completas
                 if (semanasTranscurridas > 0)
                 {
-                    // Si no hay FechaUltimoPago y solo ha pasado 1 semana, no agregar porque ya tiene el interes inicial
+                    // Si no hay FechaUltimoPago y solo ha pasado 1 semana, no agregar porque ya tiene el interés inicial
                     if (prestamo.FechaUltimoPago == null && semanasTranscurridas == 1)
                     {
-                        // Marcar FechaUltimoPago para evitar recalculos pero no agregar interes
+                        // Marcar FechaUltimoPago para evitar recálculos pero no agregar interés
                         prestamo.FechaUltimoPago = DateTime.Now;
                         await db.UpdateAsync(prestamo);
                         continue;
                     }
                     
-                    // Calcular nuevo interes
+                    // Calcular nuevo interés
                     var interesPorSemana = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100);
                     var nuevoInteres = interesPorSemana * semanasTranscurridas;
                     
-                    // Agregar al interes acumulado
+                    // Agregar al interés acumulado
                     prestamo.InteresAcumulado += nuevoInteres;
                     prestamo.TotalAdeudado = prestamo.CapitalPendiente + prestamo.InteresAcumulado;
                     
-                    // Actualizar fecha de ultimo calculo
+                    // Actualizar fecha de último cálculo
                     prestamo.FechaUltimoPago = DateTime.Now;
                     
                     await db.UpdateAsync(prestamo);
@@ -353,7 +391,7 @@ namespace App_CrediVnzl.Services
             }
         }
 
-        // Metodos para Historial de Pagos
+        // Métodos para Historial de Pagos
         public async Task<int> SaveHistorialPagoAsync(HistorialPago historial)
         {
             var db = await GetDatabaseAsync();
@@ -410,13 +448,13 @@ namespace App_CrediVnzl.Services
             return historial.Sum(h => h.MontoTotal);
         }
 
-        // Metodos para CapitalConfig
+        // Métodos para CapitalConfig
         public async Task<CapitalConfig?> GetCapitalConfigAsync()
         {
             var db = await GetDatabaseAsync();
             var config = await db.Table<CapitalConfig>().FirstOrDefaultAsync();
             
-            // Si no existe, crear una configuracion por defecto
+            // Si no existe, crear una configuración por defecto
             if (config == null)
             {
                 config = new CapitalConfig
@@ -470,7 +508,7 @@ namespace App_CrediVnzl.Services
             }
         }
 
-        // Metodos para estadisticas globales
+        // Métodos para estadísticas globales
         public async Task<decimal> GetTotalCapitalPrestadoAsync()
         {
             var db = await GetDatabaseAsync();
@@ -504,23 +542,95 @@ namespace App_CrediVnzl.Services
             return await db.Table<Prestamo>().Where(p => p.Estado == "Completado").CountAsync();
         }
 
-        // M�todo para eliminar cliente y todos sus datos relacionados
+        public async Task<int> GetClientesMorososAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var hoy = DateTime.Today;
+            
+            // Obtener todos los clientes con préstamos activos
+            var clientesConPrestamos = await db.Table<Cliente>()
+                .Where(c => c.PrestamosActivos > 0)
+                .ToListAsync();
+            
+            int clientesMorosos = 0;
+            
+            foreach (var cliente in clientesConPrestamos)
+            {
+                // Verificar si tiene préstamos con pagos vencidos
+                var prestamosCliente = await GetPrestamosByClienteAsync(cliente.Id);
+                var prestamosActivos = prestamosCliente.Where(p => p.Estado == "Activo");
+                
+                foreach (var prestamo in prestamosActivos)
+                {
+                    var fechaReferencia = prestamo.FechaUltimoPago ?? prestamo.FechaInicio;
+                    var diasTranscurridos = (hoy - fechaReferencia.Date).Days;
+                    
+                    // Si han pasado más de 14 días (2 semanas) sin pago, se considera moroso
+                    if (diasTranscurridos > 14)
+                    {
+                        clientesMorosos++;
+                        break; // Contar el cliente solo una vez
+                    }
+                }
+            }
+            
+            return clientesMorosos;
+        }
+
+        public async Task<int> GetPrestamosVencidosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var hoy = DateTime.Today;
+            
+            var prestamosActivos = await GetPrestamosActivosAsync();
+            int prestamosVencidos = 0;
+            
+            foreach (var prestamo in prestamosActivos)
+            {
+                var fechaReferencia = prestamo.FechaUltimoPago ?? prestamo.FechaInicio;
+                var diasTranscurridos = (hoy - fechaReferencia.Date).Days;
+                
+                // Si han pasado más de 14 días (2 semanas) sin pago, se considera vencido
+                if (diasTranscurridos > 14)
+                {
+                    prestamosVencidos++;
+                }
+            }
+            
+            return prestamosVencidos;
+        }
+
+        public async Task<decimal> GetGananciaCobradaAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var historial = await db.Table<HistorialPago>().ToListAsync();
+            return historial.Sum(h => h.MontoInteres);
+        }
+
+        public async Task<decimal> GetGananciaPendienteAsync()
+        {
+            var db = await GetDatabaseAsync();
+            var prestamosActivos = await GetPrestamosActivosAsync();
+            return prestamosActivos.Sum(p => p.InteresAcumulado);
+        }
+
+        // Método para eliminar cliente y todos sus datos relacionados
         public async Task EliminarClienteConDatosRelacionadosAsync(int clienteId)
         {
             var db = await GetDatabaseAsync();
             
-            // Obtener todos los pr�stamos del cliente
+            // Obtener todos los préstamos del cliente
             var prestamos = await GetPrestamosByClienteAsync(clienteId);
             
             foreach (var prestamo in prestamos)
             {
-                // Eliminar historial de pagos del pr�stamo
+                // Eliminar historial de pagos del préstamo
                 await db.ExecuteAsync("DELETE FROM HistorialPago WHERE PrestamoId = ?", prestamo.Id);
                 
-                // Eliminar pagos programados del pr�stamo
+                // Eliminar pagos programados del préstamo
                 await db.ExecuteAsync("DELETE FROM Pago WHERE PrestamoId = ?", prestamo.Id);
                 
-                // Eliminar el pr�stamo
+                // Eliminar el préstamo
                 await db.DeleteAsync(prestamo);
             }
             
@@ -532,7 +642,7 @@ namespace App_CrediVnzl.Services
             }
         }
 
-        // M�todo para reiniciar la base de datos (eliminar todos los datos)
+        // Método para reiniciar la base de datos (eliminar todos los datos)
         public async Task ReiniciarBaseDeDatosAsync()
         {
             var db = await GetDatabaseAsync();
@@ -544,12 +654,12 @@ namespace App_CrediVnzl.Services
             await db.DeleteAllAsync<Cliente>();
         }
 
-        // M�todo para eliminar completamente el archivo de base de datos
+        // Método para eliminar completamente el archivo de base de datos
         public async Task EliminarBaseDeDatosCompletaAsync()
         {
             try
             {
-                // Cerrar la conexi�n actual
+                // Cerrar la conexión actual
                 if (_database != null)
                 {
                     await _database.CloseAsync();
@@ -575,7 +685,7 @@ namespace App_CrediVnzl.Services
             }
         }
 
-        // M�todo para obtener informaci�n de la base de datos
+        // Método para obtener información de la base de datos
         public async Task<DatabaseInfo> ObtenerInformacionBaseDeDatosAsync()
         {
             var db = await GetDatabaseAsync();
@@ -589,87 +699,102 @@ namespace App_CrediVnzl.Services
                 TotalHistorialPagos = await db.Table<HistorialPago>().CountAsync()
             };
 
-            // Obtener tama�o del archivo
+            // Obtener tamaño del archivo
             if (File.Exists(info.RutaArchivo))
             {
                 var fileInfo = new FileInfo(info.RutaArchivo);
-                info.Tama�oArchivo = fileInfo.Length;
+                info.TamañoArchivo = fileInfo.Length;
             }
 
             return info;
         }
 
-        // M�todos para PagoCalendario
-        public async Task<List<PagoCalendario>> GetPagosCalendarioDelMesAsync(int year, int month)
+        // Métodos para gestión de contraseñas de clientes
+        public async Task<string> GenerarPasswordTemporalAsync(int clienteId)
         {
-            var pagos = await GetPagosByMesAsync(year, month);
-            var pagosCalendario = new List<PagoCalendario>();
+            var cliente = await GetClienteAsync(clienteId);
+            if (cliente == null)
+                throw new Exception("Cliente no encontrado");
 
-            foreach (var pago in pagos)
-            {
-                pagosCalendario.Add(new PagoCalendario
-                {
-                    Id = pago.Id,
-                    PrestamoId = pago.PrestamoId,
-                    ClienteId = pago.ClienteId,
-                    ClienteNombre = pago.ClienteNombre,
-                    FechaPago = pago.FechaProgramada,
-                    MontoPago = pago.MontoPago,
-                    EsPagado = pago.Estado == "Pagado",
-                    TipoPago = pago.TipoPago,
-                    NumeroCuota = pago.NumeroCuota,
-                    FechaPagoReal = pago.FechaPagado
-                });
-            }
+            // Generar contraseña de 6 dígitos
+            var random = new Random();
+            var password = random.Next(100000, 999999).ToString();
 
-            return pagosCalendario;
+            // Actualizar cliente
+            cliente.TieneAccesoApp = true;
+            cliente.PasswordTemporal = password;
+            cliente.RequiereCambioPassword = true;
+            cliente.FechaGeneracionPassword = DateTime.Now;
+
+            await SaveClienteAsync(cliente);
+            return password;
         }
 
-        public async Task<List<PagoCalendario>> GetPagosCalendarioPorFechaAsync(DateTime fecha)
+        public async Task<bool> CambiarPasswordClienteAsync(int clienteId, string passwordActual, string passwordNueva)
         {
-            var pagos = await GetPagosByFechaAsync(fecha);
-            var pagosCalendario = new List<PagoCalendario>();
+            var cliente = await GetClienteAsync(clienteId);
+            if (cliente == null)
+                return false;
 
-            foreach (var pago in pagos)
-            {
-                pagosCalendario.Add(new PagoCalendario
-                {
-                    Id = pago.Id,
-                    PrestamoId = pago.PrestamoId,
-                    ClienteId = pago.ClienteId,
-                    ClienteNombre = pago.ClienteNombre,
-                    FechaPago = pago.FechaProgramada,
-                    MontoPago = pago.MontoPago,
-                    EsPagado = pago.Estado == "Pagado",
-                    TipoPago = pago.TipoPago,
-                    NumeroCuota = pago.NumeroCuota,
-                    FechaPagoReal = pago.FechaPagado
-                });
-            }
+            // Verificar contraseña actual
+            if (cliente.PasswordTemporal != passwordActual)
+                return false;
 
-            return pagosCalendario;
+            // Validar que la nueva contraseña tenga al menos 6 dígitos
+            if (passwordNueva.Length < 6 || !passwordNueva.All(char.IsDigit))
+                return false;
+
+            // Actualizar contraseña
+            cliente.PasswordTemporal = passwordNueva;
+            cliente.RequiereCambioPassword = false;
+
+            await SaveClienteAsync(cliente);
+            return true;
         }
 
-        public async Task<List<DateTime>> GetDiasConPagosDelMesAsync(int year, int month)
+        public async Task<bool> RestablecerPasswordClienteAsync(int clienteId)
         {
-            var pagos = await GetPagosByMesAsync(year, month);
-            return pagos.Select(p => p.FechaProgramada.Date).Distinct().OrderBy(d => d).ToList();
+            var cliente = await GetClienteAsync(clienteId);
+            if (cliente == null)
+                return false;
+
+            // Generar nueva contraseña temporal
+            var random = new Random();
+            var password = random.Next(100000, 999999).ToString();
+
+            cliente.PasswordTemporal = password;
+            cliente.RequiereCambioPassword = true;
+            cliente.FechaGeneracionPassword = DateTime.Now;
+
+            await SaveClienteAsync(cliente);
+            return true;
         }
 
-        public async Task<ResumenPagos> GetResumenCalendarioMesAsync(int year, int month)
+        public async Task<bool> DeshabilitarAccesoClienteAsync(int clienteId)
         {
-            return await GetResumenPagosMesAsync(year, month);
+            var cliente = await GetClienteAsync(clienteId);
+            if (cliente == null)
+                return false;
+
+            cliente.TieneAccesoApp = false;
+            cliente.PasswordTemporal = null;
+
+            await SaveClienteAsync(cliente);
+            return true;
         }
 
-        // M�todo para marcar pago del calendario como pagado
-        public async Task<bool> MarcarPagoCalendarioComoPagadoAsync(int pagoId, DateTime fechaPago)
+        public async Task<List<Cliente>> GetClientesConAccesoAppAsync()
         {
-            var result = await MarcarPagoComoPagadoAsync(pagoId);
-            return result > 0;
+            var db = await GetDatabaseAsync();
+            return await db.Table<Cliente>()
+                .Where(c => c.TieneAccesoApp)
+                .OrderByDescending(c => c.FechaRegistro)
+                .ToListAsync();
         }
+
     }
 
-    // Clase para informaci�n de la base de datos
+    // Clase para información de la base de datos
     public class DatabaseInfo
     {
         public string RutaArchivo { get; set; } = string.Empty;
@@ -677,18 +802,18 @@ namespace App_CrediVnzl.Services
         public int TotalPrestamos { get; set; }
         public int TotalPagos { get; set; }
         public int TotalHistorialPagos { get; set; }
-        public long Tama�oArchivo { get; set; }
+        public long TamañoArchivo { get; set; }
         
-        public string Tama�oArchivoFormateado
+        public string TamañoArchivoFormateado
         {
             get
             {
-                if (Tama�oArchivo < 1024)
-                    return $"{Tama�oArchivo} bytes";
-                else if (Tama�oArchivo < 1024 * 1024)
-                    return $"{Tama�oArchivo / 1024.0:F2} KB";
+                if (TamañoArchivo < 1024)
+                    return $"{TamañoArchivo} bytes";
+                else if (TamañoArchivo < 1024 * 1024)
+                    return $"{TamañoArchivo / 1024.0:F2} KB";
                 else
-                    return $"{Tama�oArchivo / (1024.0 * 1024.0):F2} MB";
+                    return $"{TamañoArchivo / (1024.0 * 1024.0):F2} MB";
             }
         }
     }

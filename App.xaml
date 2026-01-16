@@ -15,6 +15,7 @@
             <converters:PercentageToProgressConverter x:Key="PercentageConverter" />
             <converters:IsGreaterThanZeroConverter x:Key="IsGreaterThanZeroConverter" />
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <converters:BoolToTextConverter x:Key="BoolToTextConverter" />
             <converters:EstadoToColorConverter x:Key="EstadoToColorConverter" />
             <converters:EsPendienteConverter x:Key="EsPendienteConverter" />
             <converters:TipoMensajeToColorConverter x:Key="TipoMensajeToColorConverter" />

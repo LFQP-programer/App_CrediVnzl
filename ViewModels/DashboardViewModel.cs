@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -13,14 +13,20 @@ namespace App_CrediVnzl.ViewModels
         private readonly DatabaseService _databaseService;
         private readonly DashboardPage? _page;
         private int _totalClientes;
+        private int _clientesMorosos;
         private int _prestamosActivos;
+        private int _prestamosVencidos;
+        private decimal _capitalInvertido;
+        private decimal _capitalDisponible;
+        private decimal _gananciaCobrada;
+        private decimal _gananciaPendiente;
         private decimal _capitalEnCalle;
         private decimal _interesesAcumulados;
         private decimal _capitalInicial;
-        private decimal _capitalDisponible;
         private decimal _gananciaTotal;
         private bool _mostrarDialogoCapital;
         private bool _mostrarDialogoGanancias;
+        private bool _mostrarMenuHamburguesa;
 
         public int TotalClientes
         {
@@ -28,10 +34,46 @@ namespace App_CrediVnzl.ViewModels
             set { _totalClientes = value; OnPropertyChanged(); }
         }
 
+        public int ClientesMorosos
+        {
+            get => _clientesMorosos;
+            set { _clientesMorosos = value; OnPropertyChanged(); }
+        }
+
         public int PrestamosActivos
         {
             get => _prestamosActivos;
             set { _prestamosActivos = value; OnPropertyChanged(); }
+        }
+
+        public int PrestamosVencidos
+        {
+            get => _prestamosVencidos;
+            set { _prestamosVencidos = value; OnPropertyChanged(); }
+        }
+
+        public decimal CapitalInvertido
+        {
+            get => _capitalInvertido;
+            set { _capitalInvertido = value; OnPropertyChanged(); }
+        }
+
+        public decimal CapitalDisponible
+        {
+            get => _capitalDisponible;
+            set { _capitalDisponible = value; OnPropertyChanged(); }
+        }
+
+        public decimal GananciaCobrada
+        {
+            get => _gananciaCobrada;
+            set { _gananciaCobrada = value; OnPropertyChanged(); }
+        }
+
+        public decimal GananciaPendiente
+        {
+            get => _gananciaPendiente;
+            set { _gananciaPendiente = value; OnPropertyChanged(); }
         }
 
         public decimal CapitalEnCalle
@@ -52,12 +94,6 @@ namespace App_CrediVnzl.ViewModels
             set { _capitalInicial = value; OnPropertyChanged(); }
         }
 
-        public decimal CapitalDisponible
-        {
-            get => _capitalDisponible;
-            set { _capitalDisponible = value; OnPropertyChanged(); }
-        }
-
         public decimal GananciaTotal
         {
             get => _gananciaTotal;
@@ -74,6 +110,12 @@ namespace App_CrediVnzl.ViewModels
         {
             get => _mostrarDialogoGanancias;
             set { _mostrarDialogoGanancias = value; OnPropertyChanged(); }
+        }
+
+        public bool MostrarMenuHamburguesa
+        {
+            get => _mostrarMenuHamburguesa;
+            set { _mostrarMenuHamburguesa = value; OnPropertyChanged(); }
         }
 
         public ObservableCollection<DashboardCard> DashboardCards { get; set; } = new();
@@ -103,6 +145,8 @@ namespace App_CrediVnzl.ViewModels
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("*** DashboardViewModel - Iniciando carga de datos ***");
+                
                 // Cargar configuracion de capital
                 var capitalConfig = await _databaseService.GetCapitalConfigAsync();
                 if (capitalConfig != null)
@@ -110,13 +154,28 @@ namespace App_CrediVnzl.ViewModels
                     CapitalInicial = capitalConfig.CapitalInicial;
                     CapitalDisponible = capitalConfig.CapitalDisponible;
                     GananciaTotal = capitalConfig.GananciaTotal;
+                    System.Diagnostics.Debug.WriteLine($"*** Capital config cargado: Inicial={CapitalInicial}, Disponible={CapitalDisponible} ***");
                 }
 
                 // Cargar datos desde la base de datos
+                System.Diagnostics.Debug.WriteLine("*** Cargando estad�sticas de clientes ***");
                 TotalClientes = await _databaseService.GetTotalClientesAsync();
+                ClientesMorosos = await _databaseService.GetClientesMorososAsync();
+                
+                System.Diagnostics.Debug.WriteLine("*** Cargando estad�sticas de pr�stamos ***");
                 PrestamosActivos = await _databaseService.GetClientesConPrestamosActivosAsync();
-                CapitalEnCalle = await _databaseService.GetTotalCapitalActivoAsync();
+                PrestamosVencidos = await _databaseService.GetPrestamosVencidosAsync();
+                
+                System.Diagnostics.Debug.WriteLine("*** Cargando estad�sticas de capital ***");
+                CapitalInvertido = await _databaseService.GetTotalCapitalActivoAsync();
+                CapitalEnCalle = CapitalInvertido; // Son lo mismo
+                
+                System.Diagnostics.Debug.WriteLine("*** Cargando estad�sticas de intereses ***");
                 InteresesAcumulados = await _databaseService.GetTotalInteresGeneradoAsync();
+                GananciaCobrada = await _databaseService.GetGananciaCobradaAsync();
+                GananciaPendiente = await _databaseService.GetGananciaPendienteAsync();
+
+                System.Diagnostics.Debug.WriteLine($"*** Estad�sticas cargadas: Clientes={TotalClientes}, Morosos={ClientesMorosos}, Activos={PrestamosActivos}, Vencidos={PrestamosVencidos} ***");
 
                 // Actualizar capital disponible
                 await _databaseService.ActualizarCapitalDisponibleAsync();
@@ -138,10 +197,26 @@ namespace App_CrediVnzl.ViewModels
                     },
                     new DashboardCard
                     {
+                        Title = "Morosos",
+                        Value = ClientesMorosos.ToString(),
+                        Icon = "M",
+                        BackgroundColor = "#F44336",
+                        IconColor = "#FFFFFF"
+                    },
+                    new DashboardCard
+                    {
                         Title = "Activos",
                         Value = PrestamosActivos.ToString(),
                         Icon = "A",
                         BackgroundColor = "#4CAF50",
+                        IconColor = "#FFFFFF"
+                    },
+                    new DashboardCard
+                    {
+                        Title = "Vencidos",
+                        Value = PrestamosVencidos.ToString(),
+                        Icon = "V",
+                        BackgroundColor = "#FF9800",
                         IconColor = "#FFFFFF"
                     },
                     new DashboardCard
@@ -159,14 +234,36 @@ namespace App_CrediVnzl.ViewModels
                         Icon = "I",
                         BackgroundColor = "#FF5722",
                         IconColor = "#FFFFFF"
+                    },
+                    new DashboardCard
+                    {
+                        Title = "Ganancia Cobrada",
+                        Value = $"${GananciaCobrada:N2}",
+                        Icon = "G",
+                        BackgroundColor = "#8BC34A",
+                        IconColor = "#FFFFFF"
+                    },
+                    new DashboardCard
+                    {
+                        Title = "Ganancia Pendiente",
+                        Value = $"${GananciaPendiente:N2}",
+                        Icon = "P",
+                        BackgroundColor = "#FFC107",
+                        IconColor = "#FFFFFF"
                     }
                 };
 
+                System.Diagnostics.Debug.WriteLine("*** Cargando pr�stamos activos ***");
                 await LoadPrestamosActivos();
+                
+                System.Diagnostics.Debug.WriteLine("*** DashboardViewModel - Carga de datos completada ***");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error cargando datos del dashboard: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en DashboardViewModel.LoadDashboardDataAsync: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                System.Diagnostics.Debug.WriteLine($"*** InnerException: {ex.InnerException?.Message} ***");
+                throw; // Re-lanzar para que el DashboardPage lo maneje
             }
         }
 
@@ -252,14 +349,6 @@ namespace App_CrediVnzl.ViewModels
                 },
                 new MenuCard
                 {
-                    Title = "Calendario",
-                    Subtitle = "Pagos programados",
-                    Icon = "Cal",
-                    BackgroundColor = "#4CAF50",
-                    Route = "calendario"
-                },
-                new MenuCard
-                {
                     Title = "Mensajes",
                     Subtitle = "Enviar recordatorios",
                     Icon = "M",
@@ -291,17 +380,39 @@ namespace App_CrediVnzl.ViewModels
                         ? (int)((prestamo.MontoPagado / prestamo.MontoInicial) * 100) 
                         : 0;
 
-                    PrestamosActivosList.Add(new PrestamoActivo
+                    // Calcular cuota semanal (capital + inter�s)
+                    var cuotaSemanal = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100);
+                    
+                    // Calcular fecha de vencimiento (�ltima fecha de pago + 7 d�as)
+                    var fechaVencimiento = (prestamo.FechaUltimoPago ?? prestamo.FechaInicio).AddDays(7);
+
+                    var prestamoActivo = new PrestamoActivo
                     {
                         ClienteNombre = cliente.NombreCompleto,
                         MontoInicial = prestamo.MontoInicial,
                         InteresSemanal = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100),
                         MontoPagado = prestamo.MontoPagado,
                         MontoPendiente = prestamo.TotalAdeudado,
-                        PorcentajePagado = porcentajePagado
-                    });
+                        PorcentajePagado = porcentajePagado,
+                        CuotaSemanal = cuotaSemanal,
+                        FechaVencimiento = fechaVencimiento
+                    };
+                    
+                    // Determinar el estado autom�ticamente
+                    prestamoActivo.DeterminarEstado();
+                    
+                    PrestamosActivosList.Add(prestamoActivo);
                 }
             }
+            
+            // Ordenar por estado: Vencidos primero, luego atrasados, luego al d�a
+            PrestamosActivosList = new ObservableCollection<PrestamoActivo>(
+                PrestamosActivosList.OrderBy(p => p.EstadoColor == "#E4002B" ? 0 : 
+                                                   p.EstadoColor == "#FF9800" ? 1 :
+                                                   p.EstadoColor == "#FFC107" ? 2 : 3)
+            );
+            
+            OnPropertyChanged(nameof(PrestamosActivosList));
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

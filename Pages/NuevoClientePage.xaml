@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
+             xmlns:helpers="clr-namespace:App_CrediVnzl.Helpers"
              x:Class="App_CrediVnzl.Pages.NuevoClientePage"
              Title="{Binding PageTitle}"
              Shell.NavBarIsVisible="True"
@@ -13,7 +14,7 @@
         <VerticalStackLayout Padding="0" Spacing="0">
 
             <!-- Informacion del Cliente Card -->
-            <Frame BackgroundColor="{StaticResource Beige}"
+            <Frame BackgroundColor="{StaticResource Gray100}"
                    CornerRadius="20"
                    Padding="20"
                    Margin="15,20,15,15"
@@ -22,146 +23,388 @@
                     
                     <!-- Info Header -->
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                        <Label Grid.Column="0"
-                               Text="👤"
-                               FontSize="24"
-                               VerticalOptions="Center" />
-                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                        <Frame Grid.Column="0"
+                               BackgroundColor="{StaticResource Tertiary}"
+                               CornerRadius="10"
+                               Padding="10"
+                               HasShadow="False">
+                            <Image Source="{x:Static helpers:IconPaths.User}"
+                                   WidthRequest="24"
+                                   HeightRequest="24" />
+                        </Frame>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                             <Label Text="Informacion del Cliente"
                                    FontSize="16"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}" />
-                            <Label Text="Complete todos los datos del cliente. Esta informacion sera utilizada para los prestamos y contacto por WhatsApp."
-                                   FontSize="12"
-                                   TextColor="{StaticResource Gray600}"
-                                   LineBreakMode="WordWrap" />
+                                   TextColor="{StaticResource Tertiary}" />
                         </VerticalStackLayout>
                     </Grid>
 
                     <BoxView HeightRequest="1" Color="{StaticResource Gray300}" />
 
-                    <!-- Nombre Completo -->
+                    <!-- Tipo de Documento -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Nombre Completo"
+                        <Label Text="Tipo de Documento"
                                FontSize="14"
+                               FontAttributes="Bold"
                                TextColor="{StaticResource Gray900}" />
-                        <Frame BackgroundColor="{StaticResource Gray100}"
+                        <HorizontalStackLayout Spacing="20" Padding="10,0">
+                            <RadioButton Content="DNI"
+                                         IsChecked="{Binding EsTipoDNI}"
+                                         GroupName="TipoDocumento"
+                                         TextColor="{StaticResource Gray900}" />
+                            <RadioButton Content="Carnet de extranjeria"
+                                         IsChecked="{Binding EsTipoCarnet}"
+                                         GroupName="TipoDocumento"
+                                         TextColor="{StaticResource Gray900}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!-- Numero de Documento -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Numero de Documento"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Frame BackgroundColor="{StaticResource White}"
                                CornerRadius="12"
-                               Padding="15,10"
+                               Padding="0"
+                               HasShadow="False">
+                            <Entry Placeholder="Ingrese el numero de documento"
+                                   Text="{Binding Cliente.NumeroDocumento}"
+                                   Keyboard="Numeric"
+                                   Margin="15,0" />
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Nombres -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Nombres"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Frame BackgroundColor="{StaticResource White}"
+                               CornerRadius="12"
+                               Padding="0"
                                HasShadow="False">
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0"
-                                       Text="👤"
-                                       FontSize="20"
-                                       VerticalOptions="Center" />
+                                <Image Grid.Column="0"
+                                       Source="{x:Static helpers:IconPaths.User}"
+                                       WidthRequest="20"
+                                       HeightRequest="20"
+                                       VerticalOptions="Center"
+                                       Margin="15,0,0,0" />
                                 <Entry Grid.Column="1"
-                                       Placeholder="Ej: Maria Gonzalez"
-                                       Text="{Binding Cliente.NombreCompleto}"
-                                       BackgroundColor="Transparent" />
+                                       Placeholder="Ingrese los nombres"
+                                       Text="{Binding Cliente.Nombres}"
+                                       Margin="0,0,15,0" />
                             </Grid>
                         </Frame>
                     </VerticalStackLayout>
 
-                    <!-- Telefono / WhatsApp -->
+                    <!-- Apellidos -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Telefono / WhatsApp"
+                        <Label Text="Apellidos"
                                FontSize="14"
+                               FontAttributes="Bold"
                                TextColor="{StaticResource Gray900}" />
-                        <Frame BackgroundColor="{StaticResource Gray100}"
+                        <Frame BackgroundColor="{StaticResource White}"
                                CornerRadius="12"
-                               Padding="15,10"
+                               Padding="0"
+                               HasShadow="False">
+                            <Entry Placeholder="Ingrese los apellidos"
+                                   Text="{Binding Cliente.Apellidos}"
+                                   Margin="15,0" />
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Numero de Celular -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Numero de Celular"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Frame BackgroundColor="{StaticResource White}"
+                               CornerRadius="12"
+                               Padding="0"
                                HasShadow="False">
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0"
-                                       Text="📱"
-                                       FontSize="20"
-                                       VerticalOptions="Center" />
+                                <Image Grid.Column="0"
+                                       Source="{x:Static helpers:IconPaths.Phone}"
+                                       WidthRequest="20"
+                                       HeightRequest="20"
+                                       VerticalOptions="Center"
+                                       Margin="15,0,0,0" />
                                 <Entry Grid.Column="1"
-                                       Placeholder="Ej: +51987654321"
-                                       Text="{Binding Cliente.Telefono}"
-                                       Keyboard="Telephone"
-                                       BackgroundColor="Transparent" />
+                                       Placeholder="999 999 999"
+                                       Text="{Binding Cliente.NumeroCelular}"
+                                       Keyboard="Numeric"
+                                       MaxLength="9"
+                                       Margin="0,0,15,0" />
                             </Grid>
                         </Frame>
-                        <Label Text="Incluya el codigo de pais para WhatsApp (Ej: +51 para Peru)"
+                        <Label Text="9 digitos (Peru)"
                                FontSize="11"
                                TextColor="{StaticResource Gray500}"
                                Margin="5,0,0,0" />
                     </VerticalStackLayout>
 
-                    <!-- Cedula / DNI -->
+                    <!-- Imagen del Recibo -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Cedula / DNI"
+                        <Label Text="Imagen del Recibo (Luz o Agua)"
                                FontSize="14"
+                               FontAttributes="Bold"
                                TextColor="{StaticResource Gray900}" />
-                        <Frame BackgroundColor="{StaticResource Gray100}"
+                        <Frame BackgroundColor="{StaticResource White}"
                                CornerRadius="12"
-                               Padding="15,10"
+                               Padding="15"
                                HasShadow="False">
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0"
-                                       Text="🆔"
-                                       FontSize="20"
-                                       VerticalOptions="Center" />
-                                <Entry Grid.Column="1"
-                                       Placeholder="Ej: 001-1234567-8"
-                                       Text="{Binding Cliente.Cedula}"
-                                       BackgroundColor="Transparent" />
-                            </Grid>
-                        </Frame>
-                    </VerticalStackLayout>
-
-                    <!-- Direccion -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Direccion"
-                               FontSize="14"
-                               TextColor="{StaticResource Gray900}" />
-                        <Frame BackgroundColor="{StaticResource Gray100}"
-                               CornerRadius="12"
-                               Padding="15,10"
-                               HasShadow="False">
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0"
-                                       Text="📍"
-                                       FontSize="20"
-                                       VerticalOptions="Start"
-                                       Margin="0,5,0,0" />
-                                <Editor Grid.Column="1"
-                                        Placeholder="Ej: Calle Principal 123, Lima"
-                                        Text="{Binding Cliente.Direccion}"
-                                        AutoSize="TextChanges"
-                                        MinimumHeightRequest="80"
-                                        BackgroundColor="Transparent" />
-                            </Grid>
+                            <VerticalStackLayout Spacing="10">
+                                <Button BackgroundColor="{StaticResource Tertiary}"
+                                        TextColor="{StaticResource White}"
+                                        Command="{Binding SeleccionarImagenCommand}"
+                                        ImageSource="{x:Static helpers:IconPaths.Camera}"
+                                        Text=" Seleccionar Imagen" />
+                                <Image Source="{Binding RutaImagenRecibo}"
+                                       HeightRequest="150"
+                                       Aspect="AspectFit"
+                                       IsVisible="{Binding TieneImagenRecibo}" />
+                            </VerticalStackLayout>
                         </Frame>
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Alerta de Confidencialidad -->
-            <Frame BackgroundColor="{StaticResource PrimaryLight}"
+            <!-- Informacion del Aval -->
+            <Frame BackgroundColor="{StaticResource Gray100}"
                    CornerRadius="20"
-                   Padding="15"
+                   Padding="20"
                    Margin="15,0,15,15"
-                   HasShadow="True"
-                   BorderColor="{StaticResource Primary}">
-                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                    <Label Grid.Column="0"
-                           Text="🔒"
-                           FontSize="24"
-                           VerticalOptions="Start" />
-                    <VerticalStackLayout Grid.Column="1" Spacing="5">
-                        <Label Text="Confidencialidad:"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    
+                    <!-- Aval Header -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Frame Grid.Column="0"
+                               BackgroundColor="{StaticResource Primary}"
+                               CornerRadius="10"
+                               Padding="10"
+                               HasShadow="False">
+                            <Image Source="{x:Static helpers:IconPaths.Users}"
+                                   WidthRequest="24"
+                                   HeightRequest="24" />
+                        </Frame>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Informacion del Aval"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Primary}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource Gray300}" />
+
+                    <!-- Tipo de Aval -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Tipo de Aval"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="{StaticResource PrimaryDark}" />
-                        <Label Text="Los datos del cliente son confidenciales. Asegurese de guardarlos de forma segura y no compartirlos con terceros."
-                               FontSize="12"
-                               TextColor="{StaticResource PrimaryDark}"
-                               LineBreakMode="WordWrap" />
+                               TextColor="{StaticResource Gray900}" />
+                        <HorizontalStackLayout Spacing="20" Padding="10,0">
+                            <RadioButton Content="Cliente existente"
+                                       IsChecked="{Binding EsAvalClienteExistente}"
+                                       GroupName="TipoAval"
+                                       TextColor="{StaticResource Gray900}"
+                                       CheckedChanged="OnTipoAvalChanged" />
+                            <RadioButton Content="Nueva persona"
+                                       IsChecked="{Binding EsAvalNuevo}"
+                                       GroupName="TipoAval"
+                                       TextColor="{StaticResource Gray900}"
+                                       CheckedChanged="OnTipoAvalChanged" />
+                        </HorizontalStackLayout>
                     </VerticalStackLayout>
-                </Grid>
+
+                    <!-- Selector de Cliente Existente -->
+                    <VerticalStackLayout Spacing="8"
+                                       IsVisible="{Binding EsAvalClienteExistente}">
+                        <Label Text="Seleccionar Cliente como Aval"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Picker ItemsSource="{Binding ClientesDisponibles}"
+                                ItemDisplayBinding="{Binding NombreCompleto}"
+                                SelectedItem="{Binding ClienteAvalSeleccionado}"
+                                BackgroundColor="{StaticResource White}"
+                                TextColor="{StaticResource Gray900}" />
+                    </VerticalStackLayout>
+
+                    <!-- Datos del Nuevo Aval -->
+                    <VerticalStackLayout Spacing="15"
+                                       IsVisible="{Binding EsAvalNuevo}">
+                        
+                        <!-- Nombres Aval -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Nombres"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Gray900}" />
+                            <Frame BackgroundColor="{StaticResource White}"
+                                   CornerRadius="12"
+                                   Padding="0"
+                                   HasShadow="False">
+                                <Entry Placeholder="Nombres del aval"
+                                       Text="{Binding Cliente.AvalNombres}"
+                                       Margin="15,0" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Apellidos Aval -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Apellidos"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Gray900}" />
+                            <Frame BackgroundColor="{StaticResource White}"
+                                   CornerRadius="12"
+                                   Padding="0"
+                                   HasShadow="False">
+                                <Entry Placeholder="Apellidos del aval"
+                                       Text="{Binding Cliente.AvalApellidos}"
+                                       Margin="15,0" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Celular Aval -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Numero de Celular"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Gray900}" />
+                            <Frame BackgroundColor="{StaticResource White}"
+                                   CornerRadius="12"
+                                   Padding="0"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                    <Image Grid.Column="0"
+                                           Source="{x:Static helpers:IconPaths.Phone}"
+                                           WidthRequest="20"
+                                           HeightRequest="20"
+                                           VerticalOptions="Center"
+                                           Margin="15,0,0,0" />
+                                    <Entry Grid.Column="1"
+                                           Placeholder="999 999 999"
+                                           Text="{Binding Cliente.AvalCelular}"
+                                           Keyboard="Numeric"
+                                           MaxLength="9"
+                                           Margin="0,0,15,0" />
+                                </Grid>
+                            </Frame>
+                            <Label Text="9 digitos (Peru)"
+                                   FontSize="11"
+                                   TextColor="{StaticResource Gray500}"
+                                   Margin="5,0,0,0" />
+                        </VerticalStackLayout>
+
+                        <!-- Direccion Aval -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Direccion"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Gray900}" />
+                            <Frame BackgroundColor="{StaticResource White}"
+                                   CornerRadius="12"
+                                   Padding="0"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                    <Image Grid.Column="0"
+                                           Source="{x:Static helpers:IconPaths.Location}"
+                                           WidthRequest="20"
+                                           HeightRequest="20"
+                                           VerticalOptions="Start"
+                                           Margin="15,10,0,0" />
+                                    <Editor Grid.Column="1"
+                                            Placeholder="Av. Principal 123, Lima"
+                                            Text="{Binding Cliente.AvalDireccion}"
+                                            AutoSize="TextChanges"
+                                            MinimumHeightRequest="80"
+                                            Margin="0,0,15,0" />
+                                </Grid>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Observaciones (Solo Admin) -->
+            <Frame BackgroundColor="{StaticResource Gray100}"
+                   CornerRadius="20"
+                   Padding="20"
+                   Margin="15,0,15,15"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    
+                    <!-- Observaciones Header -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Frame Grid.Column="0"
+                               BackgroundColor="{StaticResource Warning}"
+                               CornerRadius="10"
+                               Padding="10"
+                               HasShadow="False">
+                            <Image Source="{x:Static helpers:IconPaths.Notes}"
+                                   WidthRequest="24"
+                                   HeightRequest="24" />
+                        </Frame>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Observaciones"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Warning}" />
+                            <Label Text="Solo visible para administradores"
+                                   FontSize="11"
+                                   TextColor="{StaticResource Gray600}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource Gray300}" />
+
+                    <!-- Comentarios del Administrador -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Comentarios del Administrador"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Frame BackgroundColor="{StaticResource White}"
+                               CornerRadius="12"
+                               Padding="15"
+                               HasShadow="False">
+                            <Editor Placeholder="Agregue notas u observaciones sobre el cliente..."
+                                    Text="{Binding Cliente.Observaciones}"
+                                    AutoSize="TextChanges"
+                                    MinimumHeightRequest="100" />
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Estado del Cliente -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Estado del Cliente"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Picker SelectedItem="{Binding Cliente.EstadoCliente}"
+                                BackgroundColor="{StaticResource White}"
+                                TextColor="{StaticResource Gray900}">
+                            <Picker.Items>
+                                <x:String>Activo</x:String>
+                                <x:String>En observacion</x:String>
+                                <x:String>Moroso</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
             </Frame>
 
             <!-- Botones -->
@@ -177,14 +420,15 @@
                         Command="{Binding CancelarCommand}" />
                 
                 <Button Grid.Column="1"
-                        Text="Guardar Cliente"
-                        BackgroundColor="{StaticResource Secondary}"
+                        BackgroundColor="{StaticResource Tertiary}"
                         TextColor="{StaticResource White}"
                         FontSize="16"
                         FontAttributes="Bold"
                         CornerRadius="15"
                         HeightRequest="50"
-                        Command="{Binding GuardarCommand}" />
+                        Command="{Binding GuardarCommand}"
+                        ImageSource="{x:Static helpers:IconPaths.Save}"
+                        Text=" Guardar Cliente" />
             </Grid>
 
         </VerticalStackLayout>

@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+ï»¿using System.Text.Json.Serialization;
 
 namespace App_CrediVnzl.Models
 {
@@ -65,7 +65,7 @@ namespace App_CrediVnzl.Models
     public class WhatsAppLanguage
     {
         [JsonPropertyName("code")]
-        public string Code { get; set; } = "es"; // español
+        public string Code { get; set; } = "es"; // espaï¿½ol
     }
 
     public class WhatsAppComponent
@@ -143,7 +143,7 @@ namespace App_CrediVnzl.Models
     }
 
     /// <summary>
-    /// Resultado del envío de mensaje
+    /// Resultado del envï¿½o de mensaje
     /// </summary>
     public class WhatsAppSendResult
     {

@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+ï»¿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -11,6 +11,7 @@ namespace App_CrediVnzl.ViewModels
     public class DetalleClienteViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseService _databaseService;
+        private readonly WhatsAppService _whatsAppService;
         private Cliente _cliente;
         private int _clienteId;
         private int _prestamosCompletados;
@@ -26,6 +27,8 @@ namespace App_CrediVnzl.ViewModels
             {
                 _cliente = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(TieneAccesoApp));
+                OnPropertyChanged(nameof(TextoEstadoAcceso));
             }
         }
 
@@ -69,16 +72,24 @@ namespace App_CrediVnzl.ViewModels
             }
         }
 
+        public bool TieneAccesoApp => Cliente?.TieneAccesoApp ?? false;
+
+        public string TextoEstadoAcceso => TieneAccesoApp ? "Acceso habilitado" : "Sin acceso a la app";
+
         public ICommand NuevoPrestamoCommand { get; }
         public ICommand RegistrarPagoCommand { get; }
         public ICommand VerHistorialCommand { get; }
         public ICommand ToggleExpandirPrestamoCommand { get; }
         public ICommand ModificarClienteCommand { get; }
         public ICommand EliminarClienteCommand { get; }
+        public ICommand GenerarPasswordCommand { get; }
+        public ICommand RestablecerPasswordCommand { get; }
+        public ICommand DeshabilitarAccesoCommand { get; }
 
-        public DetalleClienteViewModel(DatabaseService databaseService)
+        public DetalleClienteViewModel(DatabaseService databaseService, WhatsAppService whatsAppService)
         {
             _databaseService = databaseService;
+            _whatsAppService = whatsAppService;
             _cliente = new Cliente();
             
             NuevoPrestamoCommand = new Command(async () => await NuevoPrestamo());
@@ -87,6 +98,9 @@ namespace App_CrediVnzl.ViewModels
             ToggleExpandirPrestamoCommand = new Command<Prestamo>(ToggleExpandirPrestamo);
             ModificarClienteCommand = new Command(async () => await ModificarCliente());
             EliminarClienteCommand = new Command(async () => await EliminarCliente());
+            GenerarPasswordCommand = new Command(async () => await GenerarPasswordAsync());
+            RestablecerPasswordCommand = new Command(async () => await RestablecerPasswordAsync());
+            DeshabilitarAccesoCommand = new Command(async () => await DeshabilitarAccesoAsync());
         }
 
         public async Task LoadDataAsync()
@@ -120,6 +134,165 @@ namespace App_CrediVnzl.ViewModels
             }
         }
 
+        private async Task GenerarPasswordAsync()
+        {
+            try
+            {
+                if (Cliente.TieneAccesoApp)
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Advertencia",
+                        "Este cliente ya tiene acceso a la aplicaciï¿½n. Use 'Restablecer Contraseï¿½a' para generar una nueva.",
+                        "OK");
+                    return;
+                }
+
+                var confirmar = await Shell.Current.DisplayAlert(
+                    "Generar Contraseï¿½a",
+                    $"ï¿½Desea generar una contraseï¿½a temporal para {Cliente.NombreCompleto}?\n\nSe enviarï¿½ automï¿½ticamente por WhatsApp.",
+                    "Sï¿½",
+                    "Cancelar");
+
+                if (!confirmar)
+                    return;
+
+                // Generar contraseï¿½a
+                var password = await _databaseService.GenerarPasswordTemporalAsync(ClienteId);
+
+                // Recargar cliente
+                Cliente = await _databaseService.GetClienteAsync(ClienteId);
+
+                // Formatear nï¿½mero de celular para Perï¿½ (+51)
+                var numeroCompleto = $"51{Cliente.NumeroCelular}";
+
+                // Crear mensaje de WhatsApp
+                var mensaje = $"Hola {Cliente.Nombres},\n\n" +
+                             $"Tu contraseï¿½a temporal para acceder a CrediVnzl es: *{password}*\n\n" +
+                             $"Por seguridad, te recomendamos cambiarla al iniciar sesiï¿½n.\n\n" +
+                             $"Puedes ingresar con tu DNI: {Cliente.NumeroDocumento}\n\n" +
+                             $"ï¿½Bienvenido!";
+
+                // Enviar mensaje por WhatsApp
+                var enviado = await _whatsAppService.EnviarMensajeAsync(numeroCompleto, mensaje);
+
+                if (enviado)
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Contraseï¿½a Generada",
+                        $"Contraseï¿½a temporal: {password}\n\nSe ha abierto WhatsApp para enviar la contraseï¿½a al cliente.",
+                        "OK");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Contraseï¿½a Generada",
+                        $"Contraseï¿½a temporal: {password}\n\nNo se pudo abrir WhatsApp. Por favor, envï¿½a esta contraseï¿½a manualmente al cliente.",
+                        "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Error al generar contraseï¿½a: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task RestablecerPasswordAsync()
+        {
+            try
+            {
+                if (!Cliente.TieneAccesoApp)
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Advertencia",
+                        "Este cliente no tiene acceso a la aplicaciï¿½n. Use 'Generar Contraseï¿½a' primero.",
+                        "OK");
+                    return;
+                }
+
+                var confirmar = await Shell.Current.DisplayAlert(
+                    "Restablecer Contraseï¿½a",
+                    $"ï¿½Desea restablecer la contraseï¿½a de {Cliente.NombreCompleto}?\n\nSe generarï¿½ una nueva contraseï¿½a temporal y se enviarï¿½ por WhatsApp.",
+                    "Sï¿½",
+                    "Cancelar");
+
+                if (!confirmar)
+                    return;
+
+                // Restablecer contraseï¿½a
+                await _databaseService.RestablecerPasswordClienteAsync(ClienteId);
+
+                // Recargar cliente para obtener la nueva contraseï¿½a
+                Cliente = await _databaseService.GetClienteAsync(ClienteId);
+
+                // Formatear nï¿½mero de celular para Perï¿½ (+51)
+                var numeroCompleto = $"51{Cliente.NumeroCelular}";
+
+                // Crear mensaje de WhatsApp
+                var mensaje = $"Hola {Cliente.Nombres},\n\n" +
+                             $"Tu nueva contraseï¿½a temporal para CrediVnzl es: *{Cliente.PasswordTemporal}*\n\n" +
+                             $"Por seguridad, te recomendamos cambiarla al iniciar sesiï¿½n.\n\n" +
+                             $"Puedes ingresar con tu DNI: {Cliente.NumeroDocumento}";
+
+                // Enviar mensaje por WhatsApp
+                var enviado = await _whatsAppService.EnviarMensajeAsync(numeroCompleto, mensaje);
+
+                if (enviado)
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Contraseï¿½a Restablecida",
+                        $"Nueva contraseï¿½a temporal: {Cliente.PasswordTemporal}\n\nSe ha abierto WhatsApp para enviar la contraseï¿½a al cliente.",
+                        "OK");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Contraseï¿½a Restablecida",
+                        $"Nueva contraseï¿½a temporal: {Cliente.PasswordTemporal}\n\nNo se pudo abrir WhatsApp. Por favor, envï¿½a esta contraseï¿½a manualmente al cliente.",
+                        "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Error al restablecer contraseï¿½a: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task DeshabilitarAccesoAsync()
+        {
+            try
+            {
+                if (!Cliente.TieneAccesoApp)
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Informaciï¿½n",
+                        "Este cliente no tiene acceso a la aplicaciï¿½n.",
+                        "OK");
+                    return;
+                }
+
+                var confirmar = await Shell.Current.DisplayAlert(
+                    "Deshabilitar Acceso",
+                    $"ï¿½Desea deshabilitar el acceso de {Cliente.NombreCompleto} a la aplicaciï¿½n?\n\nEl cliente no podrï¿½ iniciar sesiï¿½n hasta que se le genere una nueva contraseï¿½a.",
+                    "Sï¿½",
+                    "Cancelar");
+
+                if (!confirmar)
+                    return;
+
+                await _databaseService.DeshabilitarAccesoClienteAsync(ClienteId);
+                Cliente = await _databaseService.GetClienteAsync(ClienteId);
+
+                await Shell.Current.DisplayAlert(
+                    "ï¿½xito",
+                    "Acceso deshabilitado correctamente.",
+                    "OK");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Error al deshabilitar acceso: {ex.Message}", "OK");
+            }
+        }
+
         private async Task NuevoPrestamo()
         {
             await Shell.Current.GoToAsync($"nuevoprestamo?clienteId={ClienteId}");
@@ -147,7 +320,7 @@ namespace App_CrediVnzl.ViewModels
         {
             try
             {
-                // Verificar si tiene préstamos activos
+                // Verificar si tiene prï¿½stamos activos
                 var prestamos = await _databaseService.GetPrestamosByClienteAsync(ClienteId);
                 var prestamosActivos = prestamos.Where(p => p.Estado == "Activo").ToList();
 
@@ -155,8 +328,8 @@ namespace App_CrediVnzl.ViewModels
                 {
                     var confirmar = await Shell.Current.DisplayAlert(
                         "Advertencia", 
-                        $"Este cliente tiene {prestamosActivos.Count} préstamo(s) activo(s) con una deuda total de S/{prestamosActivos.Sum(p => p.TotalAdeudado):N2}.\n\n¿Está seguro de eliminar al cliente y todos sus préstamos, pagos e historial?", 
-                        "Sí, eliminar", 
+                        $"Este cliente tiene {prestamosActivos.Count} prï¿½stamo(s) activo(s) con una deuda total de S/{prestamosActivos.Sum(p => p.TotalAdeudado):N2}.\n\nï¿½Estï¿½ seguro de eliminar al cliente y todos sus prï¿½stamos, pagos e historial?", 
+                        "Sï¿½, eliminar", 
                         "Cancelar");
 
                     if (!confirmar)
@@ -165,9 +338,9 @@ namespace App_CrediVnzl.ViewModels
                 else
                 {
                     var confirmar = await Shell.Current.DisplayAlert(
-                        "Confirmar eliminación", 
-                        "¿Está seguro de eliminar este cliente? Esta acción no se puede deshacer.", 
-                        "Sí, eliminar", 
+                        "Confirmar eliminaciï¿½n", 
+                        "ï¿½Estï¿½ seguro de eliminar este cliente? Esta acciï¿½n no se puede deshacer.", 
+                        "Sï¿½, eliminar", 
                         "Cancelar");
 
                     if (!confirmar)
@@ -177,9 +350,9 @@ namespace App_CrediVnzl.ViewModels
                 // Eliminar todos los datos relacionados en cascada
                 await _databaseService.EliminarClienteConDatosRelacionadosAsync(ClienteId);
 
-                await Shell.Current.DisplayAlert("Éxito", "Cliente eliminado correctamente", "OK");
+                await Shell.Current.DisplayAlert("ï¿½xito", "Cliente eliminado correctamente", "OK");
                 
-                // Regresar a la página de clientes
+                // Regresar a la pï¿½gina de clientes
                 await Shell.Current.GoToAsync("..");
             }
             catch (Exception ex)
@@ -194,7 +367,7 @@ namespace App_CrediVnzl.ViewModels
             {
                 prestamo.Expandido = !prestamo.Expandido;
                 
-                // Refrescar la colección para actualizar la UI
+                // Refrescar la colecciï¿½n para actualizar la UI
                 var index = PrestamosActivos.IndexOf(prestamo);
                 if (index >= 0)
                 {

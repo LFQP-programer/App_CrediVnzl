@@ -1,4 +1,4 @@
-using System.ComponentModel;
+ï»¿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using App_CrediVnzl.Services;
@@ -42,7 +42,7 @@ namespace App_CrediVnzl.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"No se pudo cargar la información: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"No se pudo cargar la informacion: {ex.Message}", "OK");
             }
         }
 
@@ -51,25 +51,25 @@ namespace App_CrediVnzl.ViewModels
             try
             {
                 var confirmar = await Shell.Current.DisplayAlert(
-                    "?? Confirmar Limpieza de Datos",
-                    $"Esta acción eliminará:\n\n" +
-                    $"• {DatabaseInfo.TotalClientes} Cliente(s)\n" +
-                    $"• {DatabaseInfo.TotalPrestamos} Préstamo(s)\n" +
-                    $"• {DatabaseInfo.TotalPagos} Pago(s) Programado(s)\n" +
-                    $"• {DatabaseInfo.TotalHistorialPagos} Registro(s) de Historial\n\n" +
-                    $"Esta acción NO se puede deshacer.\n\n" +
-                    $"¿Desea continuar?",
-                    "Sí, Limpiar Todo",
+                    "Confirmar Limpieza de Datos",
+                    $"Esta accion eliminara:\n\n" +
+                    $"- {DatabaseInfo.TotalClientes} Cliente(s)\n" +
+                    $"- {DatabaseInfo.TotalPrestamos} Prestamo(s)\n" +
+                    $"- {DatabaseInfo.TotalPagos} Pago(s) Programado(s)\n" +
+                    $"- {DatabaseInfo.TotalHistorialPagos} Registro(s) de Historial\n\n" +
+                    $"Esta accion NO se puede deshacer.\n\n" +
+                    $"Desea continuar?",
+                    "Si, Limpiar Todo",
                     "Cancelar");
 
                 if (!confirmar)
                     return;
 
-                // Segunda confirmación
+                // Segunda confirmacion
                 var confirmarFinal = await Shell.Current.DisplayAlert(
-                    "?? Última Confirmación",
-                    "¿Está COMPLETAMENTE SEGURO de eliminar todos los datos?\n\nEsta es su última oportunidad para cancelar.",
-                    "SÍ, ELIMINAR TODO",
+                    "Ultima Confirmacion",
+                    "Esta COMPLETAMENTE SEGURO de eliminar todos los datos?\n\nEsta es su ultima oportunidad para cancelar.",
+                    "Si, ELIMINAR TODO",
                     "Cancelar");
 
                 if (!confirmarFinal)
@@ -81,12 +81,12 @@ namespace App_CrediVnzl.ViewModels
                 // Limpiar datos
                 await _databaseService.ReiniciarBaseDeDatosAsync();
 
-                // Actualizar información
+                // Actualizar informacion
                 await CargarInformacionAsync();
 
                 await Shell.Current.DisplayAlert(
-                    "? Éxito",
-                    "Todos los datos han sido eliminados correctamente.\n\nLa base de datos está ahora vacía y lista para usar.",
+                    "Exito",
+                    "Todos los datos han sido eliminados correctamente.\n\nLa base de datos esta ahora vacia y lista para usar.",
                     "OK");
             }
             catch (Exception ex)
@@ -100,31 +100,31 @@ namespace App_CrediVnzl.ViewModels
             try
             {
                 var confirmar = await Shell.Current.DisplayAlert(
-                    "?? Confirmar Reinicio de Base de Datos",
-                    $"Esta acción:\n\n" +
-                    $"• Eliminará el archivo de base de datos completo\n" +
-                    $"• Borrará todos los datos:\n" +
+                    "Confirmar Reinicio de Base de Datos",
+                    $"Esta accion:\n\n" +
+                    $"- Eliminara el archivo de base de datos completo\n" +
+                    $"- Borrara todos los datos:\n" +
                     $"  - {DatabaseInfo.TotalClientes} Cliente(s)\n" +
-                    $"  - {DatabaseInfo.TotalPrestamos} Préstamo(s)\n" +
+                    $"  - {DatabaseInfo.TotalPrestamos} Prestamo(s)\n" +
                     $"  - {DatabaseInfo.TotalPagos} Pago(s)\n" +
                     $"  - {DatabaseInfo.TotalHistorialPagos} Historial(es)\n" +
-                    $"• Creará una base de datos nueva y vacía\n\n" +
-                    $"Esta acción NO se puede deshacer.\n\n" +
-                    $"¿Desea continuar?",
-                    "Sí, Reiniciar",
+                    $"- Creara una base de datos nueva y vacia\n\n" +
+                    $"Esta accion NO se puede deshacer.\n\n" +
+                    $"Desea continuar?",
+                    "Si, Reiniciar",
                     "Cancelar");
 
                 if (!confirmar)
                     return;
 
-                // Segunda confirmación
+                // Segunda confirmacion
                 var confirmarFinal = await Shell.Current.DisplayAlert(
-                    "?? ADVERTENCIA FINAL",
-                    "Está a punto de ELIMINAR PERMANENTEMENTE el archivo de base de datos.\n\n" +
-                    $"Se perderá toda la información ({DatabaseInfo.TamañoArchivoFormateado}).\n\n" +
-                    "Esta es su ÚLTIMA oportunidad para cancelar.\n\n" +
-                    "¿Está ABSOLUTAMENTE SEGURO?",
-                    "SÍ, ELIMINAR TODO",
+                    "ADVERTENCIA FINAL",
+                    "Esta a punto de ELIMINAR PERMANENTEMENTE el archivo de base de datos.\n\n" +
+                    $"Se perdera toda la informacion ({DatabaseInfo.TamaÃ±oArchivoFormateado}).\n\n" +
+                    "Esta es su ULTIMA oportunidad para cancelar.\n\n" +
+                    "Esta ABSOLUTAMENTE SEGURO?",
+                    "Si, ELIMINAR TODO",
                     "NO, Cancelar");
 
                 if (!confirmarFinal)
@@ -136,13 +136,13 @@ namespace App_CrediVnzl.ViewModels
                 // Reiniciar base de datos
                 await _databaseService.EliminarBaseDeDatosCompletaAsync();
 
-                // Actualizar información
+                // Actualizar informacion
                 await CargarInformacionAsync();
 
                 await Shell.Current.DisplayAlert(
-                    "? Base de Datos Reiniciada",
+                    "Base de Datos Reiniciada",
                     "La base de datos ha sido eliminada y recreada exitosamente.\n\n" +
-                    "La aplicación está ahora completamente limpia y lista para usar con datos nuevos.",
+                    "La aplicacion esta ahora completamente limpia y lista para usar con datos nuevos.",
                     "OK");
             }
             catch (Exception ex)

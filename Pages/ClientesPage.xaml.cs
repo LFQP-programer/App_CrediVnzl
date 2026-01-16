@@ -1,4 +1,4 @@
-using App_CrediVnzl.ViewModels;
+ï»¿using App_CrediVnzl.ViewModels;
 using App_CrediVnzl.Services;
 
 namespace App_CrediVnzl.Pages
@@ -43,7 +43,7 @@ namespace App_CrediVnzl.Pages
                 System.Diagnostics.Debug.WriteLine("*** ClientesPage OnAppearing - Clientes cargados ***");
                 
                 UpdateClientesCount();
-                System.Diagnostics.Debug.WriteLine("*** ClientesPage OnAppearing - Título actualizado ***");
+                System.Diagnostics.Debug.WriteLine("*** ClientesPage OnAppearing - Tï¿½tulo actualizado ***");
                 System.Diagnostics.Debug.WriteLine("*** ClientesPage OnAppearing - Completo ***");
             }
             catch (Exception ex)
@@ -61,7 +61,7 @@ namespace App_CrediVnzl.Pages
             try
             {
                 Title = $"Clientes ({_viewModel.Clientes.Count})";
-                System.Diagnostics.Debug.WriteLine($"*** ClientesPage - Título actualizado: {Title} ***");
+                System.Diagnostics.Debug.WriteLine($"*** ClientesPage - Tï¿½tulo actualizado: {Title} ***");
             }
             catch (Exception ex)
             {

@@ -1,7 +1,7 @@
-namespace App_CrediVnzl.Models
+ï»¿namespace App_CrediVnzl.Models
 {
     /// <summary>
-    /// Configuración para WhatsApp Business API (Meta Cloud API)
+    /// Configuraciï¿½n para WhatsApp Business API (Meta Cloud API)
     /// </summary>
     public class WhatsAppConfig
     {
@@ -12,7 +12,7 @@ namespace App_CrediVnzl.Models
         public string BusinessAccountId { get; set; } = string.Empty;
 
         /// <summary>
-        /// ID del número de teléfono de WhatsApp
+        /// ID del nï¿½mero de telï¿½fono de WhatsApp
         /// Obtener en: Panel de Cloud API ? Phone Numbers
         /// </summary>
         public string PhoneNumberId { get; set; } = string.Empty;
@@ -22,12 +22,12 @@ namespace App_CrediVnzl.Models
         /// Generar en: Panel de Cloud API ? Access Token
         /// Tipos:
         /// - Temporal (24h): Para pruebas
-        /// - Permanente: Para producción (recomendado)
+        /// - Permanente: Para producciï¿½n (recomendado)
         /// </summary>
         public string AccessToken { get; set; } = string.Empty;
 
         /// <summary>
-        /// Versión de la API de WhatsApp
+        /// Versiï¿½n de la API de WhatsApp
         /// Actual: v18.0 (enero 2024)
         /// Ver: https://developers.facebook.com/docs/graph-api/changelog
         /// </summary>
@@ -45,7 +45,7 @@ namespace App_CrediVnzl.Models
         public string? WebhookVerifyToken { get; set; }
 
         /// <summary>
-        /// Validar si la configuración está completa
+        /// Validar si la configuraciï¿½n estï¿½ completa
         /// </summary>
         public bool IsValid()
         {

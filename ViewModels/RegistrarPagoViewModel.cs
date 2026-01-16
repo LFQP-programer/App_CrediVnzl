@@ -1,4 +1,4 @@
-using System.ComponentModel;
+ï»¿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using App_CrediVnzl.Models;
@@ -157,7 +157,7 @@ namespace App_CrediVnzl.ViewModels
                         "Monto Excedente",
                         $"El monto ingresado (S/{monto:N2}) excede el total adeudado (S/{Prestamo.TotalAdeudado:N2}).\n\n" +
                         $"Excedente: S/{excedente:N2}\n\n" +
-                        $"¿Desea registrar el pago por el total adeudado?",
+                        $"ï¿½Desea registrar el pago por el total adeudado?",
                         "Si",
                         "No");
                     
@@ -262,7 +262,7 @@ namespace App_CrediVnzl.ViewModels
                     mensaje += $"\nInteres acumulado: S/{Prestamo.InteresAcumulado:N2}";
                 
                 if (Prestamo.Estado == "Completado")
-                    mensaje += "\n\n¡Prestamo completado!";
+                    mensaje += "\n\nï¿½Prestamo completado!";
 
                 await Shell.Current.DisplayAlert("Exito", mensaje, "OK");
                 await Shell.Current.GoToAsync("..");
@@ -294,7 +294,7 @@ namespace App_CrediVnzl.ViewModels
         {
             bool confirmar = await Shell.Current.DisplayAlert(
                 "Cancelar", 
-                "¿Esta seguro que desea cancelar?", 
+                "ï¿½Esta seguro que desea cancelar?", 
                 "Si", 
                 "No");
 

@@ -1,0 +1,654 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:App_CrediVnzl.Helpers"
+             x:Class="App_CrediVnzl.Pages.ClienteDashboardPage"
+             Title="CrediVnzl"
+             BackgroundColor="#F5F5F5"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="0" Spacing="0">
+            
+            <!-- Header Azul -->
+            <Grid BackgroundColor="#1565C0"
+                  Padding="16,40,16,24"
+                  RowDefinitions="Auto,Auto"
+                  RowSpacing="16">
+                
+                <!-- Fila 1: Logo, Titulo y Boton Cerrar Sesion -->
+                <Grid Grid.Row="0" 
+                      ColumnDefinitions="55,*,50"
+                      ColumnSpacing="12">
+                    
+                    <!-- Logo -->
+                    <Border Grid.Column="0"
+                            BackgroundColor="White"
+                            StrokeThickness="0"
+                            Padding="8"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Image Source="logo_credivzla.png"
+                               WidthRequest="34"
+                               HeightRequest="34"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               Aspect="AspectFit" />
+                    </Border>
+                    
+                    <!-- Titulo -->
+                    <VerticalStackLayout Grid.Column="1" 
+                                       Spacing="2" 
+                                       VerticalOptions="Center">
+                        <Label Text="CrediVnzl"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               LineBreakMode="NoWrap" />
+                        <Label Text="Panel del Cliente"
+                               FontSize="13"
+                               TextColor="White"
+                               Opacity="0.85" />
+                    </VerticalStackLayout>
+                    
+                    <!-- Boton Cerrar Sesion -->
+                    <Border Grid.Column="2"
+                            BackgroundColor="#0D47A1"
+                            StrokeThickness="0"
+                            WidthRequest="48"
+                            HeightRequest="48"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCerrarSesionTapped" />
+                        </Border.GestureRecognizers>
+                        <Image Source="{x:Static helpers:IconPaths.Exit}"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Border>
+                </Grid>
+                
+                <!-- Fila 2: Info del Cliente -->
+                <Border Grid.Row="1"
+                        BackgroundColor="#0D47A1"
+                        StrokeThickness="0"
+                        Padding="20,18"
+                        Margin="0,4,0,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Bienvenido"
+                               FontSize="14"
+                               TextColor="White"
+                               Opacity="0.9" />
+                        <Label Text="{Binding NombreCliente}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               LineBreakMode="WordWrap"
+                               MaxLines="2" />
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="DNI:"
+                                   FontSize="15"
+                                   TextColor="White"
+                                   FontAttributes="Bold"
+                                   Opacity="0.9" />
+                            <Label Text="{Binding DniCliente}"
+                                   FontSize="15"
+                                   TextColor="White"
+                                   Opacity="0.9" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+                
+            </Grid>
+
+            <!-- Contenido cuando tiene prestamo -->
+            <VerticalStackLayout Padding="16,20" Spacing="16" IsVisible="{Binding TienePrestamo}">
+                
+                <!-- Proximo Pago -->
+                <Border BackgroundColor="#FF9800"
+                        StrokeThickness="0"
+                        Padding="24,20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.15" Radius="8" Offset="0,4"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="12">
+                            <Border BackgroundColor="White"
+                                    StrokeThickness="0"
+                                    Padding="10"
+                                    WidthRequest="44"
+                                    HeightRequest="44">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10"/>
+                                </Border.StrokeShape>
+                                <Image Source="{x:Static helpers:IconPaths.Clock}"
+                                       WidthRequest="24"
+                                       HeightRequest="24"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Próximo Pago"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        
+                        <Label Text="{Binding ProximoPagoMonto, StringFormat='S/ {0:N0}'}"
+                               FontSize="40"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               Margin="0,8,0,0" />
+                        
+                        <Label Text="{Binding ProximoPagoFecha, StringFormat='Fecha: {0:dd/MM/yyyy}'}"
+                               FontSize="15"
+                               TextColor="White"
+                               Opacity="0.95" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Progreso del Prestamo -->
+                <Border BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="20,22">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.1" Radius="8" Offset="0,4"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="16">
+                        
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Progreso del Préstamo"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="#212121" />
+                            
+                            <Border Grid.Column="1"
+                                    BackgroundColor="{Binding EstadoColor}"
+                                    StrokeThickness="0"
+                                    Padding="12,6">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10"/>
+                                </Border.StrokeShape>
+                                <Label Text="{Binding EstadoTexto}"
+                                       TextColor="White"
+                                       FontSize="13"
+                                       FontAttributes="Bold" />
+                            </Border>
+                        </Grid>
+
+                        <Label Text="{Binding PorcentajePagado, StringFormat='{0}%'}"
+                               FontSize="52"
+                               FontAttributes="Bold"
+                               TextColor="#0D47A1" />
+                        
+                        <ProgressBar Progress="{Binding PorcentajePagado, Converter={StaticResource PercentageConverter}}"
+                                     ProgressColor="#1565C0"
+                                     HeightRequest="14"
+                                     Margin="0,4,0,8" />
+                        
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Label Grid.Column="0"
+                                   Text="{Binding PagadoTotal, StringFormat='Pagado: S/ {0:N0}'}"
+                                   FontSize="14"
+                                   TextColor="#757575" />
+                            
+                            <Label Grid.Column="1"
+                                   Text="{Binding PorPagarTotal, StringFormat='Pendiente: S/ {0:N0}'}"
+                                   FontSize="14"
+                                   TextColor="#757575"
+                                   HorizontalOptions="End" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Grid de Detalles -->
+                <Grid ColumnDefinitions="*,*" 
+                      RowDefinitions="Auto,Auto" 
+                      ColumnSpacing="14" 
+                      RowSpacing="14">
+                    
+                    <!-- Prestado -->
+                    <Border Grid.Row="0" Grid.Column="0"
+                            BackgroundColor="#1976D2"
+                            StrokeThickness="0"
+                            Padding="16,18">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18"/>
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.15" Radius="6" Offset="0,3"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout Spacing="8">
+                                <Image Source="{x:Static helpers:IconPaths.Money}"
+                                       WidthRequest="22"
+                                       HeightRequest="22" />
+                                <Label Text="Prestado"
+                                       FontSize="13"
+                                       TextColor="White"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding PrestadoTotal, StringFormat='S/ {0:N0}'}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   LineBreakMode="NoWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+                    
+                    <!-- Interes -->
+                    <Border Grid.Row="0" Grid.Column="1"
+                            BackgroundColor="#9C27B0"
+                            StrokeThickness="0"
+                            Padding="16,18">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18"/>
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.15" Radius="6" Offset="0,3"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout Spacing="8">
+                                <Image Source="{x:Static helpers:IconPaths.Chart}"
+                                       WidthRequest="22"
+                                       HeightRequest="22" />
+                                <Label Text="Interés"
+                                       FontSize="13"
+                                       TextColor="White"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding InteresTotal, StringFormat='{0:N0}%'}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   LineBreakMode="NoWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+                    
+                    <!-- Pagado -->
+                    <Border Grid.Row="1" Grid.Column="0"
+                            BackgroundColor="#4CAF50"
+                            StrokeThickness="0"
+                            Padding="16,18">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18"/>
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.15" Radius="6" Offset="0,3"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout Spacing="8">
+                                <Image Source="{x:Static helpers:IconPaths.Check}"
+                                       WidthRequest="22"
+                                       HeightRequest="22" />
+                                <Label Text="Pagado"
+                                       FontSize="13"
+                                       TextColor="White"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding PagadoTotal, StringFormat='S/ {0:N0}'}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   LineBreakMode="NoWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+                    
+                    <!-- Por Pagar -->
+                    <Border Grid.Row="1" Grid.Column="1"
+                            BackgroundColor="#FF9800"
+                            StrokeThickness="0"
+                            Padding="16,18">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18"/>
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.15" Radius="6" Offset="0,3"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout Spacing="8">
+                                <Image Source="{x:Static helpers:IconPaths.Time}"
+                                       WidthRequest="22"
+                                       HeightRequest="22" />
+                                <Label Text="Por Pagar"
+                                       FontSize="13"
+                                       TextColor="White"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding PorPagarTotal, StringFormat='S/ {0:N0}'}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   LineBreakMode="NoWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Total a Pagar -->
+                <Border BackgroundColor="#0D47A1"
+                        StrokeThickness="0"
+                        Padding="24,20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.15" Radius="8" Offset="0,4"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Total a Pagar"
+                               FontSize="16"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               Opacity="0.9" />
+                        
+                        <Label Text="{Binding PorPagarTotal, StringFormat='S/ {0:N0}'}"
+                               FontSize="46"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               Margin="0,4,0,8" />
+                        
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Margin="0,8,0,0">
+                            <Border Grid.Column="0"
+                                    BackgroundColor="White"
+                                    StrokeThickness="0"
+                                    Padding="8"
+                                    WidthRequest="36"
+                                    HeightRequest="36">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8"/>
+                                </Border.StrokeShape>
+                                <Image Source="{x:Static helpers:IconPaths.Calendar}"
+                                       WidthRequest="20"
+                                       HeightRequest="20"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+                            
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                <Label Text="{Binding FechaInicio, StringFormat='Inicio: {0:dd/MM/yyyy}'}"
+                                       FontSize="13"
+                                       TextColor="White"
+                                       Opacity="0.85" />
+                                <Label Text="{Binding FechaVencimiento, StringFormat='Vence: {0:dd/MM/yyyy}'}"
+                                       FontSize="13"
+                                       TextColor="White"
+                                       Opacity="0.85" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Pagar con Yape -->
+                <Border BackgroundColor="#C026D3"
+                        StrokeThickness="0"
+                        Padding="24,22">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.15" Radius="8" Offset="0,4"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="14">
+                        <HorizontalStackLayout Spacing="12">
+                            <Border BackgroundColor="White"
+                                    StrokeThickness="0"
+                                    Padding="10"
+                                    WidthRequest="50"
+                                    HeightRequest="50">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12"/>
+                                </Border.StrokeShape>
+                                <Image Source="{x:Static helpers:IconPaths.Yape}"
+                                       WidthRequest="30"
+                                       HeightRequest="30"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+                            
+                            <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                                <Label Text="Pagar con Yape"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                                <Label Text="Realiza tus pagos de forma rápida y segura"
+                                       FontSize="13"
+                                       TextColor="White"
+                                       Opacity="0.9"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                        
+                        <VerticalStackLayout Spacing="10" Margin="0,8,0,0">
+                            <Label Text="Número de Yape"
+                                   FontSize="13"
+                                   TextColor="White"
+                                   Opacity="0.85" />
+                            <Border BackgroundColor="#A21CAF"
+                                    StrokeThickness="0"
+                                    Padding="16,12">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12"/>
+                                </Border.StrokeShape>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                                    <Label Text="{Binding NumeroYape}"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           VerticalOptions="Center" />
+                                    <Border BackgroundColor="White"
+                                            StrokeThickness="0"
+                                            Padding="10,8"
+                                            WidthRequest="50"
+                                            HeightRequest="38">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="8"/>
+                                        </Border.StrokeShape>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding CopiarNumeroYapeCommand}" />
+                                        </Border.GestureRecognizers>
+                                        <Image Source="{x:Static helpers:IconPaths.Copy}"
+                                               WidthRequest="18"
+                                               HeightRequest="18"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                        
+                        <VerticalStackLayout Spacing="10" Margin="0,8,0,0">
+                            <Label Text="Nombre"
+                                   FontSize="13"
+                                   TextColor="White"
+                                   Opacity="0.85" />
+                            <Border BackgroundColor="#A21CAF"
+                                    StrokeThickness="0"
+                                    Padding="16,12">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12"/>
+                                </Border.StrokeShape>
+                                <Label Text="{Binding NombreYape}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Historial de Pagos -->
+                <Border BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="20,22">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.1" Radius="8" Offset="0,4"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Historial de Pagos"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#212121" />
+                            
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#E3F2FD"
+                                    StrokeThickness="0"
+                                    Padding="10,6">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10"/>
+                                </Border.StrokeShape>
+                                <Label Text="{Binding HistorialPagos.Count, StringFormat='{0} pagos'}"
+                                       TextColor="#1565C0"
+                                       FontSize="13"
+                                       FontAttributes="Bold" />
+                            </Border>
+                        </Grid>
+                        
+                        <CollectionView ItemsSource="{Binding HistorialPagos}"
+                                       SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BackgroundColor="#F5F5F5"
+                                            StrokeThickness="0"
+                                            Padding="16,14"
+                                            Margin="0,0,0,10">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="14"/>
+                                        </Border.StrokeShape>
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                                            <Border Grid.Column="0"
+                                                    BackgroundColor="#4CAF50"
+                                                    StrokeThickness="0"
+                                                    Padding="12"
+                                                    WidthRequest="44"
+                                                    HeightRequest="44"
+                                                    VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="22"/>
+                                                </Border.StrokeShape>
+                                                <Image Source="{x:Static helpers:IconPaths.Money}"
+                                                       WidthRequest="20"
+                                                       HeightRequest="20"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center" />
+                                            </Border>
+                                            
+                                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                                <Label Text="{Binding MontoTotal, StringFormat='S/ {0:N0}'}"
+                                                       FontSize="17"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#212121" />
+                                                <Label Text="{Binding FechaPago, StringFormat='{0:yyyy-MM-dd}'}"
+                                                       FontSize="13"
+                                                       TextColor="#757575" />
+                                            </VerticalStackLayout>
+                                            
+                                            <Border Grid.Column="2"
+                                                    BackgroundColor="#E1BEE7"
+                                                    StrokeThickness="0"
+                                                    Padding="10,8"
+                                                    VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10"/>
+                                                </Border.StrokeShape>
+                                                <HorizontalStackLayout Spacing="5">
+                                                    <Image Source="{x:Static helpers:IconPaths.Yape}"
+                                                           WidthRequest="16"
+                                                           HeightRequest="16"
+                                                           VerticalOptions="Center" />
+                                                    <Label Text="Yape"
+                                                           FontSize="13"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#7B1FA2"
+                                                           VerticalOptions="Center" />
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <BoxView HeightRequest="20" Color="Transparent" />
+
+            </VerticalStackLayout>
+
+            <!-- Sin prestamo activo -->
+            <VerticalStackLayout Padding="16,30,16,20" 
+                               Spacing="0" 
+                               IsVisible="{Binding TienePrestamo, Converter={StaticResource InverseBoolConverter}}">
+                
+                <Border BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="30,40">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.1" Radius="8" Offset="0,4"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="22" HorizontalOptions="Center">
+                        <Image Source="{x:Static helpers:IconPaths.Document}"
+                               WidthRequest="70"
+                               HeightRequest="70"
+                               HorizontalOptions="Center"
+                               Margin="0,0,0,10" />
+                        <Label Text="No tienes préstamos activos"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#212121"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Contacta con tu asesor para solicitar un préstamo"
+                               FontSize="15"
+                               TextColor="#757575"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,0,0,10" />
+                        
+                        <Button Text="Contactar Asesor"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                BackgroundColor="#25D366"
+                                TextColor="White"
+                                CornerRadius="16"
+                                HeightRequest="54"
+                                Command="{Binding ContactarWhatsAppCommand}"
+                                Margin="0,10,0,0" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

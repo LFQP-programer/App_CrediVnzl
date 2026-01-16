@@ -1,159 +1,115 @@
-using App_CrediVnzl.Services;
+ï»¿using App_CrediVnzl.Services;
 using App_CrediVnzl.ViewModels;
 
 namespace App_CrediVnzl.Pages
 {
     public partial class DashboardPage : ContentPage
     {
-        private readonly DatabaseService _databaseService;
         private DashboardViewModel? _viewModel;
+        private readonly DatabaseService _databaseService;
 
         public DashboardPage(DatabaseService databaseService)
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("*** DashboardPage Constructor - Iniciando ***");
-                InitializeComponent();
-                System.Diagnostics.Debug.WriteLine("*** DashboardPage Constructor - InitializeComponent OK ***");
+                System.Diagnostics.Debug.WriteLine("*** DashboardPage - Constructor iniciado ***");
+                
                 _databaseService = databaseService;
-                System.Diagnostics.Debug.WriteLine("*** DashboardPage Constructor - Completo ***");
+                
+                InitializeComponent();
+                
+                System.Diagnostics.Debug.WriteLine("*** DashboardPage - InitializeComponent completado ***");
+                
+                _viewModel = new DashboardViewModel(_databaseService, this);
+                BindingContext = _viewModel;
+                
+                System.Diagnostics.Debug.WriteLine("*** DashboardPage - ViewModel asignado ***");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR EN DashboardPage Constructor ***: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
-                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en DashboardPage Constructor: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                System.Diagnostics.Debug.WriteLine($"*** InnerException: {ex.InnerException?.Message} ***");
                 throw;
             }
         }
 
         protected override async void OnAppearing()
         {
+            base.OnAppearing();
+
             try
             {
-                System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - Iniciando ***");
-                base.OnAppearing();
+                System.Diagnostics.Debug.WriteLine("*** DashboardPage - OnAppearing iniciado ***");
                 
-                System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - Inicializando DB ***");
+                // Asegurar que la base de datos estï¿½ inicializada
+                System.Diagnostics.Debug.WriteLine("*** DashboardPage - Verificando inicializaciï¿½n de base de datos ***");
                 await _databaseService.InitializeAsync();
-                System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - DB Inicializada OK ***");
+                System.Diagnostics.Debug.WriteLine("*** DashboardPage - Base de datos verificada ***");
                 
-                if (_viewModel == null)
+                if (_viewModel != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - Creando ViewModel ***");
-                    _viewModel = new DashboardViewModel(_databaseService, this);
-                    BindingContext = _viewModel;
-                    System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - ViewModel creado OK ***");
+                    System.Diagnostics.Debug.WriteLine("*** DashboardPage - Cargando datos del dashboard ***");
+                    await _viewModel.LoadDashboardDataAsync();
+                    System.Diagnostics.Debug.WriteLine("*** DashboardPage - Datos cargados exitosamente ***");
                 }
-                
-                System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - Cargando datos ***");
-                await _viewModel.LoadDashboardDataAsync();
-                System.Diagnostics.Debug.WriteLine("*** DashboardPage OnAppearing - Datos cargados OK ***");
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("*** ERROR: ViewModel es null en OnAppearing ***");
+                    await DisplayAlert("Error", "Error al inicializar el dashboard", "OK");
+                }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR EN DashboardPage.OnAppearing ***: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
-                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en DashboardPage.OnAppearing: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                System.Diagnostics.Debug.WriteLine($"*** InnerException: {ex.InnerException?.Message} ***");
                 
-                try
-                {
-                    await DisplayAlert("Error", $"Error al cargar el dashboard: {ex.Message}", "OK");
-                }
-                catch
-                {
-                    // Si falla el DisplayAlert, al menos tenemos los logs
-                }
+                await DisplayAlert(
+                    "Error",
+                    $"Error al cargar el dashboard:\n\n{ex.Message}\n\nPor favor, intenta nuevamente.",
+                    "OK");
             }
         }
 
-        public async Task AnimarAperturaPopup()
+        // Mï¿½todo para el menï¿½ hamburguesa
+        private void OnMenuHamburgesaTapped(object sender, EventArgs e)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
+            try
             {
-                var modal = this.FindByName<Frame>("ModalCapital");
-                if (modal != null)
+                if (_viewModel != null)
                 {
-                    modal.Scale = 0.8;
-                    modal.Opacity = 0;
+                    _viewModel.MostrarMenuHamburguesa = !_viewModel.MostrarMenuHamburguesa;
                     
-                    var scaleTask = modal.ScaleTo(1, 300, Easing.CubicOut);
-                    var fadeTask = modal.FadeTo(1, 250);
-                    
-                    await Task.WhenAll(scaleTask, fadeTask);
+                    if (_viewModel.MostrarMenuHamburguesa)
+                    {
+                        AnimarAperturaMenuHamburguesa();
+                    }
+                    else
+                    {
+                        AnimarCierreMenuHamburguesa();
+                    }
                 }
-            });
-        }
-
-        public async Task AnimarCierrePopup()
-        {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
+            }
+            catch (Exception ex)
             {
-                var modal = this.FindByName<Frame>("ModalCapital");
-                if (modal != null)
-                {
-                    var scaleTask = modal.ScaleTo(0.8, 200, Easing.CubicIn);
-                    var fadeTask = modal.FadeTo(0, 200);
-                    
-                    await Task.WhenAll(scaleTask, fadeTask);
-                }
-            });
-        }
-
-        public async Task AnimarAperturaPopupGanancias()
-        {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                var modal = this.FindByName<Frame>("ModalGanancias");
-                if (modal != null)
-                {
-                    modal.Scale = 0.8;
-                    modal.Opacity = 0;
-                    
-                    var scaleTask = modal.ScaleTo(1, 300, Easing.CubicOut);
-                    var fadeTask = modal.FadeTo(1, 250);
-                    
-                    await Task.WhenAll(scaleTask, fadeTask);
-                }
-            });
-        }
-
-        public async Task AnimarCierrePopupGanancias()
-        {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                var modal = this.FindByName<Frame>("ModalGanancias");
-                if (modal != null)
-                {
-                    var scaleTask = modal.ScaleTo(0.8, 200, Easing.CubicIn);
-                    var fadeTask = modal.FadeTo(0, 200);
-                    
-                    await Task.WhenAll(scaleTask, fadeTask);
-                }
-            });
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnMenuHamburgesaTapped: {ex.Message} ***");
+            }
         }
 
         private async void OnClientesTapped(object sender, EventArgs e)
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("*** OnClientesTapped - Iniciando navegación ***");
-                System.Diagnostics.Debug.WriteLine($"*** Shell.Current: {Shell.Current != null} ***");
-                System.Diagnostics.Debug.WriteLine($"*** Shell.Current.Navigation: {Shell.Current?.Navigation != null} ***");
-                
+                System.Diagnostics.Debug.WriteLine("*** OnClientesTapped - Navegando a clientes ***");
                 await Shell.Current.GoToAsync("clientes");
-                
-                System.Diagnostics.Debug.WriteLine("*** OnClientesTapped - Navegación completada ***");
+                System.Diagnostics.Debug.WriteLine("*** OnClientesTapped - Navegaciï¿½n completada ***");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnClientesTapped ***: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace}");
-                System.Diagnostics.Debug.WriteLine($"*** InnerException: {ex.InnerException?.Message}");
-                
-                await DisplayAlert("Error de navegación", 
-                    $"No se pudo navegar a Clientes.\n\nError: {ex.Message}\n\nDetalles: {ex.InnerException?.Message ?? "N/A"}", 
-                    "OK");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnClientesTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al navegar a Clientes: {ex.Message}", "OK");
             }
         }
 
@@ -161,12 +117,15 @@ namespace App_CrediVnzl.Pages
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("*** OnCalendarioTapped - Navegando a calendario ***");
                 await Shell.Current.GoToAsync("calendario");
+                System.Diagnostics.Debug.WriteLine("*** OnCalendarioTapped - Navegaciï¿½n completada ***");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnCalendarioTapped ***: {ex.Message}");
-                await DisplayAlert("Error", ex.Message, "OK");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnCalendarioTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al navegar a Calendario: {ex.Message}", "OK");
             }
         }
 
@@ -174,25 +133,15 @@ namespace App_CrediVnzl.Pages
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("*** OnMensajesTapped - Navegando a mensajes ***");
                 await Shell.Current.GoToAsync("mensajes");
+                System.Diagnostics.Debug.WriteLine("*** OnMensajesTapped - Navegaciï¿½n completada ***");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnMensajesTapped ***: {ex.Message}");
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
-        }
-
-        private async void OnConfiguracionTapped(object sender, EventArgs e)
-        {
-            try
-            {
-                await Shell.Current.GoToAsync("configuracion");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnConfiguracionTapped ***: {ex.Message}");
-                await DisplayAlert("Error", ex.Message, "OK");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnMensajesTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al navegar a Mensajes: {ex.Message}", "OK");
             }
         }
 
@@ -200,12 +149,294 @@ namespace App_CrediVnzl.Pages
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("*** OnReportesTapped - Navegando a reportes ***");
                 await Shell.Current.GoToAsync("reportes");
+                System.Diagnostics.Debug.WriteLine("*** OnReportesTapped - Navegaciï¿½n completada ***");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"*** ERROR EN OnReportesTapped ***: {ex.Message}");
-                await DisplayAlert("Error", ex.Message, "OK");
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnReportesTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al navegar a Reportes: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OnNuevoPrestamoTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("*** OnNuevoPrestamoTapped - Navegando a nuevo prï¿½stamo ***");
+                await Shell.Current.GoToAsync("nuevoprestamo");
+                System.Diagnostics.Debug.WriteLine("*** OnNuevoPrestamoTapped - Navegaciï¿½n completada ***");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnNuevoPrestamoTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al navegar a Nuevo Prï¿½stamo: {ex.Message}", "OK");
+            }
+        }
+
+        // Animaciones
+        public async Task AnimarAperturaPopup()
+        {
+            try
+            {
+                var overlay = this.FindByName<BoxView>("OverlayCapital");
+                var popup = this.FindByName<Border>("PopupCapital");
+
+                if (overlay != null && popup != null)
+                {
+                    overlay.IsVisible = true;
+                    popup.IsVisible = true;
+                    
+                    overlay.Opacity = 0;
+                    popup.Scale = 0.8;
+                    popup.Opacity = 0;
+
+                    await Task.WhenAll(
+                        overlay.FadeTo(1, 200),
+                        popup.ScaleTo(1, 300, Easing.SpringOut),
+                        popup.FadeTo(1, 200)
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en AnimarAperturaPopup: {ex.Message} ***");
+            }
+        }
+
+        public async Task AnimarCierrePopup()
+        {
+            try
+            {
+                var overlay = this.FindByName<BoxView>("OverlayCapital");
+                var popup = this.FindByName<Border>("PopupCapital");
+
+                if (overlay != null && popup != null)
+                {
+                    await Task.WhenAll(
+                        overlay.FadeTo(0, 200),
+                        popup.ScaleTo(0.8, 200, Easing.CubicIn),
+                        popup.FadeTo(0, 200)
+                    );
+
+                    overlay.IsVisible = false;
+                    popup.IsVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en AnimarCierrePopup: {ex.Message} ***");
+            }
+        }
+
+        public async Task AnimarAperturaPopupGanancias()
+        {
+            try
+            {
+                var overlay = this.FindByName<BoxView>("OverlayGanancias");
+                var popup = this.FindByName<Border>("PopupGanancias");
+
+                if (overlay != null && popup != null)
+                {
+                    overlay.IsVisible = true;
+                    popup.IsVisible = true;
+                    
+                    overlay.Opacity = 0;
+                    popup.Scale = 0.8;
+                    popup.Opacity = 0;
+
+                    await Task.WhenAll(
+                        overlay.FadeTo(1, 200),
+                        popup.ScaleTo(1, 300, Easing.SpringOut),
+                        popup.FadeTo(1, 200)
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en AnimarAperturaPopupGanancias: {ex.Message} ***");
+            }
+        }
+
+        public async Task AnimarCierrePopupGanancias()
+        {
+            try
+            {
+                var overlay = this.FindByName<BoxView>("OverlayGanancias");
+                var popup = this.FindByName<Border>("PopupGanancias");
+
+                if (overlay != null && popup != null)
+                {
+                    await Task.WhenAll(
+                        overlay.FadeTo(0, 200),
+                        popup.ScaleTo(0.8, 200, Easing.CubicIn),
+                        popup.FadeTo(0, 200)
+                    );
+
+                    overlay.IsVisible = false;
+                    popup.IsVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en AnimarCierrePopupGanancias: {ex.Message} ***");
+            }
+        }
+
+        private async void AnimarAperturaMenuHamburguesa()
+        {
+            try
+            {
+                var overlay = this.FindByName<BoxView>("OverlayMenu");
+                var menu = this.FindByName<Border>("MenuHamburguesa");
+
+                if (overlay != null && menu != null)
+                {
+                    overlay.IsVisible = true;
+                    menu.IsVisible = true;
+                    
+                    overlay.Opacity = 0;
+                    menu.TranslationX = menu.Width;
+
+                    await Task.WhenAll(
+                        overlay.FadeTo(1, 200),
+                        menu.TranslateTo(0, 0, 300, Easing.CubicOut)
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en AnimarAperturaMenuHamburguesa: {ex.Message} ***");
+            }
+        }
+
+        private async void AnimarCierreMenuHamburguesa()
+        {
+            try
+            {
+                var overlay = this.FindByName<BoxView>("OverlayMenu");
+                var menu = this.FindByName<Border>("MenuHamburguesa");
+
+                if (overlay != null && menu != null)
+                {
+                    await Task.WhenAll(
+                        overlay.FadeTo(0, 200),
+                        menu.TranslateTo(menu.Width, 0, 200, Easing.CubicIn)
+                    );
+
+                    overlay.IsVisible = false;
+                    menu.IsVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en AnimarCierreMenuHamburguesa: {ex.Message} ***");
+            }
+        }
+
+        private async void OnCerrarSesionTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("*** OnCerrarSesionTapped - Cerrando sesiï¿½n ***");
+                
+                if (_viewModel != null)
+                {
+                    _viewModel.MostrarMenuHamburguesa = false;
+                }
+                
+                await Shell.Current.GoToAsync("//main");
+                System.Diagnostics.Debug.WriteLine("*** OnCerrarSesionTapped - Navegaciï¿½n completada ***");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnCerrarSesionTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+            }
+        }
+
+        private async void OnPerfilTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("*** OnPerfilTapped - Navegando a perfil admin ***");
+                
+                if (_viewModel != null)
+                {
+                    _viewModel.MostrarMenuHamburguesa = false;
+                }
+                
+                await Shell.Current.GoToAsync("perfiladmin");
+                System.Diagnostics.Debug.WriteLine("*** OnPerfilTapped - Navegaciï¿½n completada ***");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnPerfilTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al navegar a Perfil: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OnConfiguracionTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("*** OnConfiguracionTapped - Navegando a configuraciï¿½n ***");
+                
+                if (_viewModel != null)
+                {
+                    _viewModel.MostrarMenuHamburguesa = false;
+                }
+                
+                await Shell.Current.GoToAsync("configuracion");
+                System.Diagnostics.Debug.WriteLine("*** OnConfiguracionTapped - Navegaciï¿½n completada ***");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnConfiguracionTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al navegar a Configuraciï¿½n: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OnAyudaTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("*** OnAyudaTapped - Navegando a ayuda ***");
+                
+                if (_viewModel != null)
+                {
+                    _viewModel.MostrarMenuHamburguesa = false;
+                }
+                
+                await Shell.Current.GoToAsync("ayuda");
+                System.Diagnostics.Debug.WriteLine("*** OnAyudaTapped - Navegaciï¿½n completada ***");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnAyudaTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al navegar a Ayuda: {ex.Message}", "OK");
+            }
+        }
+
+        private void OnOverlayMenuTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_viewModel != null)
+                {
+                    _viewModel.MostrarMenuHamburguesa = false;
+                    AnimarCierreMenuHamburguesa();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnOverlayMenuTapped: {ex.Message} ***");
             }
         }
     }

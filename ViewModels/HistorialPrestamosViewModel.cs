@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+ï»¿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -187,7 +187,7 @@ namespace App_CrediVnzl.ViewModels
             {
                 prestamo.Expandido = !prestamo.Expandido;
                 
-                // Refrescar la colección para actualizar la UI
+                // Refrescar la colecciï¿½n para actualizar la UI
                 var index = PrestamosFiltrados.IndexOf(prestamo);
                 if (index >= 0)
                 {

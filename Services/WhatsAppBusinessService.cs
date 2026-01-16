@@ -1,4 +1,4 @@
-using System.Net.Http.Headers;
+ï»¿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -7,9 +7,9 @@ using App_CrediVnzl.Models;
 namespace App_CrediVnzl.Services
 {
     /// <summary>
-    /// Servicio para envío automático de mensajes mediante WhatsApp Business API
+    /// Servicio para envï¿½o automï¿½tico de mensajes mediante WhatsApp Business API
     /// Requiere: WhatsApp Business Account y Access Token de Meta
-    /// Documentación: https://developers.facebook.com/docs/whatsapp/cloud-api
+    /// Documentaciï¿½n: https://developers.facebook.com/docs/whatsapp/cloud-api
     /// </summary>
     public class WhatsAppBusinessService
     {
@@ -35,7 +35,7 @@ namespace App_CrediVnzl.Services
         }
 
         /// <summary>
-        /// Enviar mensaje de texto simple (100% automático)
+        /// Enviar mensaje de texto simple (100% automï¿½tico)
         /// </summary>
         public async Task<WhatsAppSendResult> EnviarMensajeTextoAsync(string numeroTelefono, string mensaje)
         {
@@ -46,7 +46,7 @@ namespace App_CrediVnzl.Services
                     return new WhatsAppSendResult
                     {
                         Success = false,
-                        ErrorMessage = "Configuración de WhatsApp Business API incompleta",
+                        ErrorMessage = "Configuraciï¿½n de WhatsApp Business API incompleta",
                         PhoneNumber = numeroTelefono
                     };
                 }
@@ -58,7 +58,7 @@ namespace App_CrediVnzl.Services
                     return new WhatsAppSendResult
                     {
                         Success = false,
-                        ErrorMessage = "Número de teléfono inválido",
+                        ErrorMessage = "Nï¿½mero de telï¿½fono invï¿½lido",
                         PhoneNumber = numeroTelefono
                     };
                 }
@@ -103,7 +103,7 @@ namespace App_CrediVnzl.Services
                     return new WhatsAppSendResult
                     {
                         Success = false,
-                        ErrorMessage = "Configuración de WhatsApp Business API incompleta",
+                        ErrorMessage = "Configuraciï¿½n de WhatsApp Business API incompleta",
                         PhoneNumber = numeroTelefono
                     };
                 }
@@ -148,7 +148,7 @@ namespace App_CrediVnzl.Services
         }
 
         /// <summary>
-        /// Enviar mensajes masivos con delay automático
+        /// Enviar mensajes masivos con delay automï¿½tico
         /// </summary>
         public async Task<List<WhatsAppSendResult>> EnviarMensajesMasivosAsync(
             List<(string telefono, string mensaje)> mensajes,
@@ -176,7 +176,7 @@ namespace App_CrediVnzl.Services
         }
 
         /// <summary>
-        /// Enviar con reintentos automáticos
+        /// Enviar con reintentos automï¿½ticos
         /// </summary>
         private async Task<WhatsAppSendResult> EnviarConReintentos(
             object request, 
@@ -246,9 +246,9 @@ namespace App_CrediVnzl.Services
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Excepción en EnviarConReintentos: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Excepciï¿½n en EnviarConReintentos: {ex.Message}");
                 
-                // Reintentar en caso de excepción de red
+                // Reintentar en caso de excepciï¿½n de red
                 if (intentoActual < MAX_RETRIES)
                 {
                     await Task.Delay(2000);
@@ -265,14 +265,14 @@ namespace App_CrediVnzl.Services
         }
 
         /// <summary>
-        /// Limpiar y formatear número de teléfono para WhatsApp
+        /// Limpiar y formatear nï¿½mero de telï¿½fono para WhatsApp
         /// </summary>
         private string LimpiarNumeroTelefono(string numero)
         {
             if (string.IsNullOrWhiteSpace(numero))
                 return string.Empty;
 
-            // Remover todos los caracteres que no sean dígitos o +
+            // Remover todos los caracteres que no sean dï¿½gitos o +
             var numeroLimpio = new string(numero.Where(c => char.IsDigit(c) || c == '+').ToArray());
 
             // Remover el + inicial
@@ -281,7 +281,7 @@ namespace App_CrediVnzl.Services
                 numeroLimpio = numeroLimpio.TrimStart('+');
             }
 
-            // Si el número no comienza con código de país, agregar el de Venezuela (58)
+            // Si el nï¿½mero no comienza con cï¿½digo de paï¿½s, agregar el de Venezuela (58)
             if (numeroLimpio.Length == 10 && numeroLimpio.StartsWith("0"))
             {
                 // 0424XXXXXXX -> 58424XXXXXXX
@@ -297,13 +297,13 @@ namespace App_CrediVnzl.Services
         }
 
         /// <summary>
-        /// Verificar estado de la configuración
+        /// Verificar estado de la configuraciï¿½n
         /// </summary>
         public async Task<bool> VerificarConexionAsync()
         {
             try
             {
-                // Intenta obtener información del número de teléfono
+                // Intenta obtener informaciï¿½n del nï¿½mero de telï¿½fono
                 var url = $"{_config.BaseUrl}/{_config.PhoneNumberId}";
                 var response = await _httpClient.GetAsync(url);
                 
@@ -316,7 +316,7 @@ namespace App_CrediVnzl.Services
         }
 
         /// <summary>
-        /// Obtener límite actual de mensajes
+        /// Obtener lï¿½mite actual de mensajes
         /// </summary>
         public async Task<(bool success, string tier, int limit)> ObtenerLimitesMensajesAsync()
         {
@@ -328,7 +328,7 @@ namespace App_CrediVnzl.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    // Parsear respuesta para obtener tier y límite
+                    // Parsear respuesta para obtener tier y lï¿½mite
                     // Por ahora retornar valores por defecto
                     return (true, "TIER_1", 1000);
                 }

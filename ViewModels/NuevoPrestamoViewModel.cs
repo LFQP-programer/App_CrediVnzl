@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+ï»¿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -123,7 +123,7 @@ namespace App_CrediVnzl.ViewModels
             {
                 if (!decimal.TryParse(MontoInicial, out decimal monto))
                 {
-                    await Shell.Current.DisplayAlert("Error", "El monto debe ser un número válido", "OK");
+                    await Shell.Current.DisplayAlert("Error", "El monto debe ser un nï¿½mero vï¿½lido", "OK");
                     return;
                 }
 
@@ -142,7 +142,7 @@ namespace App_CrediVnzl.ViewModels
                     InteresAcumulado = interesPrimeraSemana, // ? Interes inicial
                     TotalAdeudado = monto + interesPrimeraSemana, // ? Total con interes
                     MontoPagado = 0,
-                    Notas = $"Préstamo creado el {DateTime.Now:dd/MM/yyyy HH:mm}\n" +
+                    Notas = $"Prï¿½stamo creado el {DateTime.Now:dd/MM/yyyy HH:mm}\n" +
                             $"Capital inicial: S/{monto:N2}\n" +
                             $"Interes primera semana: S/{interesPrimeraSemana:N2}\n" +
                             $"Total adeudado inicial: S/{(monto + interesPrimeraSemana):N2}"
@@ -156,18 +156,18 @@ namespace App_CrediVnzl.ViewModels
                 await _databaseService.SaveClienteAsync(ClienteSeleccionado);
 
                 // Mostrar mensaje con detalle
-                var mensaje = $"Préstamo creado exitosamente\n\n" +
+                var mensaje = $"Prï¿½stamo creado exitosamente\n\n" +
                              $"Capital: S/{monto:N2}\n" +
                              $"Interes semanal: S/{interesPrimeraSemana:N2}\n" +
                              $"Total a pagar: S/{(monto + interesPrimeraSemana):N2}\n\n" +
                              $"El cliente ya tiene S/{interesPrimeraSemana:N2} de interes acumulado desde hoy.";
 
-                await Shell.Current.DisplayAlert("Éxito", mensaje, "OK");
+                await Shell.Current.DisplayAlert("ï¿½xito", mensaje, "OK");
                 await Shell.Current.GoToAsync("..");
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"No se pudo crear el préstamo: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"No se pudo crear el prï¿½stamo: {ex.Message}", "OK");
             }
         }
 
@@ -175,19 +175,19 @@ namespace App_CrediVnzl.ViewModels
         {
             if (ClienteSeleccionado == null)
             {
-                await Shell.Current.DisplayAlert("Validación", "Debe seleccionar un cliente", "OK");
+                await Shell.Current.DisplayAlert("Validaciï¿½n", "Debe seleccionar un cliente", "OK");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(MontoInicial))
             {
-                await Shell.Current.DisplayAlert("Validación", "Debe ingresar el monto del préstamo", "OK");
+                await Shell.Current.DisplayAlert("Validaciï¿½n", "Debe ingresar el monto del prï¿½stamo", "OK");
                 return false;
             }
 
             if (!decimal.TryParse(MontoInicial, out decimal monto) || monto <= 0)
             {
-                await Shell.Current.DisplayAlert("Validación", "El monto debe ser un número mayor a cero", "OK");
+                await Shell.Current.DisplayAlert("Validaciï¿½n", "El monto debe ser un nï¿½mero mayor a cero", "OK");
                 return false;
             }
 
@@ -195,7 +195,7 @@ namespace App_CrediVnzl.ViewModels
             {
                 bool continuar = await Shell.Current.DisplayAlert(
                     "Advertencia", 
-                    "El monto excede el máximo recomendado de S/500. ¿Está seguro?", 
+                    "El monto excede el mï¿½ximo recomendado de S/500. ï¿½Estï¿½ seguro?", 
                     "Continuar", 
                     "Cancelar");
                 
@@ -210,8 +210,8 @@ namespace App_CrediVnzl.ViewModels
         {
             bool confirmar = await Shell.Current.DisplayAlert(
                 "Cancelar", 
-                "¿Está seguro que desea cancelar? Se perderán los datos ingresados.", 
-                "Sí", 
+                "ï¿½Estï¿½ seguro que desea cancelar? Se perderï¿½n los datos ingresados.", 
+                "Sï¿½", 
                 "No");
 
             if (confirmar)

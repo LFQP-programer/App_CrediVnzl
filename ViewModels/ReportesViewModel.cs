@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+ï»¿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -52,13 +52,13 @@ namespace App_CrediVnzl.ViewModels
         public decimal InteresesPendientes => _resumenActual?.Financiero.InteresesPendientes ?? 0;
         public decimal ROI => _resumenActual?.Financiero.ROI ?? 0;
         public decimal CambioGanancias => _resumenActual?.Financiero.CambioGanancias ?? 0;
-        public string TendenciaGanancias => CambioGanancias >= 0 ? "?" : "?";
+        public string TendenciaGanancias => CambioGanancias >= 0 ? "â†‘" : "â†“";
         public string ColorTendencia => CambioGanancias >= 0 ? "#4CAF50" : "#F44336";
         public decimal PorcentajeCambio => _resumenActual?.Financiero.PorcentajeCambioGanancias ?? 0;
 
         #endregion
 
-        #region Propiedades de Préstamos
+        #region Propiedades de Prestamos
 
         public int TotalPrestamos => _resumenActual?.Prestamos.TotalPrestamos ?? 0;
         public int PrestamosActivos => _resumenActual?.Prestamos.PrestamosActivos ?? 0;
@@ -123,7 +123,7 @@ namespace App_CrediVnzl.ViewModels
 
         #endregion
 
-        #region Métodos Públicos
+        #region Metodos Publicos
 
         public async Task CargarReportesAsync()
         {
@@ -174,7 +174,7 @@ namespace App_CrediVnzl.ViewModels
                     ClientesEnRiesgo.Add(cliente);
                 }
 
-                // Cargar datos para gráfico
+                // Cargar datos para grafico
                 var datosGrafico = await _reportesService.ObtenerDatosGraficoEvolucionAsync(_periodoSeleccionado);
                 DatosGrafico.Clear();
                 foreach (var dato in datosGrafico)
@@ -200,7 +200,7 @@ namespace App_CrediVnzl.ViewModels
 
         #endregion
 
-        #region Métodos Privados
+        #region Metodos Privados
 
         private void ActualizarFechasSegunPeriodo()
         {
@@ -228,7 +228,7 @@ namespace App_CrediVnzl.ViewModels
                     TituloReporte = "Reporte Trimestral";
                     break;
 
-                case PeriodoReporte.Año:
+                case PeriodoReporte.Anio:
                     _fechaInicio = new DateTime(_fechaFin.Year, 1, 1);
                     TituloReporte = $"Reporte de {_fechaFin.Year}";
                     break;
@@ -243,7 +243,7 @@ namespace App_CrediVnzl.ViewModels
                 "Semana" => PeriodoReporte.Semana,
                 "Mes" => PeriodoReporte.Mes,
                 "Trimestre" => PeriodoReporte.Trimestre,
-                "Año" => PeriodoReporte.Año,
+                "Anio" => PeriodoReporte.Anio,
                 _ => PeriodoReporte.Mes
             };
 
@@ -252,7 +252,7 @@ namespace App_CrediVnzl.ViewModels
 
         private void VerDetalleFinanciero()
         {
-            // Navegar a detalle financiero (implementar después)
+            // Navegar a detalle financiero (implementar despues)
             Application.Current!.MainPage!.DisplayAlert(
                 "Detalle Financiero",
                 $"Capital Total: ${CapitalTotal:N2}\n" +
@@ -266,7 +266,7 @@ namespace App_CrediVnzl.ViewModels
         private void VerDetallePrestamos()
         {
             Application.Current!.MainPage!.DisplayAlert(
-                "Detalle de Préstamos",
+                "Detalle de Prestamos",
                 $"Total: {TotalPrestamos}\n" +
                 $"Activos: {PrestamosActivos}\n" +
                 $"Completados: {PrestamosCompletados}\n" +

@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+ï»¿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -127,7 +127,7 @@ namespace App_CrediVnzl.ViewModels
 
             try
             {
-                // Verificar si tiene préstamos activos
+                // Verificar si tiene prï¿½stamos activos
                 var prestamos = await _databaseService.GetPrestamosByClienteAsync(cliente.Id);
                 var prestamosActivos = prestamos.Where(p => p.Estado == "Activo").ToList();
 
@@ -135,8 +135,8 @@ namespace App_CrediVnzl.ViewModels
                 {
                     var confirmar = await Shell.Current.DisplayAlert(
                         "Advertencia", 
-                        $"Este cliente tiene {prestamosActivos.Count} préstamo(s) activo(s) con una deuda total de S/{prestamosActivos.Sum(p => p.TotalAdeudado):N2}.\n\n¿Está seguro de eliminar al cliente y todos sus préstamos, pagos e historial?", 
-                        "Sí, eliminar", 
+                        $"Este cliente tiene {prestamosActivos.Count} prï¿½stamo(s) activo(s) con una deuda total de S/{prestamosActivos.Sum(p => p.TotalAdeudado):N2}.\n\nï¿½Estï¿½ seguro de eliminar al cliente y todos sus prï¿½stamos, pagos e historial?", 
+                        "Sï¿½, eliminar", 
                         "Cancelar");
 
                     if (!confirmar)
@@ -145,9 +145,9 @@ namespace App_CrediVnzl.ViewModels
                 else
                 {
                     var confirmar = await Shell.Current.DisplayAlert(
-                        "Confirmar eliminación", 
-                        $"¿Está seguro de eliminar a {cliente.NombreCompleto}? Esta acción no se puede deshacer.", 
-                        "Sí, eliminar", 
+                        "Confirmar eliminaciï¿½n", 
+                        $"ï¿½Estï¿½ seguro de eliminar a {cliente.NombreCompleto}? Esta acciï¿½n no se puede deshacer.", 
+                        "Sï¿½, eliminar", 
                         "Cancelar");
 
                     if (!confirmar)
@@ -157,7 +157,7 @@ namespace App_CrediVnzl.ViewModels
                 // Eliminar todos los datos relacionados en cascada
                 await _databaseService.EliminarClienteConDatosRelacionadosAsync(cliente.Id);
 
-                await Shell.Current.DisplayAlert("Éxito", "Cliente eliminado correctamente", "OK");
+                await Shell.Current.DisplayAlert("ï¿½xito", "Cliente eliminado correctamente", "OK");
                 
                 // Recargar la lista de clientes
                 await LoadClientesAsync();

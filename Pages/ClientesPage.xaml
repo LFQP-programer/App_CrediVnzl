@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
+             xmlns:helpers="clr-namespace:App_CrediVnzl.Helpers"
              x:Class="App_CrediVnzl.Pages.ClientesPage"
              Title="Clientes"
              Shell.NavBarIsVisible="True"
@@ -20,9 +21,10 @@
                Margin="15,15,15,10"
                HasShadow="True">
             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
-                <Label Grid.Column="0" 
-                       Text="🔍"
-                       FontSize="20"
+                <Image Grid.Column="0"
+                       Source="{x:Static helpers:IconPaths.Search}"
+                       WidthRequest="20"
+                       HeightRequest="20"
                        VerticalOptions="Center" />
                 <Entry Grid.Column="1"
                        Placeholder="Buscar por nombre, telefono o cedula..."
@@ -30,7 +32,6 @@
                        BackgroundColor="Transparent" />
                 <!-- Botón Agregar -->
                 <Button Grid.Column="2"
-                        Text="+"
                         BackgroundColor="{StaticResource Tertiary}"
                         TextColor="White"
                         FontSize="24"
@@ -40,7 +41,8 @@
                         CornerRadius="22"
                         Padding="0"
                         VerticalOptions="Center"
-                        Command="{Binding AddClienteCommand}" />
+                        Command="{Binding AddClienteCommand}"
+                        ImageSource="{x:Static helpers:IconPaths.Add}" />
             </Grid>
         </Frame>
 
@@ -55,8 +57,9 @@
                             <VerticalStackLayout Padding="20"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center">
-                                <Label Text="👥"
-                                       FontSize="60"
+                                <Image Source="{x:Static helpers:IconPaths.Users}"
+                                       WidthRequest="60"
+                                       HeightRequest="60"
                                        HorizontalOptions="Center" />
                                 <Label Text="No hay clientes registrados"
                                        FontSize="18"
@@ -111,22 +114,28 @@
 
                                     <!-- Telefono -->
                                     <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                                          Spacing="5">
-                                        <Label Text="📱"
-                                               FontSize="14" />
+                                                          Spacing="8">
+                                        <Image Source="{x:Static helpers:IconPaths.Phone}"
+                                               WidthRequest="16"
+                                               HeightRequest="16"
+                                               VerticalOptions="Center" />
                                         <Label Text="{Binding Telefono}"
                                                FontSize="14"
-                                               TextColor="{StaticResource Gray600}" />
+                                               TextColor="{StaticResource Gray600}"
+                                               VerticalOptions="Center" />
                                     </HorizontalStackLayout>
 
                                     <!-- Cedula -->
                                     <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                                          Spacing="5">
-                                        <Label Text="🆔"
-                                               FontSize="14" />
+                                                          Spacing="8">
+                                        <Image Source="{x:Static helpers:IconPaths.ID}"
+                                               WidthRequest="16"
+                                               HeightRequest="16"
+                                               VerticalOptions="Center" />
                                         <Label Text="{Binding Cedula, StringFormat='Cedula: {0}'}"
                                                FontSize="14"
-                                               TextColor="{StaticResource Gray600}" />
+                                               TextColor="{StaticResource Gray600}"
+                                               VerticalOptions="Center" />
                                     </HorizontalStackLayout>
 
                                     <!-- Separador -->
@@ -138,15 +147,21 @@
 
                                     <!-- Deuda Pendiente -->
                                     <HorizontalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
-                                                          Spacing="5"
+                                                          Spacing="8"
                                                           IsVisible="{Binding DeudaPendiente, Converter={StaticResource IsGreaterThanZeroConverter}}">
+                                        <Image Source="{x:Static helpers:IconPaths.Money}"
+                                               WidthRequest="16"
+                                               HeightRequest="16"
+                                               VerticalOptions="Center" />
                                         <Label Text="Deuda pendiente:"
                                                FontSize="14"
-                                               TextColor="{StaticResource Gray600}" />
+                                               TextColor="{StaticResource Gray600}"
+                                               VerticalOptions="Center" />
                                         <Label Text="{Binding DeudaPendiente, StringFormat='${0:N2}'}"
                                                FontSize="16"
                                                FontAttributes="Bold"
-                                               TextColor="{StaticResource Secondary}" />
+                                               TextColor="{StaticResource Secondary}"
+                                               VerticalOptions="Center" />
                                     </HorizontalStackLayout>
                                 </Grid>
                             </Frame>

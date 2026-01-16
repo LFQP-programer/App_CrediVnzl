@@ -1,9 +1,9 @@
-using App_CrediVnzl.Models;
+ï»¿using App_CrediVnzl.Models;
 
 namespace App_CrediVnzl.Services
 {
     /// <summary>
-    /// Servicio para generación de reportes y estadísticas
+    /// Servicio para generacion de reportes y estadisticas
     /// </summary>
     public class ReportesService
     {
@@ -60,13 +60,13 @@ namespace App_CrediVnzl.Services
                 var gananciaTotal = config?.GananciaTotal ?? 0;
                 var roi = capitalInicial > 0 ? (gananciaTotal / capitalInicial) * 100 : 0;
 
-                // Tasa de recuperación
+                // Tasa de recuperacion
                 var totalPrestado = prestamosActivos.Sum(p => p.MontoInicial);
                 var tasaRecuperacion = totalPrestado > 0 
                     ? (capitalRecuperado / totalPrestado) * 100 
                     : 0;
 
-                // Comparativa con período anterior
+                // Comparativa con periodo anterior
                 var duracionPeriodo = (fechaFin - fechaInicio).Days;
                 var fechaInicioAnterior = fechaInicio.AddDays(-duracionPeriodo);
                 var fechaFinAnterior = fechaInicio;
@@ -102,7 +102,7 @@ namespace App_CrediVnzl.Services
         }
 
         /// <summary>
-        /// Obtener reporte de préstamos
+        /// Obtener reporte de prestamos
         /// </summary>
         public async Task<ReportePrestamos> ObtenerReportePrestamosAsync(DateTime fechaInicio, DateTime fechaFin)
         {
@@ -138,7 +138,7 @@ namespace App_CrediVnzl.Services
                     .Where(p => p.Estado == "Completado")
                     .Sum(p => p.MontoInicial);
 
-                // Distribución por estado
+                // Distribucion por estado
                 var distribucion = new Dictionary<string, int>
                 {
                     ["Activo"] = prestamosActivos,
@@ -183,7 +183,7 @@ namespace App_CrediVnzl.Services
                 var inicioMes = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                 var clientesNuevos = clientes.Count(c => c.FechaRegistro >= inicioMes);
 
-                // Promedio de préstamos por cliente
+                // Promedio de prestamos por cliente
                 var prestamos = await _databaseService.GetPrestamosAsync();
                 var promedioPrestamosPorCliente = totalClientes > 0 
                     ? (decimal)prestamos.Count / totalClientes 
@@ -311,7 +311,7 @@ namespace App_CrediVnzl.Services
                 var prestamos = await _databaseService.GetPrestamosAsync();
                 var historialPagos = await _databaseService.GetHistorialPagosByClienteAsync(0);
 
-                // Filtrar por período
+                // Filtrar por periodo
                 var prestamosEnPeriodo = prestamos
                     .Where(p => p.FechaInicio >= fechaInicio && p.FechaInicio <= fechaFin)
                     .ToList();
@@ -325,14 +325,14 @@ namespace App_CrediVnzl.Services
                 var interesesGenerados = pagosEnPeriodo.Sum(h => h.MontoInteres);
                 var flujoNeto = totalCobrado - totalPrestado;
 
-                // Proyección próximos 30 días
+                // Proyeccion proximos 30 dias
                 var fechaProyeccion = DateTime.Now.AddDays(30);
                 var pagosProyectados = await _databaseService.GetPagosByFechaAsync(DateTime.Now);
                 var proyeccion = pagosProyectados
                     .Where(p => p.FechaProgramada <= fechaProyeccion && p.Estado == "Pendiente")
                     .Sum(p => p.MontoPago);
 
-                // Flujo por día
+                // Flujo por dia
                 var flujoPorDia = new List<FlujoDiario>();
                 var fechaActual = fechaInicio;
                 while (fechaActual <= fechaFin)
@@ -394,7 +394,7 @@ namespace App_CrediVnzl.Services
                 var tasaCumplimiento = totalPagos > 0 ? ((decimal)pagosPuntuales / totalPagos) * 100 : 0;
                 var montoTotal = pagosEnPeriodo.Sum(h => h.MontoTotal);
 
-                // Análisis por día de la semana
+                // Analisis por dia de la semana
                 var pagosPorDia = pagosEnPeriodo
                     .GroupBy(h => h.FechaPago.DayOfWeek)
                     .ToDictionary(g => g.Key, g => g.Count());
@@ -423,7 +423,7 @@ namespace App_CrediVnzl.Services
         }
 
         /// <summary>
-        /// Obtener datos para gráfico de evolución
+        /// Obtener datos para grafico de evolucion
         /// </summary>
         public async Task<List<DatoGrafico>> ObtenerDatosGraficoEvolucionAsync(PeriodoReporte periodo)
         {
@@ -444,7 +444,7 @@ namespace App_CrediVnzl.Services
                     case PeriodoReporte.Trimestre:
                         fechaInicio = fechaFin.AddMonths(-3);
                         break;
-                    case PeriodoReporte.Año:
+                    case PeriodoReporte.Anio:
                         fechaInicio = fechaFin.AddYears(-1);
                         break;
                     default:
@@ -458,8 +458,8 @@ namespace App_CrediVnzl.Services
                     .OrderBy(h => h.FechaPago)
                     .ToList();
 
-                // Agrupar por día/semana/mes según el período
-                if (periodo == PeriodoReporte.Año)
+                // Agrupar por dia/semana/mes segun el periodo
+                if (periodo == PeriodoReporte.Anio)
                 {
                     // Agrupar por mes
                     var pagosPorMes = pagosEnPeriodo
@@ -484,7 +484,7 @@ namespace App_CrediVnzl.Services
                 }
                 else
                 {
-                    // Agrupar por día
+                    // Agrupar por dia
                     var pagosPorDia = pagosEnPeriodo
                         .GroupBy(h => h.FechaPago.Date)
                         .Select(g => new

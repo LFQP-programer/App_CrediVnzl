@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="App_CrediVnzl.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -12,9 +12,34 @@
     Shell.TabBarBackgroundColor="{StaticResource Tertiary}"
     Shell.TabBarForegroundColor="{StaticResource White}">
 
+    <!-- Página de selección de rol (Main) -->
+    <ShellContent
+        Title="Inicio"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="main" />
+
+    <!-- Página de Login Administrador -->
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="login" />
+
+    <!-- Página de Login Cliente -->
+    <ShellContent
+        Title="Login Cliente"
+        ContentTemplate="{DataTemplate pages:LoginClientePage}"
+        Route="logincliente" />
+
+    <!-- Dashboard Administrador -->
     <ShellContent
         Title="Dashboard"
         ContentTemplate="{DataTemplate pages:DashboardPage}"
-        Route="DashboardPage" />
+        Route="dashboard" />
+
+    <!-- Dashboard Cliente -->
+    <ShellContent
+        Title="Mi Prestamo"
+        ContentTemplate="{DataTemplate pages:ClienteDashboardPage}"
+        Route="clientedashboard" />
 
 </Shell>

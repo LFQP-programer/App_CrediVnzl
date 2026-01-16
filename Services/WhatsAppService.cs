@@ -1,4 +1,4 @@
-namespace App_CrediVnzl.Services
+ï»¿namespace App_CrediVnzl.Services
 {
     public class WhatsAppService
     {
@@ -6,19 +6,19 @@ namespace App_CrediVnzl.Services
         {
             try
             {
-                // Limpiar el número de teléfono (quitar espacios, guiones, etc.)
+                // Limpiar el nï¿½mero de telï¿½fono (quitar espacios, guiones, etc.)
                 var numeroLimpio = LimpiarNumeroTelefono(numeroTelefono);
 
                 if (string.IsNullOrWhiteSpace(numeroLimpio))
                 {
-                    System.Diagnostics.Debug.WriteLine("Número de teléfono vacío o inválido");
+                    System.Diagnostics.Debug.WriteLine("Nï¿½mero de telï¿½fono vacï¿½o o invï¿½lido");
                     return false;
                 }
 
-                // Validar que el número tenga al menos 10 dígitos
+                // Validar que el nï¿½mero tenga al menos 10 dï¿½gitos
                 if (numeroLimpio.Length < 10)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Número de teléfono muy corto: {numeroLimpio}");
+                    System.Diagnostics.Debug.WriteLine($"Nï¿½mero de telï¿½fono muy corto: {numeroLimpio}");
                     return false;
                 }
 
@@ -60,7 +60,7 @@ namespace App_CrediVnzl.Services
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error en envío de mensajes seguidos: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error en envï¿½o de mensajes seguidos: {ex.Message}");
                 return false;
             }
         }
@@ -70,18 +70,18 @@ namespace App_CrediVnzl.Services
             if (string.IsNullOrWhiteSpace(numero))
                 return string.Empty;
 
-            // Remover todos los caracteres que no sean dígitos o el símbolo +
+            // Remover todos los caracteres que no sean dï¿½gitos o el sï¿½mbolo +
             var numeroLimpio = new string(numero.Where(c => char.IsDigit(c) || c == '+').ToArray());
 
-            // Si el número empieza con +, removerlo (la API de WhatsApp no lo necesita)
+            // Si el nï¿½mero empieza con +, removerlo (la API de WhatsApp no lo necesita)
             if (numeroLimpio.StartsWith("+"))
             {
                 numeroLimpio = numeroLimpio.TrimStart('+');
             }
 
-            // Si el número no comienza con código de país, intentar detectarlo
-            // Para Venezuela: si tiene 10 dígitos y empieza con 0, cambiar 0 por 58
-            // Si tiene 10 dígitos y empieza con 4, agregar 58
+            // Si el nï¿½mero no comienza con cï¿½digo de paï¿½s, intentar detectarlo
+            // Para Venezuela: si tiene 10 dï¿½gitos y empieza con 0, cambiar 0 por 58
+            // Si tiene 10 dï¿½gitos y empieza con 4, agregar 58
             if (numeroLimpio.Length == 10)
             {
                 if (numeroLimpio.StartsWith("0"))
@@ -111,7 +111,7 @@ namespace App_CrediVnzl.Services
 
             var numeroLimpio = LimpiarNumeroTelefono(numero);
             
-            // Un número de teléfono válido debe tener al menos 10 dígitos
+            // Un nï¿½mero de telï¿½fono vï¿½lido debe tener al menos 10 dï¿½gitos
             return numeroLimpio.Length >= 10 && numeroLimpio.Length <= 15;
         }
 
@@ -122,21 +122,21 @@ namespace App_CrediVnzl.Services
             if (string.IsNullOrWhiteSpace(numeroLimpio))
                 return string.Empty;
 
-            // Si es número venezolano (58 + 10 dígitos)
+            // Si es nï¿½mero venezolano (58 + 10 dï¿½gitos)
             if (numeroLimpio.Length == 12 && numeroLimpio.StartsWith("58"))
             {
                 // Formato: +58 (424) 123-4567
                 return $"+{numeroLimpio.Substring(0, 2)} ({numeroLimpio.Substring(2, 3)}) {numeroLimpio.Substring(5, 3)}-{numeroLimpio.Substring(8, 4)}";
             }
 
-            // Si es formato venezolano sin código de país
+            // Si es formato venezolano sin cï¿½digo de paï¿½s
             if (numeroLimpio.Length == 10 && numeroLimpio.StartsWith("4"))
             {
                 // Formato: (424) 123-4567
                 return $"({numeroLimpio.Substring(0, 3)}) {numeroLimpio.Substring(3, 3)}-{numeroLimpio.Substring(6, 4)}";
             }
 
-            // Formato genérico con espacios cada 3-4 dígitos
+            // Formato genï¿½rico con espacios cada 3-4 dï¿½gitos
             if (numeroLimpio.Length > 6)
             {
                 return $"{numeroLimpio.Substring(0, numeroLimpio.Length - 6)} {numeroLimpio.Substring(numeroLimpio.Length - 6, 3)} {numeroLimpio.Substring(numeroLimpio.Length - 3)}";
