@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -11,6 +11,7 @@ namespace App_CrediVnzl.ViewModels
     public class NuevoPrestamoViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseService _databaseService;
+        private readonly NotificationService _notificationService;
         private Cliente? _clienteSeleccionado;
         private string _montoInicial = string.Empty;
         private DateTime _fechaInicio = DateTime.Today;
@@ -75,9 +76,10 @@ namespace App_CrediVnzl.ViewModels
         public ICommand CancelarCommand { get; }
         public ICommand ToggleCondicionesCommand { get; }
 
-        public NuevoPrestamoViewModel(DatabaseService databaseService)
+        public NuevoPrestamoViewModel(DatabaseService databaseService, NotificationService notificationService)
         {
             _databaseService = databaseService;
+            _notificationService = notificationService;
             CrearPrestamoCommand = new Command(async () => await CrearPrestamo());
             CancelarCommand = new Command(async () => await Cancelar());
             ToggleCondicionesCommand = new Command(() => CondicionesExpandidas = !CondicionesExpandidas);
@@ -137,15 +139,18 @@ namespace App_CrediVnzl.ViewModels
                     TasaInteresSemanal = TASA_INTERES_SEMANAL,
                     DuracionSemanas = 0, // Sin duracion fija, pago flexible
                     FechaInicio = FechaInicio,
+                    FechaProximoPago = FechaInicio.AddDays(7), // Próximo pago en 7 días (1 semana)
+                    FrecuenciaPago = "Semanal",
                     Estado = "Activo",
                     CapitalPendiente = monto,
                     InteresAcumulado = interesPrimeraSemana, // ? Interes inicial
                     TotalAdeudado = monto + interesPrimeraSemana, // ? Total con interes
                     MontoPagado = 0,
-                    Notas = $"Pr�stamo creado el {DateTime.Now:dd/MM/yyyy HH:mm}\n" +
+                    Notas = $"Préstamo creado el {DateTime.Now:dd/MM/yyyy HH:mm}\n" +
                             $"Capital inicial: S/{monto:N2}\n" +
                             $"Interes primera semana: S/{interesPrimeraSemana:N2}\n" +
-                            $"Total adeudado inicial: S/{(monto + interesPrimeraSemana):N2}"
+                            $"Total adeudado inicial: S/{(monto + interesPrimeraSemana):N2}\n" +
+                            $"Próximo pago: {FechaInicio.AddDays(7):dd/MM/yyyy}"
                 };
 
                 await _databaseService.SavePrestamoAsync(prestamo);
@@ -154,6 +159,9 @@ namespace App_CrediVnzl.ViewModels
                 ClienteSeleccionado.PrestamosActivos++;
                 ClienteSeleccionado.DeudaPendiente += monto + interesPrimeraSemana; // ? Incluir interes
                 await _databaseService.SaveClienteAsync(ClienteSeleccionado);
+
+                // Actualizar notificaciones para incluir el nuevo préstamo
+                await _notificationService.ActualizarTodasLasNotificacionesAsync();
 
                 // Mostrar mensaje con detalle
                 var mensaje = $"Pr�stamo creado exitosamente\n\n" +

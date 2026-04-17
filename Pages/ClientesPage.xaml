@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
@@ -76,95 +76,145 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame BackgroundColor="{StaticResource Beige}"
-                                   CornerRadius="15"
-                                   Padding="20"
-                                   Margin="0,0,0,15"
-                                   HasShadow="True">
-                                <Frame.GestureRecognizers>
+                            <Border BackgroundColor="White"
+                                    Stroke="{Binding EstadoColor}"
+                                    StrokeThickness="2"
+                                    StrokeShape="RoundRectangle 15"
+                                    Padding="20"
+                                    Margin="0,0,0,15">
+                                <Border.Shadow>
+                                    <Shadow Brush="Black"
+                                            Offset="0,4"
+                                            Radius="8"
+                                            Opacity="0.15" />
+                                </Border.Shadow>
+                                <Border.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ClientesViewModel}}, Path=EditClienteCommand}"
                                                          CommandParameter="{Binding .}" />
-                                </Frame.GestureRecognizers>
+                                </Border.GestureRecognizers>
                                 
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Nombre -->
-                                    <Label Grid.Row="0" Grid.Column="0"
-                                           Text="{Binding NombreCompleto}"
-                                           FontSize="18"
-                                           FontAttributes="Bold"
-                                           TextColor="{StaticResource Gray900}" />
-
-                                    <!-- Badge Prestamos Activos -->
-                                    <Frame Grid.Row="0" Grid.Column="1"
-                                           BackgroundColor="{StaticResource Success}"
-                                           CornerRadius="12"
-                                           Padding="10,5"
-                                           HasShadow="False"
-                                           IsVisible="{Binding PrestamosActivos, Converter={StaticResource IsGreaterThanZeroConverter}}">
-                                        <Label Text="{Binding PrestamosActivos, StringFormat='{0} activos'}"
-                                               TextColor="{StaticResource White}"
-                                               FontSize="12"
-                                               FontAttributes="Bold" />
-                                    </Frame>
-
-                                    <!-- Telefono -->
-                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                                          Spacing="8">
-                                        <Image Source="{x:Static helpers:IconPaths.Phone}"
-                                               WidthRequest="16"
-                                               HeightRequest="16"
-                                               VerticalOptions="Center" />
-                                        <Label Text="{Binding Telefono}"
-                                               FontSize="14"
-                                               TextColor="{StaticResource Gray600}"
-                                               VerticalOptions="Center" />
-                                    </HorizontalStackLayout>
-
-                                    <!-- Cedula -->
-                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                                          Spacing="8">
-                                        <Image Source="{x:Static helpers:IconPaths.ID}"
-                                               WidthRequest="16"
-                                               HeightRequest="16"
-                                               VerticalOptions="Center" />
-                                        <Label Text="{Binding Cedula, StringFormat='Cedula: {0}'}"
-                                               FontSize="14"
-                                               TextColor="{StaticResource Gray600}"
-                                               VerticalOptions="Center" />
-                                    </HorizontalStackLayout>
-
-                                    <!-- Separador -->
-                                    <BoxView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-                                            HeightRequest="1"
-                                            Color="{StaticResource Gray300}"
-                                            Margin="0,5,0,5"
-                                            IsVisible="{Binding DeudaPendiente, Converter={StaticResource IsGreaterThanZeroConverter}}" />
-
-                                    <!-- Deuda Pendiente -->
-                                    <HorizontalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
-                                                          Spacing="8"
-                                                          IsVisible="{Binding DeudaPendiente, Converter={StaticResource IsGreaterThanZeroConverter}}">
-                                        <Image Source="{x:Static helpers:IconPaths.Money}"
-                                               WidthRequest="16"
-                                               HeightRequest="16"
-                                               VerticalOptions="Center" />
-                                        <Label Text="Deuda pendiente:"
-                                               FontSize="14"
-                                               TextColor="{StaticResource Gray600}"
-                                               VerticalOptions="Center" />
-                                        <Label Text="{Binding DeudaPendiente, StringFormat='${0:N2}'}"
-                                               FontSize="16"
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
+                                    <!-- Fila 1: Avatar + Nombre + Badge -->
+                                    <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+                                        <!-- Avatar con Iniciales -->
+                                        <Border Grid.Column="0"
+                                                StrokeShape="RoundRectangle 24"
+                                                BackgroundColor="{Binding ColorAvatar}"
+                                                WidthRequest="48"
+                                                HeightRequest="48"
+                                                StrokeThickness="0"
+                                                VerticalOptions="Center">
+                                            <Label Text="{Binding Iniciales}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+                                        
+                                        <!-- Nombre -->
+                                        <Label Grid.Column="1"
+                                               Text="{Binding NombreCompleto}"
+                                               FontSize="18"
                                                FontAttributes="Bold"
-                                               TextColor="{StaticResource Secondary}"
+                                               TextColor="#212121"
                                                VerticalOptions="Center" />
-                                    </HorizontalStackLayout>
+                                        
+                                        <!-- Badge de Estado -->
+                                        <Border Grid.Column="2"
+                                                Stroke="{Binding EstadoColor}"
+                                                StrokeThickness="2"
+                                                BackgroundColor="{Binding EstadoColorClaro}"
+                                                Padding="8,4"
+                                                StrokeShape="RoundRectangle 10"
+                                                VerticalOptions="Center">
+                                            <Label Text="{Binding EstadoTexto}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding EstadoColor}" />
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Fila 2: Contacto -->
+                                    <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                        <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                            <Image Source="{x:Static helpers:IconPaths.Phone}"
+                                                   WidthRequest="20"
+                                                   HeightRequest="20"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding Telefono}"
+                                                   FontSize="14"
+                                                   TextColor="#616161"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                        
+                                        <HorizontalStackLayout Grid.Column="1" Spacing="8" HorizontalOptions="End">
+                                            <Image Source="{x:Static helpers:IconPaths.ID}"
+                                                   WidthRequest="20"
+                                                   HeightRequest="20"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding Cedula, StringFormat='DNI: {0}'}"
+                                                   FontSize="14"
+                                                   TextColor="#616161"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+
+                                    <!-- Fila 3: Separador -->
+                                    <BoxView Grid.Row="2"
+                                            HeightRequest="1"
+                                            Color="#E0E0E0"
+                                            IsVisible="{Binding PrestamosActivos, Converter={StaticResource IsGreaterThanZeroConverter}}" />
+
+                                    <!-- Fila 4: Métricas en Mini-Cards -->
+                                    <Grid Grid.Row="3" 
+                                          ColumnDefinitions="*,*" 
+                                          ColumnSpacing="12"
+                                          IsVisible="{Binding PrestamosActivos, Converter={StaticResource IsGreaterThanZeroConverter}}">
+                                        <!-- Mini-Card: Préstamos -->
+                                        <Border Grid.Column="0"
+                                                BackgroundColor="#F5F5F5"
+                                                StrokeShape="RoundRectangle 12"
+                                                Padding="15,12"
+                                                StrokeThickness="0">
+                                            <VerticalStackLayout Spacing="4">
+                                                <Label Text="Préstamos"
+                                                       FontSize="12"
+                                                       TextColor="#757575" />
+                                                <HorizontalStackLayout Spacing="6">
+                                                    <Label Text="{Binding PrestamosActivos}"
+                                                           FontSize="24"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#2196F3"
+                                                           VerticalOptions="Center" />
+                                                    <Label Text="activos"
+                                                           FontSize="12"
+                                                           TextColor="#757575"
+                                                           VerticalOptions="End"
+                                                           Margin="0,0,0,4" />
+                                                </HorizontalStackLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                        
+                                        <!-- Mini-Card: Deuda -->
+                                        <Border Grid.Column="1"
+                                                BackgroundColor="#F5F5F5"
+                                                StrokeShape="RoundRectangle 12"
+                                                Padding="15,12"
+                                                StrokeThickness="0">
+                                            <VerticalStackLayout Spacing="4">
+                                                <Label Text="Deuda Total"
+                                                       FontSize="12"
+                                                       TextColor="#757575" />
+                                                <Label Text="{Binding DeudaPendiente, StringFormat='${0:N0}'}"
+                                                       FontSize="20"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#F44336" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </Grid>
                                 </Grid>
-                            </Frame>
+                            </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

@@ -89,7 +89,7 @@ namespace App_CrediVnzl.ViewModels
             EliminarDatosCommand = new Command(async () => await OnEliminarDatosAsync());
             
             // Valores por defecto
-            NombreNegocio = "Mi Negocio de Préstamos";
+            NombreNegocio = "Mi Negocio de Prï¿½stamos";
             Direccion = "";
         }
 
@@ -97,15 +97,15 @@ namespace App_CrediVnzl.ViewModels
         {
             var confirmar = await Application.Current!.MainPage!.DisplayAlert(
                 "?? Eliminar Datos",
-                "¿Estás seguro de eliminar TODOS los datos existentes?\n\n" +
+                "ï¿½Estï¿½s seguro de eliminar TODOS los datos existentes?\n\n" +
                 "Esto incluye:\n" +
-                "• Configuración del negocio\n" +
-                "• Cuenta de administrador\n" +
-                "• Todos los clientes\n" +
-                "• Todos los préstamos\n" +
-                "• Todo el historial\n\n" +
-                "Esta acción NO se puede deshacer.",
-                "Sí, eliminar todo",
+                "ï¿½ Configuraciï¿½n del negocio\n" +
+                "ï¿½ Cuenta de administrador\n" +
+                "ï¿½ Todos los clientes\n" +
+                "ï¿½ Todos los prï¿½stamos\n" +
+                "ï¿½ Todo el historial\n\n" +
+                "Esta acciï¿½n NO se puede deshacer.",
+                "Sï¿½, eliminar todo",
                 "Cancelar");
 
             if (!confirmar)
@@ -156,13 +156,13 @@ namespace App_CrediVnzl.ViewModels
 
             if (Password != ConfirmarPassword)
             {
-                await Application.Current!.MainPage!.DisplayAlert("Error", "Las contraseñas no coinciden", "OK");
+                await Application.Current!.MainPage!.DisplayAlert("Error", "Las contraseï¿½as no coinciden", "OK");
                 return;
             }
 
             if (Password.Length < 6)
             {
-                await Application.Current!.MainPage!.DisplayAlert("Error", "La contraseña debe tener al menos 6 caracteres", "OK");
+                await Application.Current!.MainPage!.DisplayAlert("Error", "La contraseï¿½a debe tener al menos 6 caracteres", "OK");
                 return;
             }
 
@@ -182,13 +182,13 @@ namespace App_CrediVnzl.ViewModels
 
                 if (exito)
                 {
-                    // Hacer login automático después de crear la cuenta
+                    // Hacer login automï¿½tico despuï¿½s de crear la cuenta
                     var (loginExito, loginMensaje, usuario) = await _authService.LoginAsync(NombreUsuario, Password);
                     
                     if (loginExito && usuario != null)
                     {
                         await Application.Current!.MainPage!.DisplayAlert(
-                            "? Configuración Completa", 
+                            "? Configuraciï¿½n Completa", 
                             "Tu cuenta de administrador ha sido creada exitosamente.", 
                             "OK");
                         
@@ -197,12 +197,12 @@ namespace App_CrediVnzl.ViewModels
                     }
                     else
                     {
-                        // Si falla el login automático, ir a página de login
+                        // Si falla el login automï¿½tico, ir a pï¿½gina de login
                         await Application.Current!.MainPage!.DisplayAlert(
                             "Cuenta Creada", 
-                            "Tu cuenta ha sido creada. Por favor, inicia sesión.", 
+                            "Tu cuenta ha sido creada. Por favor, inicia sesiï¿½n.", 
                             "OK");
-                        await Shell.Current.GoToAsync("//login");
+                        await Shell.Current.GoToAsync("//loginadmin");
                     }
                 }
                 else

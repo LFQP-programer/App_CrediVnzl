@@ -7,10 +7,10 @@ namespace App_CrediVnzl.Pages
     {
         private readonly NuevoPrestamoViewModel _viewModel;
 
-        public NuevoPrestamoPage(DatabaseService databaseService)
+        public NuevoPrestamoPage(DatabaseService databaseService, NotificationService notificationService)
         {
             InitializeComponent();
-            _viewModel = new NuevoPrestamoViewModel(databaseService);
+            _viewModel = new NuevoPrestamoViewModel(databaseService, notificationService);
             BindingContext = _viewModel;
         }
 

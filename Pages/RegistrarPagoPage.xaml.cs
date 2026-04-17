@@ -7,10 +7,10 @@ namespace App_CrediVnzl.Pages
     {
         private readonly RegistrarPagoViewModel _viewModel;
 
-        public RegistrarPagoPage(DatabaseService databaseService)
+        public RegistrarPagoPage(DatabaseService databaseService, NotificationService notificationService)
         {
             InitializeComponent();
-            _viewModel = new RegistrarPagoViewModel(databaseService);
+            _viewModel = new RegistrarPagoViewModel(databaseService, notificationService);
             BindingContext = _viewModel;
         }
 

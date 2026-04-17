@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -44,7 +44,7 @@ namespace App_CrediVnzl.ViewModels
                 _tipoMensajeSeleccionado = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(EsRecordatorios));
-                OnPropertyChanged(nameof(EsIndividual));
+                OnPropertyChanged(nameof(Esíndividual));
                 OnPropertyChanged(nameof(EsMasivo));
                 OnPropertyChanged(nameof(TextoBotonEnviar));
                 OnPropertyChanged(nameof(ColorBotonEnviar));
@@ -128,7 +128,7 @@ namespace App_CrediVnzl.ViewModels
         }
 
         public bool EsRecordatorios => TipoMensajeSeleccionado == "Recordatorios";
-        public bool EsIndividual => TipoMensajeSeleccionado == "Individual";
+        public bool Esíndividual => TipoMensajeSeleccionado == "Individual";
         public bool EsMasivo => TipoMensajeSeleccionado == "Masivo";
 
         public string TextoBotonEnviar

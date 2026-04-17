@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
@@ -58,7 +58,7 @@
                         </HorizontalStackLayout>
                     </Frame>
 
-                    <!-- Menú Hamburguesa -->
+                    <!-- MenU Hamburguesa -->
                     <Frame Grid.Column="2"
                            BackgroundColor="Transparent"
                            BorderColor="{StaticResource White}"
@@ -270,32 +270,8 @@
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Calendario Menu -->
-                    <Frame Grid.Row="0" Grid.Column="1"
-                           BackgroundColor="{StaticResource White}"
-                           CornerRadius="20"
-                           Padding="18"
-                           HasShadow="True">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnCalendarioTapped" />
-                        </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="8">
-                            <Image Source="{x:Static helpers:IconPaths.Calendar}"
-                                   WidthRequest="36"
-                                   HeightRequest="36"
-                                   HorizontalOptions="Start" />
-                            <Label Text="Calendario"
-                                   FontSize="15"
-                                   FontAttributes="Bold"
-                                   TextColor="{StaticResource Gray900}" />
-                            <Label Text="Pagos"
-                                   FontSize="11"
-                                   TextColor="{StaticResource Gray600}" />
-                        </VerticalStackLayout>
-                    </Frame>
-
                     <!-- Mensajes Menu -->
-                    <Frame Grid.Row="1" Grid.Column="0"
+                    <Frame Grid.Row="0" Grid.Column="1"
                            BackgroundColor="{StaticResource White}"
                            CornerRadius="20"
                            Padding="18"
@@ -319,7 +295,7 @@
                     </Frame>
 
                     <!-- Reportes Menu -->
-                    <Frame Grid.Row="1" Grid.Column="1"
+                    <Frame Grid.Row="1" Grid.Column="0"
                            BackgroundColor="{StaticResource White}"
                            CornerRadius="20"
                            Padding="18"
@@ -336,7 +312,7 @@
                                    FontSize="15"
                                    FontAttributes="Bold"
                                    TextColor="{StaticResource Gray900}" />
-                            <Label Text="Estadísticas"
+                            <Label Text="EstadIsticas"
                                    FontSize="11"
                                    TextColor="{StaticResource Gray600}" />
                         </VerticalStackLayout>
@@ -346,7 +322,7 @@
                 <!-- Prestamos Activos Section -->
                 <VerticalStackLayout Padding="15,20" Spacing="15">
                     
-                    <!-- Header con Botón Nuevo Préstamo -->
+                    <!-- Header con Botón Nuevo PrEstamo -->
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                         <Label Grid.Column="0"
                                Text="Préstamos Activos"
@@ -355,7 +331,7 @@
                                TextColor="{StaticResource Gray900}"
                                VerticalOptions="Center" />
                         
-                        <!-- Botón Nuevo Préstamo -->
+                        <!-- Botón Nuevo PrEstamo -->
                         <Button Grid.Column="1"
                                 Text="+ Nuevo"
                                 FontSize="14"
@@ -380,7 +356,7 @@
                                        TextColor="{StaticResource Gray600}"
                                        HorizontalOptions="Center"
                                        HorizontalTextAlignment="Center" />
-                                <Label Text="Crea tu primer préstamo usando el botón de arriba"
+                                <Label Text="Crea tu primer prEstamo usando el botón de arriba"
                                        FontSize="14"
                                        TextColor="{StaticResource Gray500}"
                                        HorizontalOptions="Center"
@@ -396,6 +372,12 @@
                                        Margin="0,0,0,12"
                                        HasShadow="True"
                                        BorderColor="{Binding EstadoColor}">
+                                    
+                                    <!-- Agregar gesto de toque para navegar -->
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnPrestamoTapped" 
+                                                             CommandParameter="{Binding .}" />
+                                    </Frame.GestureRecognizers>
                                     
                                     <Grid RowSpacing="10">
                                         <Grid.RowDefinitions>
@@ -664,7 +646,7 @@
             </VerticalStackLayout>
         </Border>
 
-        <!-- Overlay y Menú Hamburguesa -->
+        <!-- Overlay y MenU Hamburguesa -->
         <BoxView x:Name="OverlayMenu"
                  BackgroundColor="Black"
                  Opacity="0.5"
@@ -688,7 +670,7 @@
             </Border.StrokeShape>
             
             <VerticalStackLayout Padding="0" Spacing="0">
-                <!-- Header del Menú -->
+                <!-- Header del MenU -->
                 <Frame BackgroundColor="{StaticResource Tertiary}"
                        Padding="20"
                        HasShadow="False"
@@ -709,7 +691,7 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Opciones del Menú -->
+                <!-- Opciones del MenU -->
                 <VerticalStackLayout Padding="10,20" Spacing="5">
                     
                     <!-- Perfil -->
@@ -776,6 +758,7 @@
                     <BoxView Color="{StaticResource Gray300}"
                              HeightRequest="1"
                              Margin="15,10" />
+
 
                     <!-- Cerrar Sesión -->
                     <Frame BackgroundColor="Transparent"

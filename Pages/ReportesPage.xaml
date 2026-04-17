@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_CrediVnzl.Pages.ReportesPage"
-             Title="Reportes y Estadísticas"
+             Title="Reportes y EstadIsticas"
              Shell.NavBarIsVisible="True"
              Shell.BackgroundColor="{StaticResource Tertiary}"
              Shell.ForegroundColor="{StaticResource White}"
@@ -12,7 +12,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="0" Spacing="0">
             
-            <!-- Filtros de período en el header -->
+            <!-- Filtros de perIodo en el header -->
             <Frame BackgroundColor="{StaticResource Tertiary}" 
                    Padding="15,10,15,15"
                    CornerRadius="0"
@@ -70,9 +70,9 @@
                                     Padding="18,8"
                                     HeightRequest="36"/>
                             
-                            <Button Text="Año"
+                            <Button Text="ANo"
                                     Command="{Binding CambiarPeriodoCommand}"
-                                    CommandParameter="Año"
+                                    CommandParameter="ANo"
                                     BackgroundColor="White"
                                     TextColor="{StaticResource Tertiary}"
                                     FontSize="13"

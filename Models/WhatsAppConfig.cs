@@ -1,4 +1,4 @@
-﻿namespace App_CrediVnzl.Models
+namespace App_CrediVnzl.Models
 {
     /// <summary>
     /// Configuraci�n para WhatsApp Business API (Meta Cloud API)

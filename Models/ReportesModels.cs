@@ -47,7 +47,7 @@ namespace App_CrediVnzl.Models
     {
         public int TotalClientes { get; set; }
         public int ClientesActivos { get; set; }
-        public int ClientesInactivos { get; set; }
+        public int Clientesínactivos { get; set; }
         public int ClientesNuevosEsteMes { get; set; }
         public decimal PromedioPrestamosPorCliente { get; set; }
         public decimal DeudaPromedioCliente { get; set; }

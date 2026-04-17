@@ -11,36 +11,37 @@ namespace App_CrediVnzl.ViewModels
 
         public BienvenidaViewModel()
         {
+            System.Diagnostics.Debug.WriteLine("*** BienvenidaViewModel - Constructor llamado ***");
             AdminLoginCommand = new Command(async () => await OnAdminLoginAsync());
             ClienteLoginCommand = new Command(async () => await OnClienteLoginAsync());
+            System.Diagnostics.Debug.WriteLine("*** BienvenidaViewModel - Comandos inicializados ***");
         }
 
         private async Task OnAdminLoginAsync()
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("*** BienvenidaViewModel - Navegando a LoginAdmin ***");
+                System.Diagnostics.Debug.WriteLine("*** BienvenidaViewModel - OnAdminLoginAsync INICIADO ***");
+                System.Diagnostics.Debug.WriteLine($"*** Shell.Current: {Shell.Current != null} ***");
+                System.Diagnostics.Debug.WriteLine($"*** Application.Current: {Application.Current != null} ***");
                 
-                // Verificar si estamos en un Shell
                 if (Shell.Current != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("*** Usando Shell.GoToAsync ***");
-                    await Shell.Current.GoToAsync("loginadmin");
+                    System.Diagnostics.Debug.WriteLine("*** Navegando con Shell.GoToAsync a loginadmin (ruta absoluta) ***");
+                    await Shell.Current.GoToAsync("//loginadmin");
+                    System.Diagnostics.Debug.WriteLine("*** Navegaci�n completada ***");
                 }
-                else if (Application.Current?.MainPage is NavigationPage navPage)
+                else
                 {
-                    System.Diagnostics.Debug.WriteLine("*** Usando NavigationPage.PushAsync ***");
-                    var authService = Application.Current.Handler?.MauiContext?.Services.GetService<Services.AuthService>();
-                    if (authService != null)
-                    {
-                        var loginPage = new Pages.LoginAdminPage(authService);
-                        await navPage.PushAsync(loginPage);
-                    }
+                    System.Diagnostics.Debug.WriteLine("*** Shell.Current es NULL ***");
+                    await Application.Current!.MainPage!.DisplayAlert("Error", "Shell no disponible", "OK");
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"*** ERROR en OnAdminLoginAsync: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             }
         }
 
@@ -48,28 +49,27 @@ namespace App_CrediVnzl.ViewModels
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("*** BienvenidaViewModel - Navegando a LoginCliente ***");
+                System.Diagnostics.Debug.WriteLine("*** BienvenidaViewModel - OnClienteLoginAsync INICIADO ***");
+                System.Diagnostics.Debug.WriteLine($"*** Shell.Current: {Shell.Current != null} ***");
+                System.Diagnostics.Debug.WriteLine($"*** Application.Current: {Application.Current != null} ***");
                 
-                // Verificar si estamos en un Shell
                 if (Shell.Current != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("*** Usando Shell.GoToAsync ***");
-                    await Shell.Current.GoToAsync("logincliente");
+                    System.Diagnostics.Debug.WriteLine("*** Navegando con Shell.GoToAsync a logincliente (ruta absoluta) ***");
+                    await Shell.Current.GoToAsync("//logincliente");
+                    System.Diagnostics.Debug.WriteLine("*** Navegaci�n completada ***");
                 }
-                else if (Application.Current?.MainPage is NavigationPage navPage)
+                else
                 {
-                    System.Diagnostics.Debug.WriteLine("*** Usando NavigationPage.PushAsync ***");
-                    var authService = Application.Current.Handler?.MauiContext?.Services.GetService<Services.AuthService>();
-                    if (authService != null)
-                    {
-                        var loginPage = new Pages.LoginClientePage(authService);
-                        await navPage.PushAsync(loginPage);
-                    }
+                    System.Diagnostics.Debug.WriteLine("*** Shell.Current es NULL ***");
+                    await Application.Current!.MainPage!.DisplayAlert("Error", "Shell no disponible", "OK");
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"*** ERROR en OnClienteLoginAsync: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             }
         }
 

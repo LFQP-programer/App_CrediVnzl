@@ -1,4 +1,4 @@
-﻿using App_CrediVnzl.Services;
+using App_CrediVnzl.Services;
 using App_CrediVnzl.ViewModels;
 
 namespace App_CrediVnzl.Pages
@@ -450,6 +450,40 @@ namespace App_CrediVnzl.Pages
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"*** ERROR en OnOverlayMenuTapped: {ex.Message} ***");
+            }
+        }
+
+        private async void OnPrestamoTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("*** OnPrestamoTapped - Iniciando navegación ***");
+                
+                if (sender is not Frame frame)
+                {
+                    System.Diagnostics.Debug.WriteLine("*** ERROR: sender no es un Frame ***");
+                    return;
+                }
+
+                var tapGesture = frame.GestureRecognizers.FirstOrDefault() as TapGestureRecognizer;
+                if (tapGesture?.CommandParameter is not Models.PrestamoActivo prestamoCard)
+                {
+                    System.Diagnostics.Debug.WriteLine("*** ERROR: No se pudo obtener el préstamo ***");
+                    return;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"*** Navegando al préstamo ID: {prestamoCard.PrestamoId} ***");
+                
+                // Navegar a registrar pago con el ID del préstamo
+                await Shell.Current.GoToAsync($"registrarpago?prestamoId={prestamoCard.PrestamoId}");
+                
+                System.Diagnostics.Debug.WriteLine("*** OnPrestamoTapped - Navegación completada ***");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR en OnPrestamoTapped: {ex.Message} ***");
+                System.Diagnostics.Debug.WriteLine($"*** StackTrace: {ex.StackTrace} ***");
+                await DisplayAlert("Error", $"Error al abrir el préstamo: {ex.Message}", "OK");
             }
         }
     }

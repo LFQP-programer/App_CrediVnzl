@@ -1,7 +1,8 @@
-﻿namespace App_CrediVnzl.Models
+namespace App_CrediVnzl.Models
 {
     public class PrestamoActivo
     {
+        public int PrestamoId { get; set; }
         public string ClienteNombre { get; set; } = string.Empty;
         public decimal MontoInicial { get; set; }
         public decimal InteresSemanal { get; set; }

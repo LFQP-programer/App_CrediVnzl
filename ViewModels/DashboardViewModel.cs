@@ -1,4 +1,4 @@
-ï»¿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -145,7 +145,7 @@ namespace App_CrediVnzl.ViewModels
 
         private void OnCerrarSesion()
         {
-            // Cerrar sesión y navegar al login
+            // Cerrar sesiï¿½n y navegar al login
             Shell.Current.GoToAsync("//login");
         }
 
@@ -396,6 +396,7 @@ namespace App_CrediVnzl.ViewModels
 
                     var prestamoActivo = new PrestamoActivo
                     {
+                        PrestamoId = prestamo.Id,
                         ClienteNombre = cliente.NombreCompleto,
                         MontoInicial = prestamo.MontoInicial,
                         InteresSemanal = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100),

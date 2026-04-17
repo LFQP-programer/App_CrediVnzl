@@ -5,7 +5,7 @@
              Title="Gestionar Usuarios"
              BackgroundColor="#F5F5F5">
 
-    <ScrollView>
+    <ScrollView Padding="0,0,0,300">
         <VerticalStackLayout Spacing="20" Padding="20">
 
             <!-- Solicitudes Pendientes -->
@@ -90,7 +90,7 @@
                             <Label FontSize="13" TextColor="#1565C0" VerticalOptions="Center">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="El usuario será el DNI del cliente y se generará una contraseña de 6 dígitos automáticamente"/>
+                                        <Span Text="El usuario serA el DNI del cliente y se generarA una contraseña de 6 dIgitos automAticamente"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -161,7 +161,7 @@
                                            TextColor="#9E9E9E"/>
                                     
                                     <Label Grid.Row="3" Grid.Column="0"
-                                           Text="{Binding UltimoAcceso, StringFormat='⏰ Último acceso: {0:dd/MM/yyyy HH:mm}'}"
+                                           Text="{Binding UltimoAcceso, StringFormat='⏰ Ultimo acceso: {0:dd/MM/yyyy HH:mm}'}"
                                            FontSize="11"
                                            TextColor="#9E9E9E"/>
                                     

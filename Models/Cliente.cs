@@ -1,4 +1,4 @@
-﻿using SQLite;
+using SQLite;
 
 namespace App_CrediVnzl.Models
 {
@@ -67,12 +67,91 @@ namespace App_CrediVnzl.Models
         public string NombreCompleto => $"{Nombres} {Apellidos}";
 
         [Ignore]
-        public string Cedula => NumeroDocumento; // Para compatibilidad con c�digo existente
+        public string Cedula => NumeroDocumento; // Para compatibilidad con código existente
 
         [Ignore]
         public string Telefono => NumeroCelular; // Para compatibilidad
 
         [Ignore]
         public string Direccion => AvalDireccion; // Para compatibilidad temporal
+
+        // Propiedades para el diseño visual
+        [Ignore]
+        public string Iniciales
+        {
+            get
+            {
+                var inicialNombre = !string.IsNullOrEmpty(Nombres) ? Nombres[0].ToString().ToUpper() : "";
+                var inicialApellido = !string.IsNullOrEmpty(Apellidos) ? Apellidos[0].ToString().ToUpper() : "";
+                return $"{inicialNombre}{inicialApellido}";
+            }
+        }
+
+        [Ignore]
+        public string ColorAvatar
+        {
+            get
+            {
+                // Generar color basado en el nombre para consistencia
+                var hash = NombreCompleto.GetHashCode();
+                var colores = new[] { "#2196F3", "#4CAF50", "#FF9800", "#9C27B0", "#00BCD4", "#FF5722" };
+                var index = Math.Abs(hash) % colores.Length;
+                return colores[index];
+            }
+        }
+
+        [Ignore]
+        public string EstadoTexto
+        {
+            get
+            {
+                if (PrestamosActivos == 0)
+                    return "Sin préstamos";
+                    
+                if (EstadoCliente == "Moroso")
+                    return "Moroso";
+                    
+                if (EstadoCliente == "En observación" || EstadoCliente == "En observacion")
+                    return "Atención";
+                    
+                return "Al día";
+            }
+        }
+
+        [Ignore]
+        public string EstadoColor
+        {
+            get
+            {
+                if (PrestamosActivos == 0)
+                    return "#9E9E9E"; // Gris
+                    
+                if (EstadoCliente == "Moroso")
+                    return "#F44336"; // Rojo
+                    
+                if (EstadoCliente == "En observación" || EstadoCliente == "En observacion")
+                    return "#FF9800"; // Naranja
+                    
+                return "#4CAF50"; // Verde
+            }
+        }
+
+        [Ignore]
+        public string EstadoColorClaro
+        {
+            get
+            {
+                if (PrestamosActivos == 0)
+                    return "#F5F5F5"; // Gris claro
+                    
+                if (EstadoCliente == "Moroso")
+                    return "#FFEBEE"; // Rojo claro
+                    
+                if (EstadoCliente == "En observación" || EstadoCliente == "En observacion")
+                    return "#FFF3E0"; // Naranja claro
+                    
+                return "#E8F5E9"; // Verde claro
+            }
+        }
     }
 }

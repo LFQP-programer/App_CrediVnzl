@@ -1,4 +1,4 @@
-﻿using App_CrediVnzl.Services;
+using App_CrediVnzl.Services;
 using App_CrediVnzl.ViewModels;
 
 namespace App_CrediVnzl.Pages
@@ -27,6 +27,7 @@ namespace App_CrediVnzl.Pages
                 }
             }
         }
+
 
         public ClienteDashboardPage(DatabaseService databaseService, WhatsAppService whatsAppService)
         {

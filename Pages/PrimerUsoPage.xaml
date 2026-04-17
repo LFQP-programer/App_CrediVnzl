@@ -5,14 +5,14 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#F5F5F5">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+    <ScrollView Padding="0,0,0,20">
+        <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Start">
 
             <Label Text="??" 
                    FontSize="80" 
                    HorizontalOptions="Center"/>
 
-            <Label Text="¡Bienvenido!" 
+            <Label Text="?Bienvenido!" 
                    FontSize="28" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center"
@@ -37,7 +37,7 @@
                            Padding="0" 
                            HasShadow="False"
                            BorderColor="#E0E0E0">
-                        <Entry Placeholder="Ej: Juan Pérez"
+                        <Entry Placeholder="Ej: Juan P?rez"
                                Text="{Binding NombreCompleto}"
                                Margin="10,5"/>
                     </Frame>
@@ -54,33 +54,33 @@
                                Margin="10,5"/>
                     </Frame>
 
-                    <Label Text="Contraseña *" 
+                    <Label Text="Contrase?a *" 
                            FontSize="14" 
                            TextColor="#757575"/>
                     <Frame CornerRadius="10" 
                            Padding="0" 
                            HasShadow="False"
                            BorderColor="#E0E0E0">
-                        <Entry Placeholder="Mínimo 6 caracteres"
+                        <Entry Placeholder="M?nimo 6 caracteres"
                                Text="{Binding Password}"
                                IsPassword="True"
                                Margin="10,5"/>
                     </Frame>
 
-                    <Label Text="Confirmar contraseña *" 
+                    <Label Text="Confirmar contrase?a *" 
                            FontSize="14" 
                            TextColor="#757575"/>
                     <Frame CornerRadius="10" 
                            Padding="0" 
                            HasShadow="False"
                            BorderColor="#E0E0E0">
-                        <Entry Placeholder="Repita la contraseña"
+                        <Entry Placeholder="Repita la contrase?a"
                                Text="{Binding ConfirmarPassword}"
                                IsPassword="True"
                                Margin="10,5"/>
                     </Frame>
 
-                    <Label Text="Teléfono" 
+                    <Label Text="Tel?fono" 
                            FontSize="14" 
                            TextColor="#757575"/>
                     <Frame CornerRadius="10" 

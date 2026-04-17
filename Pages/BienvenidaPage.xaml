@@ -31,16 +31,21 @@
                              Margin="0,20,0,40">
 
             <!-- Opción Administrador -->
-            <Frame CornerRadius="20" 
-                   Padding="0" 
-                   HasShadow="False"
-                   BackgroundColor="White"
-                   HeightRequest="100">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding AdminLoginCommand}" />
-                </Frame.GestureRecognizers>
+            <Border StrokeThickness="0"
+                    BackgroundColor="White"
+                    Padding="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20"/>
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AdminLoginCommand}" 
+                                          NumberOfTapsRequired="1"/>
+                </Border.GestureRecognizers>
                 
-                <Grid Padding="20" ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                <Grid Padding="20" 
+                      ColumnDefinitions="Auto,*" 
+                      ColumnSpacing="15"
+                      HeightRequest="100">
                     <Frame Grid.Column="0"
                            CornerRadius="30"
                            WidthRequest="60"
@@ -65,19 +70,24 @@
                                TextColor="#6B7280"/>
                     </VerticalStackLayout>
                 </Grid>
-            </Frame>
+            </Border>
 
             <!-- Opción Cliente -->
-            <Frame CornerRadius="20" 
-                   Padding="0" 
-                   HasShadow="False"
-                   BackgroundColor="White"
-                   HeightRequest="100">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ClienteLoginCommand}" />
-                </Frame.GestureRecognizers>
+            <Border StrokeThickness="0"
+                    BackgroundColor="White"
+                    Padding="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20"/>
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ClienteLoginCommand}"
+                                          NumberOfTapsRequired="1"/>
+                </Border.GestureRecognizers>
                 
-                <Grid Padding="20" ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                <Grid Padding="20" 
+                      ColumnDefinitions="Auto,*" 
+                      ColumnSpacing="15"
+                      HeightRequest="100">
                     <Frame Grid.Column="0"
                            CornerRadius="30"
                            WidthRequest="60"
@@ -102,7 +112,7 @@
                                TextColor="#6B7280"/>
                     </VerticalStackLayout>
                 </Grid>
-            </Frame>
+            </Border>
 
         </VerticalStackLayout>
 

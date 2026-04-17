@@ -1,4 +1,4 @@
-﻿using App_CrediVnzl.Models;
+using App_CrediVnzl.Models;
 
 namespace App_CrediVnzl.Services
 {
@@ -177,7 +177,7 @@ namespace App_CrediVnzl.Services
                 var clientes = await _databaseService.GetClientesAsync();
                 var totalClientes = clientes.Count;
                 var clientesActivos = clientes.Count(c => c.PrestamosActivos > 0);
-                var clientesInactivos = totalClientes - clientesActivos;
+                var clientesínactivos = totalClientes - clientesActivos;
 
                 // Clientes nuevos este mes
                 var inicioMes = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -286,7 +286,7 @@ namespace App_CrediVnzl.Services
                 {
                     TotalClientes = totalClientes,
                     ClientesActivos = clientesActivos,
-                    ClientesInactivos = clientesInactivos,
+                    Clientesínactivos = clientesínactivos,
                     ClientesNuevosEsteMes = clientesNuevos,
                     PromedioPrestamosPorCliente = promedioPrestamosPorCliente,
                     DeudaPromedioCliente = deudaPromedio,

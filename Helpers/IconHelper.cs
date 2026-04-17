@@ -1,4 +1,4 @@
-﻿namespace App_CrediVnzl.Helpers
+namespace App_CrediVnzl.Helpers
 {
     /// <summary>
     /// Clase que contiene iconos usando c�digos Unicode seguros para todas las plataformas

@@ -117,19 +117,19 @@ namespace App_CrediVnzl.ViewModels
             {
                 if (string.IsNullOrWhiteSpace(PasswordActual))
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Error", "Debes ingresar tu contraseña actual para cambiarla", "OK");
+                    await Application.Current!.MainPage!.DisplayAlert("Error", "Debes ingresar tu contraseï¿½a actual para cambiarla", "OK");
                     return;
                 }
 
                 if (PasswordNuevo != PasswordConfirmar)
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Error", "Las contraseñas nuevas no coinciden", "OK");
+                    await Application.Current!.MainPage!.DisplayAlert("Error", "Las contraseï¿½as nuevas no coinciden", "OK");
                     return;
                 }
 
                 if (PasswordNuevo.Length < 6)
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Error", "La nueva contraseña debe tener al menos 6 caracteres", "OK");
+                    await Application.Current!.MainPage!.DisplayAlert("Error", "La nueva contraseï¿½a debe tener al menos 6 caracteres", "OK");
                     return;
                 }
             }
@@ -141,7 +141,7 @@ namespace App_CrediVnzl.ViewModels
                 var usuario = _authService.UsuarioActual;
                 if (usuario == null)
                 {
-                    await Application.Current!.MainPage!.DisplayAlert("Error", "No hay sesión activa", "OK");
+                    await Application.Current!.MainPage!.DisplayAlert("Error", "No hay sesiï¿½n activa", "OK");
                     return;
                 }
 
@@ -162,7 +162,7 @@ namespace App_CrediVnzl.ViewModels
 
                 await _databaseService.SaveUsuarioAsync(usuario);
 
-                await Application.Current!.MainPage!.DisplayAlert("Éxito", "Datos actualizados correctamente", "OK");
+                await Application.Current!.MainPage!.DisplayAlert("ï¿½xito", "Datos actualizados correctamente", "OK");
                 
                 PasswordActual = string.Empty;
                 PasswordNuevo = string.Empty;

@@ -1,7 +1,7 @@
 namespace App_CrediVnzl.Helpers
 {
     /// <summary>
-    /// Clase con rutas de íconos SVG para usar en toda la aplicación
+    /// Clase con rutas de ï¿½conos SVG para usar en toda la aplicaciï¿½n
     /// </summary>
     public static class IconPaths
     {

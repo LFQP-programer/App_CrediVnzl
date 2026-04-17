@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:helpers="clr-namespace:App_CrediVnzl.Helpers"
@@ -143,7 +143,7 @@
                                        HorizontalOptions="Center"
                                        VerticalOptions="Center" />
                             </Border>
-                            <Label Text="Próximo Pago"
+                            <Label Text="PrOximo Pago"
                                    FontSize="17"
                                    FontAttributes="Bold"
                                    TextColor="White"
@@ -177,7 +177,7 @@
                         
                         <Grid ColumnDefinitions="*,Auto">
                             <Label Grid.Column="0"
-                                   Text="Progreso del Préstamo"
+                                   Text="Progreso del PrEstamo"
                                    FontSize="17"
                                    FontAttributes="Bold"
                                    TextColor="#212121" />
@@ -272,7 +272,7 @@
                                 <Image Source="{x:Static helpers:IconPaths.Chart}"
                                        WidthRequest="22"
                                        HeightRequest="22" />
-                                <Label Text="Interés"
+                                <Label Text="InterEs"
                                        FontSize="13"
                                        TextColor="White"
                                        VerticalOptions="Center" />
@@ -431,7 +431,7 @@
                                        FontSize="20"
                                        FontAttributes="Bold"
                                        TextColor="White" />
-                                <Label Text="Realiza tus pagos de forma rápida y segura"
+                                <Label Text="Realiza tus pagos de forma rApida y segura"
                                        FontSize="13"
                                        TextColor="White"
                                        Opacity="0.9"
@@ -440,7 +440,7 @@
                         </HorizontalStackLayout>
                         
                         <VerticalStackLayout Spacing="10" Margin="0,8,0,0">
-                            <Label Text="Número de Yape"
+                            <Label Text="NUmero de Yape"
                                    FontSize="13"
                                    TextColor="White"
                                    Opacity="0.85" />
@@ -627,7 +627,7 @@
                                TextColor="#212121"
                                HorizontalOptions="Center"
                                HorizontalTextAlignment="Center" />
-                        <Label Text="Contacta con tu asesor para solicitar un préstamo"
+                        <Label Text="Contacta con tu asesor para solicitar un prEstamo"
                                FontSize="15"
                                TextColor="#757575"
                                HorizontalOptions="Center"

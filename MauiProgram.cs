@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using App_CrediVnzl.Services;
 using App_CrediVnzl.Pages;
 
@@ -28,14 +28,37 @@ namespace App_CrediVnzl
 
                 // Registrar servicios
                 System.Diagnostics.Debug.WriteLine("*** MauiProgram - Registrando servicios ***");
+                
+                // DatabaseService debe registrarse primero ya que AuthService depende de él
+                builder.Services.AddSingleton<DatabaseService>(sp =>
+                {
+                    System.Diagnostics.Debug.WriteLine("*** Creando instancia de DatabaseService ***");
+                    var dbService = new DatabaseService();
+                    // Inicializar de forma asíncrona pero no bloquear
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await dbService.InitializeAsync();
+                            System.Diagnostics.Debug.WriteLine("*** DatabaseService inicializado correctamente ***");
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"*** Error inicializando DatabaseService: {ex.Message} ***");
+                        }
+                    });
+                    return dbService;
+                });
+                
                 builder.Services.AddSingleton<AuthService>();
-                builder.Services.AddSingleton<DatabaseService>();
                 builder.Services.AddSingleton<WhatsAppService>();
                 builder.Services.AddSingleton<ReportesService>();
+                builder.Services.AddSingleton<NotificationService>();
                 System.Diagnostics.Debug.WriteLine("*** MauiProgram - Servicios registrados ***");
 
                 // Registrar paginas
                 System.Diagnostics.Debug.WriteLine("*** MauiProgram - Registrando páginas ***");
+                builder.Services.AddTransient<BienvenidaPage>();
                 builder.Services.AddTransient<LoginPage>();
                 builder.Services.AddTransient<LoginClientePage>();
                 builder.Services.AddTransient<DashboardPage>();
@@ -49,10 +72,14 @@ namespace App_CrediVnzl
                 builder.Services.AddTransient<HistorialPrestamosPage>();
                 builder.Services.AddTransient<EnviarMensajesPage>();
                 builder.Services.AddTransient<ConfiguracionPage>();
+                builder.Services.AddTransient<ConfiguracionCuentaPage>();
+                builder.Services.AddTransient<GestionarUsuariosPage>();
                 builder.Services.AddTransient<ReportesPage>();
                 builder.Services.AddTransient<PerfilAdminPage>();
                 builder.Services.AddTransient<CambiarContrasenaAdminPage>();
-                System.Diagnostics.Debug.WriteLine("*** MauiProgram - Páginas registradas ***");
+                builder.Services.AddTransient<PrimerUsoPage>();
+                builder.Services.AddTransient<AyudaPage>();
+                System.Diagnostics.Debug.WriteLine("*** MauiProgram - Páginas registradas OK ***");
                 
                 var app = builder.Build();
                 System.Diagnostics.Debug.WriteLine("*** MauiProgram - App construida ***");

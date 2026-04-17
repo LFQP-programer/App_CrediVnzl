@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using App_CrediVnzl.Models;
@@ -55,6 +55,27 @@ namespace App_CrediVnzl.ViewModels
             _authService = authService;
             LoginCommand = new Command(async () => await OnLoginClicked());
             VolverCommand = new Command(async () => await OnVolverClicked());
+        }
+
+        public void CargarCredencialesGuardadas()
+        {
+            // Intentar cargar credenciales guardadas de Preferences
+            try
+            {
+                if (Preferences.ContainsKey("saved_username"))
+                {
+                    Username = Preferences.Get("saved_username", string.Empty);
+                }
+                
+                if (Preferences.ContainsKey("saved_password"))
+                {
+                    Password = Preferences.Get("saved_password", string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error cargando credenciales guardadas: {ex.Message}");
+            }
         }
 
         private async Task OnLoginClicked()

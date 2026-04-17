@@ -112,32 +112,32 @@ namespace App_CrediVnzl.ViewModels
 
             try
             {
-                // Crear usuario con DNI y contraseña automática
+                // Crear usuario con DNI y contraseï¿½a automï¿½tica
                 var (exito, mensaje, passwordGenerada) = await _authService.RegistrarClienteUsuarioAsync(
                     ClienteSeleccionado.Id,
-                    "", // No se usa, el método usa el DNI internamente
-                    ""); // No se usa, se genera automáticamente
+                    "", // No se usa, el mï¿½todo usa el DNI internamente
+                    ""); // No se usa, se genera automï¿½ticamente
 
                 if (exito && passwordGenerada != null)
                 {
                     // Preparar mensaje de WhatsApp
-                    var mensajeWhatsApp = $"¡Bienvenido a CrediVnzl! ??\n\n" +
+                    var mensajeWhatsApp = $"ï¿½Bienvenido a CrediVnzl! ??\n\n" +
                                          $"Tu cuenta ha sido creada exitosamente.\n\n" +
                                          $"?? *Tus credenciales de acceso:*\n" +
                                          $"Usuario: *{ClienteSeleccionado.Cedula}* (tu DNI)\n" +
-                                         $"Contraseña: *{passwordGenerada}*\n\n" +
+                                         $"Contraseï¿½a: *{passwordGenerada}*\n\n" +
                                          $"?? Descarga la app y accede con estas credenciales.\n\n" +
-                                         $"?? Por seguridad, te recomendamos cambiar tu contraseña desde la opción 'Mi Cuenta' en la app.\n\n" +
-                                         $"¡Gracias por confiar en nosotros!";
+                                         $"?? Por seguridad, te recomendamos cambiar tu contraseï¿½a desde la opciï¿½n 'Mi Cuenta' en la app.\n\n" +
+                                         $"ï¿½Gracias por confiar en nosotros!";
 
                     // Preguntar si desea enviar WhatsApp
                     var enviarWhatsApp = await Application.Current!.MainPage!.DisplayAlert(
                         "? Usuario Creado",
                         $"Usuario creado para: {ClienteSeleccionado.NombreCompleto}\n\n" +
                         $"?? Usuario (DNI): {ClienteSeleccionado.Cedula}\n" +
-                        $"?? Contraseña: {passwordGenerada}\n\n" +
-                        $"¿Deseas enviar las credenciales por WhatsApp ahora?",
-                        "Sí, enviar WhatsApp",
+                        $"?? Contraseï¿½a: {passwordGenerada}\n\n" +
+                        $"ï¿½Deseas enviar las credenciales por WhatsApp ahora?",
+                        "Sï¿½, enviar WhatsApp",
                         "No, solo copiar");
 
                     if (enviarWhatsApp)
@@ -149,14 +149,14 @@ namespace App_CrediVnzl.ViewModels
                         {
                             await Application.Current!.MainPage!.DisplayAlert(
                                 "WhatsApp Enviado",
-                                "Se ha abierto WhatsApp con el mensaje de credenciales. Por favor, envíalo al cliente.",
+                                "Se ha abierto WhatsApp con el mensaje de credenciales. Por favor, envï¿½alo al cliente.",
                                 "OK");
                         }
                         else
                         {
                             await Application.Current!.MainPage!.DisplayAlert(
                                 "Error",
-                                "No se pudo abrir WhatsApp. Verifica el número de teléfono del cliente.",
+                                "No se pudo abrir WhatsApp. Verifica el nï¿½mero de telï¿½fono del cliente.",
                                 "OK");
                         }
                     }
@@ -166,12 +166,12 @@ namespace App_CrediVnzl.ViewModels
                         await Application.Current!.MainPage!.DisplayAlert(
                             "Credenciales Generadas",
                             $"Usuario: {ClienteSeleccionado.Cedula}\n" +
-                            $"Contraseña: {passwordGenerada}\n\n" +
+                            $"Contraseï¿½a: {passwordGenerada}\n\n" +
                             $"Comunica estas credenciales al cliente.",
                             "OK");
                     }
                     
-                    // Limpiar selección
+                    // Limpiar selecciï¿½n
                     ClienteSeleccionado = null;
                     
                     // Recargar datos
@@ -199,9 +199,9 @@ namespace App_CrediVnzl.ViewModels
 
             var confirmar = await Application.Current!.MainPage!.DisplayAlert(
                 "Aprobar Solicitud",
-                $"¿Aprobar la solicitud de {usuario.NombreCompleto}?\n\n" +
-                $"Se generará una contraseña automática de 6 dígitos.",
-                "Sí, aprobar",
+                $"ï¿½Aprobar la solicitud de {usuario.NombreCompleto}?\n\n" +
+                $"Se generarï¿½ una contraseï¿½a automï¿½tica de 6 dï¿½gitos.",
+                "Sï¿½, aprobar",
                 "Cancelar");
 
             if (!confirmar) return;
@@ -214,32 +214,32 @@ namespace App_CrediVnzl.ViewModels
 
                 if (exito)
                 {
-                    // Extraer la contraseña del mensaje
-                    var password = mensaje.Replace("Cliente aprobado exitosamente. Contraseña temporal: ", "");
+                    // Extraer la contraseï¿½a del mensaje
+                    var password = mensaje.Replace("Cliente aprobado exitosamente. Contraseï¿½a temporal: ", "");
                     
-                    // Obtener cliente para el teléfono
+                    // Obtener cliente para el telï¿½fono
                     var cliente = await _databaseService.GetClienteAsync(usuario.ClienteId ?? 0);
                     
                     if (cliente != null)
                     {
                         // Preparar mensaje de WhatsApp
-                        var mensajeWhatsApp = $"¡Bienvenido a CrediVnzl! ??\n\n" +
+                        var mensajeWhatsApp = $"ï¿½Bienvenido a CrediVnzl! ??\n\n" +
                                              $"Tu solicitud ha sido *aprobada* exitosamente.\n\n" +
                                              $"?? *Tus credenciales de acceso:*\n" +
                                              $"Usuario: *{usuario.NombreUsuario}* (tu DNI)\n" +
-                                             $"Contraseña: *{password}*\n\n" +
+                                             $"Contraseï¿½a: *{password}*\n\n" +
                                              $"?? Descarga la app y accede con estas credenciales.\n\n" +
-                                             $"?? Por seguridad, te recomendamos cambiar tu contraseña desde la opción 'Mi Cuenta' en la app.\n\n" +
-                                             $"¡Gracias por confiar en nosotros!";
+                                             $"?? Por seguridad, te recomendamos cambiar tu contraseï¿½a desde la opciï¿½n 'Mi Cuenta' en la app.\n\n" +
+                                             $"ï¿½Gracias por confiar en nosotros!";
 
                         // Preguntar si desea enviar WhatsApp
                         var enviarWhatsApp = await Application.Current!.MainPage!.DisplayAlert(
                             "? Cliente Aprobado",
                             $"Cliente: {usuario.NombreCompleto}\n\n" +
                             $"?? Usuario (DNI): {usuario.NombreUsuario}\n" +
-                            $"?? Contraseña: {password}\n\n" +
-                            $"¿Deseas enviar las credenciales por WhatsApp ahora?",
-                            "Sí, enviar WhatsApp",
+                            $"?? Contraseï¿½a: {password}\n\n" +
+                            $"ï¿½Deseas enviar las credenciales por WhatsApp ahora?",
+                            "Sï¿½, enviar WhatsApp",
                             "No, solo copiar");
 
                         if (enviarWhatsApp)
@@ -251,14 +251,14 @@ namespace App_CrediVnzl.ViewModels
                             {
                                 await Application.Current!.MainPage!.DisplayAlert(
                                     "WhatsApp Enviado",
-                                    "Se ha abierto WhatsApp con el mensaje de credenciales. Por favor, envíalo al cliente.",
+                                    "Se ha abierto WhatsApp con el mensaje de credenciales. Por favor, envï¿½alo al cliente.",
                                     "OK");
                             }
                             else
                             {
                                 await Application.Current!.MainPage!.DisplayAlert(
                                     "Error",
-                                    "No se pudo abrir WhatsApp. Verifica el número de teléfono del cliente.",
+                                    "No se pudo abrir WhatsApp. Verifica el nï¿½mero de telï¿½fono del cliente.",
                                     "OK");
                             }
                         }
@@ -268,7 +268,7 @@ namespace App_CrediVnzl.ViewModels
                             await Application.Current!.MainPage!.DisplayAlert(
                                 "Credenciales",
                                 $"Usuario: {usuario.NombreUsuario}\n" +
-                                $"Contraseña: {password}\n\n" +
+                                $"Contraseï¿½a: {password}\n\n" +
                                 $"Comunica estas credenciales al cliente.",
                                 "OK");
                         }
@@ -298,8 +298,8 @@ namespace App_CrediVnzl.ViewModels
 
             var confirmar = await Application.Current!.MainPage!.DisplayAlert(
                 "Rechazar Solicitud",
-                $"¿Rechazar la solicitud de {usuario.NombreCompleto}?",
-                "Sí, rechazar",
+                $"ï¿½Rechazar la solicitud de {usuario.NombreCompleto}?",
+                "Sï¿½, rechazar",
                 "Cancelar");
 
             if (!confirmar) return;
@@ -339,10 +339,10 @@ namespace App_CrediVnzl.ViewModels
             if (usuario == null) return;
 
             var confirmar = await Application.Current!.MainPage!.DisplayAlert(
-                "Regenerar Contraseña",
-                $"¿Generar una nueva contraseña para {usuario.NombreCompleto}?\n\n" +
-                $"La contraseña actual dejará de funcionar.",
-                "Sí, regenerar",
+                "Regenerar Contraseï¿½a",
+                $"ï¿½Generar una nueva contraseï¿½a para {usuario.NombreCompleto}?\n\n" +
+                $"La contraseï¿½a actual dejarï¿½ de funcionar.",
+                "Sï¿½, regenerar",
                 "Cancelar");
 
             if (!confirmar) return;
@@ -355,30 +355,30 @@ namespace App_CrediVnzl.ViewModels
 
                 if (exito && passwordGenerada != null)
                 {
-                    // Obtener cliente para el teléfono
+                    // Obtener cliente para el telï¿½fono
                     var cliente = await _databaseService.GetClienteAsync(usuario.ClienteId ?? 0);
                     
                     if (cliente != null)
                     {
                         // Preparar mensaje de WhatsApp
-                        var mensajeWhatsApp = $"?? *Contraseña Regenerada - CrediVnzl*\n\n" +
+                        var mensajeWhatsApp = $"?? *Contraseï¿½a Regenerada - CrediVnzl*\n\n" +
                                              $"Hola {usuario.NombreCompleto},\n\n" +
-                                             $"Se ha generado una nueva contraseña para tu cuenta.\n\n" +
+                                             $"Se ha generado una nueva contraseï¿½a para tu cuenta.\n\n" +
                                              $"?? *Tus nuevas credenciales:*\n" +
                                              $"Usuario: *{usuario.NombreUsuario}* (tu DNI)\n" +
-                                             $"Nueva Contraseña: *{passwordGenerada}*\n\n" +
-                                             $"?? Tu contraseña anterior ya no funcionará.\n\n" +
-                                             $"?? Recuerda que puedes cambiar tu contraseña desde la app en cualquier momento.\n\n" +
+                                             $"Nueva Contraseï¿½a: *{passwordGenerada}*\n\n" +
+                                             $"?? Tu contraseï¿½a anterior ya no funcionarï¿½.\n\n" +
+                                             $"?? Recuerda que puedes cambiar tu contraseï¿½a desde la app en cualquier momento.\n\n" +
                                              $"Si no solicitaste este cambio, contacta inmediatamente al administrador.";
 
                         // Preguntar si desea enviar WhatsApp
                         var enviarWhatsApp = await Application.Current!.MainPage!.DisplayAlert(
-                            "? Contraseña Regenerada",
+                            "? Contraseï¿½a Regenerada",
                             $"Cliente: {usuario.NombreCompleto}\n\n" +
                             $"?? Usuario (DNI): {usuario.NombreUsuario}\n" +
-                            $"?? Nueva Contraseña: {passwordGenerada}\n\n" +
-                            $"¿Deseas enviar la nueva contraseña por WhatsApp?",
-                            "Sí, enviar WhatsApp",
+                            $"?? Nueva Contraseï¿½a: {passwordGenerada}\n\n" +
+                            $"ï¿½Deseas enviar la nueva contraseï¿½a por WhatsApp?",
+                            "Sï¿½, enviar WhatsApp",
                             "No, solo copiar");
 
                         if (enviarWhatsApp)
@@ -390,25 +390,25 @@ namespace App_CrediVnzl.ViewModels
                             {
                                 await Application.Current!.MainPage!.DisplayAlert(
                                     "WhatsApp Enviado",
-                                    "Se ha abierto WhatsApp con la nueva contraseña. Por favor, envíalo al cliente.",
+                                    "Se ha abierto WhatsApp con la nueva contraseï¿½a. Por favor, envï¿½alo al cliente.",
                                     "OK");
                             }
                             else
                             {
                                 await Application.Current!.MainPage!.DisplayAlert(
                                     "Error",
-                                    "No se pudo abrir WhatsApp. Verifica el número de teléfono del cliente.",
+                                    "No se pudo abrir WhatsApp. Verifica el nï¿½mero de telï¿½fono del cliente.",
                                     "OK");
                             }
                         }
                         else
                         {
-                            // Solo mostrar la contraseña
+                            // Solo mostrar la contraseï¿½a
                             await Application.Current!.MainPage!.DisplayAlert(
-                                "Nueva Contraseña",
+                                "Nueva Contraseï¿½a",
                                 $"Usuario: {usuario.NombreUsuario}\n" +
-                                $"Nueva Contraseña: {passwordGenerada}\n\n" +
-                                $"Comunica la nueva contraseña al cliente.",
+                                $"Nueva Contraseï¿½a: {passwordGenerada}\n\n" +
+                                $"Comunica la nueva contraseï¿½a al cliente.",
                                 "OK");
                         }
                     }
@@ -422,7 +422,7 @@ namespace App_CrediVnzl.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error regenerando contraseña: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error regenerando contraseï¿½a: {ex.Message}");
                 await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             }
             finally
@@ -437,8 +437,8 @@ namespace App_CrediVnzl.ViewModels
 
             var confirmar = await Application.Current!.MainPage!.DisplayAlert(
                 "Confirmar",
-                $"¿Desea desactivar el usuario de {usuario.NombreCompleto}?",
-                "Sí",
+                $"ï¿½Desea desactivar el usuario de {usuario.NombreCompleto}?",
+                "Sï¿½",
                 "No");
 
             if (!confirmar) return;
@@ -448,7 +448,7 @@ namespace App_CrediVnzl.ViewModels
                 usuario.Activo = false;
                 await _databaseService.SaveUsuarioAsync(usuario);
                 
-                await Application.Current!.MainPage!.DisplayAlert("Éxito", "Usuario desactivado", "OK");
+                await Application.Current!.MainPage!.DisplayAlert("ï¿½xito", "Usuario desactivado", "OK");
                 await LoadDataAsync();
             }
             catch (Exception ex)

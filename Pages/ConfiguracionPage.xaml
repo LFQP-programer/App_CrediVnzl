@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_CrediVnzl.Pages.ConfiguracionPage"
@@ -30,13 +30,13 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Gestión de Usuarios -->
+            <!-- GestiOn de Usuarios -->
             <Frame BackgroundColor="White"
                    CornerRadius="15"
                    Padding="20"
                    HasShadow="True">
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="Gestión de Usuarios"
+                    <Label Text="Gestion de Usuarios"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="{StaticResource Gray900}"/>

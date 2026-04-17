@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_CrediVnzl.Pages.EnviarMensajesPage"
@@ -9,7 +9,7 @@
              Shell.TitleColor="{StaticResource White}"
              BackgroundColor="#F5F5F5">
 
-    <ScrollView>
+    <ScrollView Padding="0,0,0,300">
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Tipo de Mensaje -->
@@ -67,12 +67,12 @@
                 <VerticalStackLayout Spacing="10">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="📢" FontSize="20"/>
-                        <Label Text="Envío Automático" 
+                        <Label Text="EnvIo AutomAtico" 
                                FontSize="16" 
                                FontAttributes="Bold"
                                TextColor="#212121"/>
                     </HorizontalStackLayout>
-                    <Label Text="Se enviará un recordatorio automático a todos los clientes con pagos próximos (hoy y mañana)."
+                    <Label Text="Se enviarA un recordatorio automAtico a todos los clientes con pagos prOximos (hoy y maNana)."
                            FontSize="14"
                            TextColor="#424242"/>
                     <Label Text="{Binding TotalMensajesRecordatorios, StringFormat='Total de mensajes: {0}'}"
@@ -104,7 +104,7 @@
                                TextColor="#424242"/>
                     </Frame>
 
-                    <Label Text="No hay pagos pendientes próximos"
+                    <Label Text="No hay pagos pendientes prOximos"
                            FontSize="14"
                            TextColor="#757575"
                            HorizontalOptions="Center"
@@ -117,7 +117,7 @@
                    CornerRadius="10"
                    Padding="15"
                    HasShadow="True"
-                   IsVisible="{Binding EsIndividual}">
+                   IsVisible="{Binding Esíndividual}">
                 <VerticalStackLayout Spacing="15">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="👤" FontSize="20"/>
@@ -145,14 +145,14 @@
                             BackgroundColor="#F5F5F5"
                             TextColor="#212121"/>
                     
-                    <Label Text="💡 El mensaje será enviado únicamente al cliente seleccionado."
+                    <Label Text="💡 El mensaje serA enviado Unicamente al cliente seleccionado."
                            FontSize="12"
                            TextColor="#757575"
                            FontAttributes="Italic"/>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- MASIVO -->
+            <!-- MASíVO -->
             <Frame BackgroundColor="#FFE0B2"
                    CornerRadius="10"
                    Padding="15"
@@ -161,12 +161,12 @@
                 <VerticalStackLayout Spacing="10">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="👥" FontSize="20"/>
-                        <Label Text="Envío Masivo Personalizado" 
+                        <Label Text="EnvIo Masivo Personalizado" 
                                FontSize="16" 
                                FontAttributes="Bold"
                                TextColor="#212121"/>
                     </HorizontalStackLayout>
-                    <Label Text="Se enviará tu mensaje personalizado a todos los clientes con pagos próximos (hoy y mañana)."
+                    <Label Text="Se enviarA tu mensaje personalizado a todos los clientes con pagos prOximos (hoy y maNana)."
                            FontSize="14"
                            TextColor="#424242"/>
                     <Label Text="{Binding TotalMensajesMasivos, StringFormat='Total de mensajes: {0}'}"
@@ -194,7 +194,7 @@
                             BackgroundColor="#F5F5F5"
                             TextColor="#212121"/>
                     
-                    <Label Text="💡 Se agregará el nombre de cada cliente al inicio del mensaje automáticamente."
+                    <Label Text="💡 Se agregarA el nombre de cada cliente al inicio del mensaje automAticamente."
                            FontSize="12"
                            TextColor="#757575"
                            FontAttributes="Italic"/>
@@ -222,23 +222,23 @@
                 <VerticalStackLayout Spacing="10">
                     <HorizontalStackLayout Spacing="8">
                         <Label Text="🚀" FontSize="20"/>
-                        <Label Text="Proceso Semi-Automático"
+                        <Label Text="Proceso Semi-AutomAtico"
                                FontSize="16"
                                FontAttributes="Bold"
                                TextColor="#2E7D32"/>
                     </HorizontalStackLayout>
                     
-                    <Label Text="✅ WhatsApp se abrirá automáticamente para cada cliente"
+                    <Label Text="✅ WhatsApp se abrirA automAticamente para cada cliente"
                            FontSize="13"
                            TextColor="#1B5E20"/>
-                    <Label Text="✅ El mensaje estará prellenado y listo"
+                    <Label Text="✅ El mensaje estarA prellenado y listo"
                            FontSize="13"
                            TextColor="#1B5E20"/>
-                    <Label Text="⚡ Solo presiona ENVIAR en cada conversación"
+                    <Label Text="⚡ Solo presiona ENVIAR en cada conversaciOn"
                            FontSize="13"
                            TextColor="#1B5E20"
                            FontAttributes="Bold"/>
-                    <Label Text="✅ Cambio automático entre conversaciones (500ms)"
+                    <Label Text="✅ Cambio automAtico entre conversaciones (500ms)"
                            FontSize="13"
                            TextColor="#1B5E20"/>
                 </VerticalStackLayout>
@@ -259,16 +259,16 @@
                                TextColor="#E65100"/>
                     </HorizontalStackLayout>
                     
-                    <Label Text="• WhatsApp NO permite envío 100% automático por seguridad"
+                    <Label Text="• WhatsApp NO permite envIo 100% automAtico por seguridad"
                            FontSize="12"
                            TextColor="#BF360C"/>
-                    <Label Text="• Deberás presionar ENVIAR manualmente en cada mensaje"
+                    <Label Text="• DeberAs presionar ENVIAR manualmente en cada mensaje"
                            FontSize="12"
                            TextColor="#BF360C"/>
-                    <Label Text="• Los clientes sin teléfono serán omitidos automáticamente"
+                    <Label Text="• Los clientes sin telEfono serAn omitidos automAticamente"
                            FontSize="12"
                            TextColor="#BF360C"/>
-                    <Label Text="• Para envío 100% automático necesitarías WhatsApp Business API (de pago)"
+                    <Label Text="• Para envIo 100% automAtico necesitarIas WhatsApp Business API (de pago)"
                            FontSize="12"
                            TextColor="#BF360C"
                            FontAttributes="Italic"/>
@@ -284,13 +284,13 @@
                 <VerticalStackLayout Spacing="8">
                     <HorizontalStackLayout Spacing="8">
                         <Label Text="💼" FontSize="18"/>
-                        <Label Text="¿Necesitas Envío Totalmente Automático?"
+                        <Label Text="?Necesitas EnvIo Totalmente AutomAtico?"
                                FontSize="14"
                                FontAttributes="Bold"
                                TextColor="#1565C0"/>
                     </HorizontalStackLayout>
                     
-                    <Label Text="Para envío 100% automático necesitarías:"
+                    <Label Text="Para envIo 100% automAtico necesitarIas:"
                            FontSize="12"
                            TextColor="#0D47A1"
                            FontAttributes="Bold"/>

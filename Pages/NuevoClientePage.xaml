@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:App_CrediVnzl.ViewModels"
@@ -10,7 +10,7 @@
              Shell.ForegroundColor="{StaticResource White}"
              Shell.TitleColor="{StaticResource White}">
 
-    <ScrollView>
+    <ScrollView Padding="0,0,0,300">
         <VerticalStackLayout Padding="0" Spacing="0">
 
             <!-- Informacion del Cliente Card -->
@@ -128,22 +128,28 @@
                                CornerRadius="12"
                                Padding="0"
                                HasShadow="False">
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Grid ColumnDefinitions="Auto,50,*" ColumnSpacing="10">
                                 <Image Grid.Column="0"
                                        Source="{x:Static helpers:IconPaths.Phone}"
                                        WidthRequest="20"
                                        HeightRequest="20"
                                        VerticalOptions="Center"
                                        Margin="15,0,0,0" />
-                                <Entry Grid.Column="1"
-                                       Placeholder="999 999 999"
+                                <Label Grid.Column="1"
+                                       Text="+51"
+                                       FontSize="14"
+                                       TextColor="{StaticResource Gray900}"
+                                       VerticalOptions="Center"
+                                       Margin="0,0,0,0" />
+                                <Entry Grid.Column="2"
+                                       Placeholder="999999999"
                                        Text="{Binding Cliente.NumeroCelular}"
                                        Keyboard="Numeric"
                                        MaxLength="9"
                                        Margin="0,0,15,0" />
                             </Grid>
                         </Frame>
-                        <Label Text="9 digitos (Peru)"
+                        <Label Text="9 d?igitos (Peru)"
                                FontSize="11"
                                TextColor="{StaticResource Gray500}"
                                Margin="5,0,0,0" />
@@ -285,22 +291,28 @@
                                    CornerRadius="12"
                                    Padding="0"
                                    HasShadow="False">
-                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Grid ColumnDefinitions="Auto,50,*" ColumnSpacing="10">
                                     <Image Grid.Column="0"
                                            Source="{x:Static helpers:IconPaths.Phone}"
                                            WidthRequest="20"
                                            HeightRequest="20"
                                            VerticalOptions="Center"
                                            Margin="15,0,0,0" />
-                                    <Entry Grid.Column="1"
-                                           Placeholder="999 999 999"
+                                    <Label Grid.Column="1"
+                                           Text="+51"
+                                           FontSize="14"
+                                           TextColor="{StaticResource Gray900}"
+                                           VerticalOptions="Center"
+                                           Margin="0,0,0,0" />
+                                    <Entry Grid.Column="2"
+                                           Placeholder="999999999"
                                            Text="{Binding Cliente.AvalCelular}"
                                            Keyboard="Numeric"
                                            MaxLength="9"
                                            Margin="0,0,15,0" />
                                 </Grid>
                             </Frame>
-                            <Label Text="9 digitos (Peru)"
+                            <Label Text="9 d?igitos (Peru)"
                                    FontSize="11"
                                    TextColor="{StaticResource Gray500}"
                                    Margin="5,0,0,0" />

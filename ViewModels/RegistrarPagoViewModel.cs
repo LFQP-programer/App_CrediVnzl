@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using App_CrediVnzl.Models;
@@ -10,6 +10,7 @@ namespace App_CrediVnzl.ViewModels
     public class RegistrarPagoViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseService _databaseService;
+        private readonly NotificationService _notificationService;
         private Prestamo _prestamo;
         private int _prestamoId;
         private string _montoPago = string.Empty;
@@ -33,6 +34,8 @@ namespace App_CrediVnzl.ViewModels
             {
                 _prestamoId = value;
                 OnPropertyChanged();
+                // Cargar datos automáticamente cuando se establece el PrestamoId
+                Task.Run(async () => await LoadDataAsync());
             }
         }
 
@@ -72,9 +75,10 @@ namespace App_CrediVnzl.ViewModels
         public ICommand PagarTotalCommand { get; }
         public ICommand ToggleSistemaPagoCommand { get; }
 
-        public RegistrarPagoViewModel(DatabaseService databaseService)
+        public RegistrarPagoViewModel(DatabaseService databaseService, NotificationService notificationService)
         {
             _databaseService = databaseService;
+            _notificationService = notificationService;
             _prestamo = new Prestamo();
             
             RegistrarPagoCommand = new Command(async () => await RegistrarPago());
@@ -124,7 +128,7 @@ namespace App_CrediVnzl.ViewModels
                     return;
                 }
                 
-                var interesPorSemana = prestamo.CapitalPendiente * (prestamo.TasaInteresSemanal / 100);
+                var interesPorSemana = prestamo.MontoInicial * (prestamo.TasaInteresSemanal / 100);
                 var nuevoInteres = interesPorSemana * semanasAAgregar;
                 
                 prestamo.InteresAcumulado += nuevoInteres;
@@ -198,6 +202,12 @@ namespace App_CrediVnzl.ViewModels
                 Prestamo.MontoPagado += monto;
                 Prestamo.FechaUltimoPago = DateTime.Now;
                 Prestamo.TotalAdeudado = Prestamo.CapitalPendiente + Prestamo.InteresAcumulado;
+                
+                // Actualizar fecha del próximo pago (7 días después si es semanal)
+                if (Prestamo.Estado == "Activo")
+                {
+                    Prestamo.FechaProximoPago = DateTime.Now.AddDays(7);
+                }
 
                 // Verificar si el prestamo esta completado
                 if (Prestamo.CapitalPendiente <= 0)
@@ -248,6 +258,12 @@ namespace App_CrediVnzl.ViewModels
 
                 // Actualizar cliente
                 await _databaseService.ActualizarDeudaClienteAsync(Prestamo.ClienteId);
+
+                // Enviar notificación de pago registrado
+                await _notificationService.NotificarPagoRegistradoAsync(Prestamo, monto);
+
+                // Actualizar todas las notificaciones (por si cambió el estado del préstamo)
+                await _notificationService.ActualizarTodasLasNotificacionesAsync();
 
                 // Mostrar mensaje de exito
                 var mensaje = $"Pago registrado exitosamente\n\n";

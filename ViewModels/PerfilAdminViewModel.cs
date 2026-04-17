@@ -1,6 +1,7 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Linq;
 using App_CrediVnzl.Services;
 
 namespace App_CrediVnzl.ViewModels
@@ -90,6 +91,9 @@ namespace App_CrediVnzl.ViewModels
         public ICommand EditarCommand { get; }
         public ICommand GuardarCommand { get; }
         public ICommand CancelarCommand { get; }
+        public ICommand VolverCommand { get; }
+        public ICommand GuardarCambiosCommand { get; }
+        public ICommand CambiarContrasenaCommand { get; }
 
         public PerfilAdminViewModel(AuthService authService, DatabaseService databaseService)
         {
@@ -99,6 +103,9 @@ namespace App_CrediVnzl.ViewModels
             EditarCommand = new Command(OnEditar);
             GuardarCommand = new Command(async () => await OnGuardarAsync());
             CancelarCommand = new Command(OnCancelar);
+            VolverCommand = new Command(async () => await OnVolverAsync());
+            GuardarCambiosCommand = new Command(async () => await OnGuardarCambiosAsync());
+            CambiarContrasenaCommand = new Command(async () => await OnCambiarContrasenaAsync());
             
             _ = CargarDatosAsync();
         }
@@ -109,12 +116,24 @@ namespace App_CrediVnzl.ViewModels
             {
                 IsLoading = true;
                 
-                // Cargar datos del administrador
-                NombreCompleto = "Administrador CrediVnzl";
-                Usuario = "admin";
-                Email = "admin@credivnzl.com";
-                Telefono = "+51 999 999 999";
-                FechaCreacion = DateTime.Now.AddMonths(-6);
+                // Cargar datos del administrador desde Preferences
+                NombreCompleto = Preferences.Get("Admin_NombreCompleto", "Administrador CrediVnzl");
+                Usuario = Preferences.Get("Admin_Usuario", "admin");
+                Email = Preferences.Get("Admin_Email", "admin@credivnzl.com");
+                Telefono = Preferences.Get("Admin_Telefono", "999999999"); // Solo 9 dígitos
+                
+                // La fecha de creaci�n se guarda como string y se convierte
+                var fechaString = Preferences.Get("Admin_FechaCreacion", "");
+                if (string.IsNullOrEmpty(fechaString))
+                {
+                    // Si es la primera vez, establecer fecha actual y guardarla
+                    FechaCreacion = DateTime.Now;
+                    Preferences.Set("Admin_FechaCreacion", FechaCreacion.ToString("O"));
+                }
+                else
+                {
+                    FechaCreacion = DateTime.Parse(fechaString);
+                }
                 
                 // Cargar estad�sticas desde la base de datos
                 await CargarEstadisticasAsync();
@@ -239,6 +258,122 @@ namespace App_CrediVnzl.ViewModels
         {
             IsEditing = false;
             _ = CargarDatosAsync(); // Recargar datos originales
+        }
+
+        private async Task OnVolverAsync()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync("..");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al volver: {ex.Message}");
+            }
+        }
+
+        private async Task OnGuardarCambiosAsync()
+        {
+            if (string.IsNullOrWhiteSpace(NombreCompleto))
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "El nombre completo es obligatorio",
+                    "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Usuario))
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "El nombre de usuario es obligatorio",
+                    "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "El correo electrónico es obligatorio",
+                    "OK");
+                return;
+            }
+
+            // Validación básica de formato de email
+            if (!Email.Contains("@") || !Email.Contains("."))
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Por favor ingresa un correo electrónico válido",
+                    "OK");
+                return;
+            }
+
+            // Validación de teléfono (debe tener exactamente 9 dígitos)
+            if (!string.IsNullOrWhiteSpace(Telefono))
+            {
+                // Remover cualquier caracter que no sea dígito
+                var telefonoLimpio = new string(Telefono.Where(char.IsDigit).ToArray());
+                
+                if (telefonoLimpio.Length != 9)
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Error",
+                        "El teléfono debe tener exactamente 9 dígitos",
+                        "OK");
+                    return;
+                }
+                
+                // Actualizar con el teléfono limpio (solo dígitos)
+                Telefono = telefonoLimpio;
+            }
+
+            try
+            {
+                IsLoading = true;
+
+                // Guardar los cambios en Preferences
+                Preferences.Set("Admin_NombreCompleto", NombreCompleto);
+                Preferences.Set("Admin_Usuario", Usuario);
+                Preferences.Set("Admin_Email", Email);
+                Preferences.Set("Admin_Telefono", Telefono);
+
+                System.Diagnostics.Debug.WriteLine($"Datos guardados - Usuario: {Usuario}, Nombre: {NombreCompleto}, Email: {Email}, Teléfono: {Telefono}");
+
+                await Application.Current.MainPage.DisplayAlert(
+                    "✓ Éxito",
+                    "Los cambios se guardaron correctamente",
+                    "OK");
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    $"No se pudieron guardar los cambios: {ex.Message}",
+                    "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task OnCambiarContrasenaAsync()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync("cambiarcontrasenaadmin");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al navegar a cambiar contraseña: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    $"No se pudo abrir la página de cambio de contraseña: {ex.Message}",
+                    "OK");
+            }
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

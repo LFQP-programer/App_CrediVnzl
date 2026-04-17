@@ -1,4 +1,4 @@
-﻿using App_CrediVnzl.Pages;
+using App_CrediVnzl.Pages;
 
 namespace App_CrediVnzl
 {
@@ -25,16 +25,14 @@ namespace App_CrediVnzl
                 Routing.RegisterRoute("mensajes", typeof(EnviarMensajesPage));
                 Routing.RegisterRoute("reportes", typeof(ReportesPage));
                 Routing.RegisterRoute("configuracion", typeof(ConfiguracionPage));
+                Routing.RegisterRoute("configuracioncuenta", typeof(ConfiguracionCuentaPage));
+                Routing.RegisterRoute("gestionarusuarios", typeof(GestionarUsuariosPage));
                 Routing.RegisterRoute("perfiladmin", typeof(PerfilAdminPage));
                 Routing.RegisterRoute("cambiarcontrasenaadmin", typeof(CambiarContrasenaAdminPage));
                 
-                // Registrar ruta de calendario apuntando a reportes temporalmente
-                // TODO: Crear CalendarioPagosPage cuando sea necesario
-                Routing.RegisterRoute("calendario", typeof(ReportesPage));
-                
                 // Ruta de ayuda apuntando a configuración temporalmente
                 // TODO: Crear AyudaPage cuando sea necesario
-                Routing.RegisterRoute("ayuda", typeof(ConfiguracionPage));
+                Routing.RegisterRoute("ayuda", typeof(AyudaPage));
                 
                 System.Diagnostics.Debug.WriteLine("*** AppShell Constructor - Rutas registradas OK ***");
                 

@@ -1,4 +1,5 @@
 using App_CrediVnzl.ViewModels;
+using App_CrediVnzl.Services;
 
 namespace App_CrediVnzl.Pages
 {
@@ -6,10 +7,10 @@ namespace App_CrediVnzl.Pages
     {
         private readonly ConfiguracionCuentaViewModel _viewModel;
 
-        public ConfiguracionCuentaPage(ConfiguracionCuentaViewModel viewModel)
+        public ConfiguracionCuentaPage(AuthService authService, DatabaseService databaseService)
         {
             InitializeComponent();
-            _viewModel = viewModel;
+            _viewModel = new ConfiguracionCuentaViewModel(authService, databaseService);
             BindingContext = _viewModel;
         }
 

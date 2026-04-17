@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using App_CrediVnzl.Services;
@@ -70,6 +70,7 @@ namespace App_CrediVnzl.ViewModels
         public ICommand ToggleContrasenaActualCommand { get; }
         public ICommand ToggleContrasenaNuevaCommand { get; }
         public ICommand ToggleContrasenaConfirmarCommand { get; }
+        public ICommand VolverCommand { get; }
 
         public CambiarContrasenaAdminViewModel(AuthService authService)
         {
@@ -79,6 +80,7 @@ namespace App_CrediVnzl.ViewModels
             ToggleContrasenaActualCommand = new Command(() => MostrarContrasenaActual = !MostrarContrasenaActual);
             ToggleContrasenaNuevaCommand = new Command(() => MostrarContrasenaNueva = !MostrarContrasenaNueva);
             ToggleContrasenaConfirmarCommand = new Command(() => MostrarContrasenaConfirmar = !MostrarContrasenaConfirmar);
+            VolverCommand = new Command(async () => await OnVolverAsync());
         }
 
         private async Task OnCambiarContrasenaAsync()
@@ -160,6 +162,18 @@ namespace App_CrediVnzl.ViewModels
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        private async Task OnVolverAsync()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync("..");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al volver: {ex.Message}");
             }
         }
 

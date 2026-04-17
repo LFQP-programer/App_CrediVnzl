@@ -1,4 +1,4 @@
-﻿using SQLite;
+using SQLite;
 using App_CrediVnzl.Models;
 
 namespace App_CrediVnzl.Services
@@ -21,6 +21,7 @@ namespace App_CrediVnzl.Services
             await _database.CreateTableAsync<Pago>();
             await _database.CreateTableAsync<HistorialPago>();
             await _database.CreateTableAsync<CapitalConfig>();
+            await _database.CreateTableAsync<Usuario>();
             
             // Verificar y agregar columnas faltantes en Cliente (para migración)
             await MigrarTablaClienteAsync();
@@ -370,8 +371,8 @@ namespace App_CrediVnzl.Services
             }
             
             // Actualizar deuda pendiente de todos los clientes afectados
-            var clientesIds = prestamosActivos.Select(p => p.ClienteId).Distinct();
-            foreach (var clienteId in clientesIds)
+            var clientesíds = prestamosActivos.Select(p => p.ClienteId).Distinct();
+            foreach (var clienteId in clientesíds)
             {
                 await ActualizarDeudaClienteAsync(clienteId);
             }
@@ -625,11 +626,11 @@ namespace App_CrediVnzl.Services
             foreach (var prestamo in prestamos)
             {
                 // Eliminar historial de pagos del préstamo
-                await db.ExecuteAsync("DELETE FROM HistorialPago WHERE PrestamoId = ?", prestamo.Id);
-                
+                await db.ExecuteAsync("DELETE FROM historial_pagos WHERE PrestamoId = ?", prestamo.Id);
+
                 // Eliminar pagos programados del préstamo
-                await db.ExecuteAsync("DELETE FROM Pago WHERE PrestamoId = ?", prestamo.Id);
-                
+                await db.ExecuteAsync("DELETE FROM pagos WHERE PrestamoId = ?", prestamo.Id);
+
                 // Eliminar el préstamo
                 await db.DeleteAsync(prestamo);
             }
@@ -792,7 +793,84 @@ namespace App_CrediVnzl.Services
                 .ToListAsync();
         }
 
+        // Métodos para gestión de Usuarios
+        public async Task<List<Usuario>> GetUsuariosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>()
+                .OrderByDescending(u => u.FechaCreacion)
+                .ToListAsync();
+        }
+
+        public async Task<List<Usuario>> GetUsuariosClientesAsync()
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>()
+                .Where(u => u.Tipo == TipoUsuario.Cliente)
+                .OrderByDescending(u => u.FechaCreacion)
+                .ToListAsync();
+        }
+
+        public async Task<Usuario?> GetUsuarioAsync(int id)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>()
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Usuario?> GetUsuarioByNombreUsuarioAsync(string nombreUsuario)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.Table<Usuario>()
+                .Where(u => u.NombreUsuario == nombreUsuario)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<int> SaveUsuarioAsync(Usuario usuario)
+        {
+            var db = await GetDatabaseAsync();
+            
+            if (usuario.Id != 0)
+            {
+                return await db.UpdateAsync(usuario);
+            }
+            else
+            {
+                return await db.InsertAsync(usuario);
+            }
+        }
+
+        public async Task<int> DeleteUsuarioAsync(Usuario usuario)
+        {
+            var db = await GetDatabaseAsync();
+            return await db.DeleteAsync(usuario);
+        }
+
+        // Método para limpiar todos los datos (útil para pruebas)
+        public async Task LimpiarTodosLosDatosAsync()
+        {
+            var db = await GetDatabaseAsync();
+            
+            // Eliminar todos los registros de todas las tablas
+            await db.DeleteAllAsync<Pago>();
+            await db.DeleteAllAsync<HistorialPago>();
+            await db.DeleteAllAsync<Prestamo>();
+            await db.DeleteAllAsync<Cliente>();
+            
+            // Resetear capital config
+            var config = await GetCapitalConfigAsync();
+            if (config != null)
+            {
+                config.CapitalInicial = 0;
+                config.CapitalDisponible = 0;
+                config.GananciaTotal = 0;
+                config.FechaActualizacion = DateTime.Now;
+                await SaveCapitalConfigAsync(config);
+            }
+        }
     }
+
 
     // Clase para información de la base de datos
     public class DatabaseInfo

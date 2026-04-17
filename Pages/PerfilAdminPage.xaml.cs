@@ -10,10 +10,5 @@ namespace App_CrediVnzl.Pages
             InitializeComponent();
             BindingContext = new PerfilAdminViewModel(authService, databaseService);
         }
-
-        private async void OnVolverTapped(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("..");
-        }
     }
 }

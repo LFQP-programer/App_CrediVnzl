@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using App_CrediVnzl.Models;
@@ -110,15 +110,6 @@ namespace App_CrediVnzl.ViewModels
                     
                     // Autenticar como cliente
                     _authService.LoginCliente(cliente.Id, cliente.NombreCompleto, cliente.Cedula);
-                    
-                    // Si requiere cambio de contrase�a, mostrar mensaje
-                    if (cliente.RequiereCambioPassword)
-                    {
-                        await Application.Current.MainPage.DisplayAlert(
-                            "Cambio de Contrase�a",
-                            "Por seguridad, te recomendamos cambiar tu contrase�a temporal desde tu perfil.",
-                            "OK");
-                    }
                     
                     // Navegar al dashboard de cliente
                     System.Diagnostics.Debug.WriteLine("*** LoginClienteViewModel - Navegando al dashboard de cliente ***");

@@ -1,4 +1,4 @@
-﻿using SQLite;
+using SQLite;
 
 namespace App_CrediVnzl.Models
 {
@@ -20,6 +20,11 @@ namespace App_CrediVnzl.Models
         public DateTime FechaInicio { get; set; }
 
         public DateTime? FechaUltimoPago { get; set; }
+
+        public DateTime? FechaProximoPago { get; set; }
+
+        [MaxLength(20)]
+        public string? FrecuenciaPago { get; set; } = "Semanal"; // Diario, Semanal, Quincenal, Mensual
 
         [MaxLength(20)]
         public string Estado { get; set; } = "Activo"; // Activo, Completado, Cancelado
@@ -52,7 +57,7 @@ namespace App_CrediVnzl.Models
         {
             get
             {
-                return CapitalPendiente * (TasaInteresSemanal / 100);
+                return MontoInicial * (TasaInteresSemanal / 100);
             }
         }
 
