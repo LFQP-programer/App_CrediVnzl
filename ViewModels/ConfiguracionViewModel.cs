@@ -24,6 +24,7 @@ namespace App_CrediVnzl.ViewModels
         public ICommand LimpiarDatosCommand { get; }
         public ICommand ReiniciarBaseDeDatosCommand { get; }
         public ICommand GestionarUsuariosCommand { get; }
+        public ICommand ImportarDatosCSVCommand { get; }
 
         public ConfiguracionViewModel(DatabaseService databaseService)
         {
@@ -34,6 +35,7 @@ namespace App_CrediVnzl.ViewModels
             LimpiarDatosCommand = new Command(async () => await LimpiarDatosAsync());
             ReiniciarBaseDeDatosCommand = new Command(async () => await ReiniciarBaseDeDatosAsync());
             GestionarUsuariosCommand = new Command(async () => await OnGestionarUsuariosAsync());
+            ImportarDatosCSVCommand = new Command(async () => await ImportarDatosCSVAsync());
         }
 
         private async Task OnGestionarUsuariosAsync()
@@ -50,6 +52,149 @@ namespace App_CrediVnzl.ViewModels
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Error", $"No se pudo cargar la informacion: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task ImportarDatosCSVAsync()
+        {
+            try
+            {
+                var options = new PickOptions
+                {
+                    PickerTitle = "Seleccione el archivo CSV",
+                };
+
+                var result = await FilePicker.Default.PickAsync(options);
+
+                if (result != null)
+                {
+                    await Shell.Current.DisplayAlert("Procesando", "Leyendo archivo, por favor espere no salga de esta pantalla...", "OK");
+
+                    int clientesImportados = 0;
+                    int prestamosImportados = 0;
+                    int lineasOmitidas = 0;
+
+                    using var stream = await result.OpenReadAsync();
+                    using var reader = new StreamReader(stream);
+                    var content = await reader.ReadToEndAsync();
+
+                    // Separar por salto de linea
+                    var lines = content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (lines.Length <= 1)
+                    {
+                        await Shell.Current.DisplayAlert("Aviso", "El archivo parece estar vacío o solo contiene la cabecera.", "OK");
+                        return;
+                    }
+
+                    // Ignorar la cabecera e iterar desde la fila 1
+                    var clientesActuales = await _databaseService.GetClientesAsync();
+
+                    foreach (var line in lines.Skip(1))
+                    {
+                        try
+                        {
+                            var separator = line.Contains(";") ? ';' : ',';
+                            var cols = line.Split(separator);
+
+                            // Se espera MÍNIMO las columnas de cliente (5)
+                            if (cols.Length < 5)
+                            {
+                                lineasOmitidas++;
+                                continue;
+                            }
+
+                            string cedula = cols[0].Trim();
+                            string nombres = cols[1].Trim();
+                            string apellidos = cols[2].Trim();
+                            string celular = cols[3].Trim();
+                            string direccion = cols[4].Trim();
+
+                            if (string.IsNullOrEmpty(cedula) || string.IsNullOrEmpty(nombres))
+                            {
+                                lineasOmitidas++;
+                                continue;
+                            }
+
+                            // Verificar o crear cliente
+                            var cliente = clientesActuales.FirstOrDefault(c => c.NumeroDocumento == cedula);
+                            if (cliente == null)
+                            {
+                                cliente = new Models.Cliente
+                                {
+                                    TipoDocumento = "DNI",
+                                    NumeroDocumento = cedula,
+                                    Nombres = nombres,
+                                    Apellidos = apellidos,
+                                    NumeroCelular = celular,
+                                    AvalDireccion = direccion,
+                                    EstadoCliente = "Activo",
+                                    FechaRegistro = DateTime.Now
+                                };
+                                await _databaseService.SaveClienteAsync(cliente);
+                                clientesActuales.Add(cliente); // Añadir a cache para que los siguientes préstamos lo encuentren
+                                clientesImportados++;
+                            }
+
+                            // Si tiene los datos de préstamo (11 o más columnas en total)
+                            if (cols.Length >= 11)
+                            {
+                                if (decimal.TryParse(cols[5].Trim(), out decimal montoInicial) &&
+                                    decimal.TryParse(cols[6].Trim(), out decimal tasaInteres) &&
+                                    int.TryParse(cols[7].Trim(), out int duracion) &&
+                                    DateTime.TryParse(cols[8].Trim(), out DateTime fechaInicio) &&
+                                    decimal.TryParse(cols[9].Trim(), out decimal capitalPendiente) &&
+                                    decimal.TryParse(cols[10].Trim(), out decimal interesAcumulado))
+                                {
+                                    var prestamo = new Models.Prestamo
+                                    {
+                                        ClienteId = cliente.Id,
+                                        MontoInicial = montoInicial,
+                                        TasaInteresSemanal = tasaInteres,
+                                        DuracionSemanas = duracion,
+                                        FechaInicio = fechaInicio,
+                                        FrecuenciaPago = "Semanal",
+                                        Estado = "Activo",
+                                        CapitalPendiente = capitalPendiente,
+                                        InteresAcumulado = interesAcumulado,
+                                        TotalAdeudado = capitalPendiente + interesAcumulado,
+                                        MontoPagado = montoInicial - capitalPendiente
+                                    };
+
+                                    await _databaseService.SavePrestamoAsync(prestamo);
+
+                                    // Actualizar deuda del cliente
+                                    cliente.PrestamosActivos++;
+                                    cliente.DeudaPendiente += prestamo.TotalAdeudado;
+                                    await _databaseService.SaveClienteAsync(cliente);
+
+                                    prestamosImportados++;
+                                }
+                                else
+                                {
+                                    // Fallo el parseo de números o fechas en esta fila
+                                    lineasOmitidas++;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            lineasOmitidas++;
+                        }
+                    }
+
+                    await CargarInformacionAsync();
+
+                    string resMsg = $"Nuevos Clientes: {clientesImportados}\nNuevos Préstamos: {prestamosImportados}";
+                    if (lineasOmitidas > 0)
+                        resMsg += $"\nLíneas omitidas por error/formato: {lineasOmitidas}";
+
+                    await Shell.Current.DisplayAlert("Importación Finalizada", resMsg, "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error de Lectura", $"Ocurrió un error al procesar el archivo CSV: {ex.Message}", "OK");
             }
         }
 
