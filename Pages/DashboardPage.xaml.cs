@@ -202,13 +202,13 @@ namespace App_CrediVnzl.Pages
                 {
                     overlay.IsVisible = true;
                     popup.IsVisible = true;
-                    
+
                     overlay.Opacity = 0;
                     popup.Scale = 0.8;
                     popup.Opacity = 0;
 
                     await Task.WhenAll(
-                        overlay.FadeTo(1, 200),
+                        overlay.FadeTo(0.5, 200),
                         popup.ScaleTo(1, 300, Easing.SpringOut),
                         popup.FadeTo(1, 200)
                     );
@@ -256,13 +256,13 @@ namespace App_CrediVnzl.Pages
                 {
                     overlay.IsVisible = true;
                     popup.IsVisible = true;
-                    
+
                     overlay.Opacity = 0;
                     popup.Scale = 0.8;
                     popup.Opacity = 0;
 
                     await Task.WhenAll(
-                        overlay.FadeTo(1, 200),
+                        overlay.FadeTo(0.5, 200),
                         popup.ScaleTo(1, 300, Easing.SpringOut),
                         popup.FadeTo(1, 200)
                     );
@@ -315,7 +315,7 @@ namespace App_CrediVnzl.Pages
                     menu.TranslationX = menu.Width;
 
                     await Task.WhenAll(
-                        overlay.FadeTo(1, 200),
+                        overlay.FadeTo(0.5, 200),
                         menu.TranslateTo(0, 0, 300, Easing.CubicOut)
                     );
                 }
