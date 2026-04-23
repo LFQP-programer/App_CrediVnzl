@@ -13,18 +13,6 @@
             Spacing="20"
             VerticalOptions="Start">
 
-            <!-- Botón Volver -->
-            <Button
-                BackgroundColor="Transparent"
-                TextColor="{StaticResource Surface}"
-                FontSize="16"
-                HorizontalOptions="Start"
-                Command="{Binding VolverCommand}"
-                Margin="0,10,0,20"
-                Padding="0"
-                ImageSource="{x:Static helpers:IconPaths.Back}"
-                Text=" Volver" />
-
             <!-- Card de Login -->
             <Frame
                 BackgroundColor="{StaticResource Surface}"

@@ -361,7 +361,7 @@ namespace App_CrediVnzl.Pages
                     _viewModel.MostrarMenuHamburguesa = false;
                 }
                 
-                await Shell.Current.GoToAsync("//main");
+                await Shell.Current.GoToAsync("//loginadmin");
                 System.Diagnostics.Debug.WriteLine("*** OnCerrarSesionTapped - Navegaci�n completada ***");
             }
             catch (Exception ex)

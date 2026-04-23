@@ -48,13 +48,11 @@ namespace App_CrediVnzl.ViewModels
         }
 
         public ICommand LoginCommand { get; }
-        public ICommand VolverCommand { get; }
 
         public LoginViewModel(AuthService authService)
         {
             _authService = authService;
             LoginCommand = new Command(async () => await OnLoginClicked());
-            VolverCommand = new Command(async () => await OnVolverClicked());
         }
 
         public void CargarCredencialesGuardadas()
@@ -128,11 +126,6 @@ namespace App_CrediVnzl.ViewModels
             {
                 IsLoading = false;
             }
-        }
-
-        private async Task OnVolverClicked()
-        {
-            await Shell.Current.GoToAsync("//main");
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

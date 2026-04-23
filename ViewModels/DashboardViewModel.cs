@@ -146,7 +146,7 @@ namespace App_CrediVnzl.ViewModels
         private void OnCerrarSesion()
         {
             // Cerrar sesi�n y navegar al login
-            Shell.Current.GoToAsync("//login");
+            Shell.Current.GoToAsync("//loginadmin");
         }
 
         public async Task LoadDashboardDataAsync()

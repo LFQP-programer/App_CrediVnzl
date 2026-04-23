@@ -142,7 +142,7 @@ namespace App_CrediVnzl.ViewModels
 
         private async Task OnVolverClicked()
         {
-            await Shell.Current.GoToAsync("//main");
+            await Shell.Current.GoToAsync("//loginadmin");
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

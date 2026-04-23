@@ -12,35 +12,17 @@
     Shell.TabBarBackgroundColor="{StaticResource Tertiary}"
     Shell.TabBarForegroundColor="{StaticResource White}">
 
-    <!-- Página de selección de rol (Main) -->
-    <ShellContent
-        Title="Inicio"
-        ContentTemplate="{DataTemplate pages:BienvenidaPage}"
-        Route="main" />
-
     <!-- Página de Login Administrador -->
     <ShellContent
         Title="Login Admin"
         ContentTemplate="{DataTemplate pages:LoginPage}"
         Route="loginadmin" />
 
-    <!-- Página de Login Cliente -->
-    <ShellContent
-        Title="Login Cliente"
-        ContentTemplate="{DataTemplate pages:LoginClientePage}"
-        Route="logincliente" />
-
     <!-- Dashboard Administrador -->
     <ShellContent
         Title="Dashboard"
         ContentTemplate="{DataTemplate pages:DashboardPage}"
         Route="dashboard" />
-
-    <!-- Dashboard Cliente -->
-    <ShellContent
-        Title="Mi Prestamo"
-        ContentTemplate="{DataTemplate pages:ClienteDashboardPage}"
-        Route="clientedashboard" />
     
     <!-- Página de Primer Uso -->
     <ShellContent
@@ -49,3 +31,4 @@
         Route="primeruso" />
 
 </Shell>
+
